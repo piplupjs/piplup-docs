@@ -1,0 +1,49 @@
+---
+title: useHtmlButtonAdapter
+description: Returns button props that connect a custom HTML button component to React Hook Form form state.
+---
+
+`useHtmlButtonAdapter` returns normalized button props for building custom button components that respond to React Hook Form state such as submit state, errors, and disabled behavior.
+
+## Import
+
+```tsx
+import { useHtmlButtonAdapter } from "@piplup/rhf-adapters/html";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/html/button/element.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseHtmlButtonAdapterProps"
+  cwd
+/>
+
+## Return value
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseHtmlButtonAdapterReturnType"
+  cwd
+/>
+
+## Notes
+
+- The hook is built on top of `useFormStateAdapter`.
+- `type="submit"` and `type="reset"` preserve native form semantics while still allowing adapter-managed disabling.
+
+## See also
+
+- [HtmlButtonElement](/docs/rhf-adapters/html/components/html-button-element)
+- [useFormStateAdapter](/docs/rhf-core/hooks/use-form-state-adapter)

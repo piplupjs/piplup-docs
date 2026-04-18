@@ -1,0 +1,25 @@
+{
+  "title": "Components",
+  "pages": [
+    "mui-x-date-calendar-element",
+    "mui-x-date-field-element",
+    "mui-x-date-picker-element",
+    "mui-x-date-time-picker-element",
+    "mui-x-desktop-date-picker-element",
+    "mui-x-desktop-date-time-picker-element",
+    "mui-x-desktop-time-picker-element",
+    "mui-x-digital-clock-element",
+    "mui-x-mobile-date-picker-element",
+    "mui-x-mobile-date-time-picker-element",
+    "mui-x-mobile-time-picker-element",
+    "mui-x-month-calendar-element",
+    "mui-x-multi-section-digital-clock-element",
+    "mui-x-static-date-picker-element",
+    "mui-x-static-date-time-picker-element",
+    "mui-x-static-time-picker-element",
+    "mui-x-time-clock-element",
+    "mui-x-time-field-element",
+    "mui-x-time-picker-element",
+    "mui-x-year-calendar-element"
+  ]
+}

@@ -1,0 +1,28 @@
+---
+title: MuiOtpInputElement
+description: A pre-integrated MuiOtpInputElement component for connecting OTP and verification code input to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiOtpInputElement } from "@piplup/rhf-adapters/mui-one-time-password-input";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    { label: "useForm", path: "demo/adapters/mui-one-time-password-input/use-form.tsx" },
+    { label: "FormContainer", path: "demo/adapters/mui-one-time-password-input/form-container.tsx" },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiOtpInputElementProps" cwd />
+
+## Notes
+
+- Use this component for OTP and verification flows that store a single string value.
+- For custom OTP inputs, build on `useMuiOtpInputAdapter`.

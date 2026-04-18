@@ -1,0 +1,43 @@
+---
+title: MuiInputElement
+description: A pre-integrated MuiInputElement component for connecting MUI Input to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiInputElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/input/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/input/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiInputElementProps" cwd />
+
+`MuiInputElement` supports props of the MUI Input component, along with additional adapter-specific props. For a complete list of available Input properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/input/).
+
+> The `ref` is forwarded to the underlying `<Input />` component.
+
+## Notes
+
+- Use this component for standard MUI input fields managed by RHF.
+- For custom input UIs, build on `useMuiInputAdapterProps`.
+
+## See also
+
+- [useMuiInputAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-input-adapter)
+- [Input](https://mui.com/material-ui/api/input/)

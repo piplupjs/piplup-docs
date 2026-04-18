@@ -1,0 +1,47 @@
+---
+title: MuiIconButtonElement
+description: A pre-integrated MuiIconButtonElement component for React Hook Form-aware icon button actions.
+---
+
+## Import
+
+```tsx
+import { MuiIconButtonElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/icon-button/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/icon-button/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiIconButtonElementProps"
+  cwd
+/>
+
+`MuiIconButtonElement` supports props of the MUI IconButton component, along with additional adapter-specific props. For a complete list of available IconButton properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/icon-button/).
+
+> The `ref` is forwarded to the underlying `<IconButton />` component.
+
+
+## Notes
+
+- For custom icon button UIs, build on `useMuiIconButtonAdapter`.
+
+## See also
+
+- [useMuiIconButtonAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-icon-button-adapter)
+- [IconButton](https://mui.com/material-ui/api/icon-button/)

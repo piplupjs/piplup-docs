@@ -1,0 +1,13 @@
+{
+    "$schema": "../../.source/json-schema/docs.meta.json",
+    "collapsible": false,
+    "pages": [
+        "index",
+        "rhf-core",
+        "rhf-adapters",
+        "react-acl",
+        "utils",
+        "cache-buster",
+        "vite-plugin-cache-buster"
+    ]
+}

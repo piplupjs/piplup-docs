@@ -1,0 +1,42 @@
+---
+title: MuiSwitchElement
+description: A pre-integrated MuiSwitchElement component for connecting MUI Switch to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiSwitchElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/switch/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/switch/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiSwitchElementProps" cwd />
+
+`MuiSwitchElement` supports props of the MUI Switch component, along with additional adapter-specific props. For a complete list of available Switch properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/switch/).
+
+> The `ref` is forwarded to the underlying `<Switch />` component.
+
+## Notes
+
+- For custom switch UIs, build on `useMuiSwitchAdapter`.
+
+## See also
+
+- [useMuiSwitchAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-switch-adapter)
+- [Switch](https://mui.com/material-ui/api/switch/)

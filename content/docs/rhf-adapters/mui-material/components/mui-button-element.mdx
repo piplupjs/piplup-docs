@@ -1,0 +1,45 @@
+---
+title: MuiButtonElement
+description: A pre-integrated MuiButtonElement component for React Hook Form-aware button behavior with MUI Button.
+---
+
+## Import
+
+```tsx
+import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/button/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/button/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiButtonElementProps" cwd />
+
+`MuiButtonElement` supports all standard props of the MUI Button component, along with additional adapter-specific props. For a complete list of available Button properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/button/).
+
+> The `ref` is forwarded to the underlying `<Button />` component.
+
+
+## Notes
+
+- Use this component for submit, reset, and form-state-aware button actions.
+- For custom button UIs, build on `useMuiButtonAdapter`.
+
+## See also
+
+- [useMuiButtonAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-button-adapter)
+- [useHtmlButtonAdapter](/docs/rhf-adapters/html/hooks/use-html-button-adapter)
+- [Button](https://mui.com/material-ui/api/button/)

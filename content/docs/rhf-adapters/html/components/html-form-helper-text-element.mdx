@@ -1,0 +1,59 @@
+---
+title: HtmlFormHelperTextElement
+description: A helper text component for rendering hints and validation messages from React Hook Form field state.
+---
+
+`HtmlFormHelperTextElement` renders helper content for a field and can switch naturally into error messaging based on React Hook Form state.
+
+## Import
+
+```tsx
+import { HtmlFormHelperTextElement } from "@piplup/rhf-adapters/html";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-form-helper-text-element/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-form-helper-text-element/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="HtmlFormHelperTextElementProps"
+  cwd
+/>
+
+`HtmlFormHelperTextElement` accepts paragraph props together with adapter props such as `name`, `control`, and `renderOnError`.
+
+> The `ref` is forwarded to the underlying `<p>` element.
+
+## Notes
+
+- Use `renderOnError` when helper text should only appear for validation failures.
+- Pair the helper text `id` with an input's `aria-describedby` for better accessibility.
+- For bespoke helper text UIs, build on [`useHtmlFormHelperTextAdapter`](../hooks/use-html-form-helper-text-adapter).
+
+## See also
+
+<Cards>
+  <Card
+    title="useHtmlFormHelperTextAdapter"
+    href="../hooks/use-html-form-helper-text-adapter"
+  >
+    Reuse the helper-text adapter logic in a custom component.
+  </Card>
+  <Card title="useFieldStateAdapter" href="/docs/rhf-core/hooks/use-field-state-adapter">
+    Core hook that powers helper text and field-state derivation.
+  </Card>
+</Cards>

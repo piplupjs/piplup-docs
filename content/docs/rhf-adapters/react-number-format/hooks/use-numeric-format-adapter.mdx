@@ -1,0 +1,27 @@
+---
+title: useNumericFormatAdapter
+description: Returns adapter props for building custom NumericFormat integrations with React Hook Form.
+---
+
+## Import
+
+```tsx
+import { useNumericFormatAdapter } from "@piplup/rhf-adapters/react-number-format";
+```
+
+## Usage
+
+<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/numeric-format/element.tsx" }]} />
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseNumericFormatAdapterProps" cwd />
+
+## Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseNumericFormatAdapterReturnType" cwd />
+
+## Notes
+
+- Use this hook for custom numeric formatting UIs that still need `react-hook-form` controlled state.
+- It builds on `useNumberFormatBaseAdapter`.

@@ -1,0 +1,46 @@
+---
+title: MuiXDateTimePickerElement
+description: A pre-integrated MuiXDateTimePickerElement component for connecting MUI X DateTimePicker to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiXDateTimePickerElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-x-date-pickers/date-time-picker/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-x-date-pickers/date-time-picker/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiXDateTimePickerElementProps"
+  cwd
+/>
+
+`MuiXDateTimePickerElement` supports all standard props of the MUI X DateTimePicker component, along with additional adapter-specific props. For a complete list of available DateTimePicker properties, refer to the MUI X Date Pickers [API documentation](https://mui.com/x/api/date-pickers/date-time-picker/).
+
+> The `ref` is forwarded to the underlying `<DateTimePicker />` component.
+
+## Notes
+
+- For custom date-time pickers, build on `useMuiXDateTimePickerAdapter`.
+
+## See also
+
+- [useMuiXDateTimePickerAdapter](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-time-picker-adapter)
+- [DateTimePicker](https://mui.com/x/api/date-pickers/date-time-picker/)

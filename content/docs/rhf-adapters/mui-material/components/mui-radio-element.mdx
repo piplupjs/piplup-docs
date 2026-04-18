@@ -1,0 +1,42 @@
+---
+title: MuiRadioElement
+description: A pre-integrated MuiRadioElement component for connecting MUI Radio to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiRadioElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/radio/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/radio/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiRadioElementProps" cwd />
+
+`MuiRadioElement` supports props of the MUI Radio component, along with additional adapter-specific props. For a complete list of available Radio properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/radio/).
+
+> The `ref` is forwarded to the underlying `<Radio />` component.
+
+## Notes
+
+- For custom radio UIs, build on `useMuiRadioAdapter`.
+
+## See also
+
+- [useMuiRadioAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-radio-adapter)
+- [Radio](https://mui.com/material-ui/api/radio/)

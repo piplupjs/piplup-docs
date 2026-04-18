@@ -1,0 +1,28 @@
+---
+title: MuiColorInputElement
+description: A pre-integrated MuiColorInputElement component for connecting color values to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiColorInputElement } from "@piplup/rhf-adapters/mui-color-input";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    { label: "useForm", path: "demo/adapters/mui-color-input/use-form.tsx" },
+    { label: "FormContainer", path: "demo/adapters/mui-color-input/form-container.tsx" },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiColorInputElementProps" cwd />
+
+## Notes
+
+- Use this component when the form value should stay synchronized with a color input widget.
+- For custom color inputs, build on `useMuiColorInputAdapter`.

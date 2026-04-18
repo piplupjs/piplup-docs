@@ -1,0 +1,294 @@
+---
+title: HtmlInputElement
+description: A pre-integrated input component for native HTML input types with React Hook Form registration, value handling, and validation wiring.
+---
+
+`HtmlInputElement` connects a native `<input>` to React Hook Form and supports common input types without manually wiring `register`, `Controller`, or field-state plumbing.
+
+## Import
+
+```tsx
+import { HtmlInputElement } from "@piplup/rhf-adapters/html";
+```
+
+## Usage
+
+### Text
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/text/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/text/form-container.tsx",
+    },
+  ]}
+/>
+
+### Password
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/password/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/password/form-container.tsx",
+    },
+  ]}
+/>
+
+### Number
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/number/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/number/form-container.tsx",
+    },
+  ]}
+/>
+
+### Email
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/email/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/email/form-container.tsx",
+    },
+  ]}
+/>
+
+### Radio
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/radio/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/radio/form-container.tsx",
+    },
+  ]}
+/>
+
+### Checkbox
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/checkbox/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/checkbox/form-container.tsx",
+    },
+  ]}
+/>
+
+### Color
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/color/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/color/form-container.tsx",
+    },
+  ]}
+/>
+
+### Range
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/range/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/range/form-container.tsx",
+    },
+  ]}
+/>
+
+### Date
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/date/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/date/form-container.tsx",
+    },
+  ]}
+/>
+
+### Time
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/time/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/time/form-container.tsx",
+    },
+  ]}
+/>
+
+### Date Time Local
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/datetime-local/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/datetime-local/form-container.tsx",
+    },
+  ]}
+/>
+
+### Month
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/month/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/month/form-container.tsx",
+    },
+  ]}
+/>
+
+### Week
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/week/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/week/form-container.tsx",
+    },
+  ]}
+/>
+
+### File
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/file/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/file/form-container.tsx",
+    },
+  ]}
+/>
+
+### Search
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/search/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/search/form-container.tsx",
+    },
+  ]}
+/>
+
+### Tel
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/tel/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/tel/form-container.tsx",
+    },
+  ]}
+/>
+
+### URL
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-input-element/url/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-input-element/url/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="HtmlInputElementProps" cwd />
+
+`HtmlInputElement` accepts native input props together with adapter props such as `control`, `rules`, `transform`, and message overrides.
+
+> The `ref` is forwarded to the underlying `<input>` element.
+
+## Notes
+
+- Use `transform` when the field value shape differs from the DOM value.
+- Checkbox, radio, file, and other specialized input types can still reuse the same adapter surface.
+- For custom input UIs, build on [`useHtmlInputAdapter`](../hooks/use-html-input-adapter).
+
+## See also
+
+<Cards>
+  <Card title="useHtmlInputAdapter" href="../hooks/use-html-input-adapter">
+    Reuse the input adapter logic in your own component.
+  </Card>
+  <Card title="useControllerAdapter" href="/docs/rhf-core/hooks/use-controller-adapter">
+    Core hook that powers controlled field integration.
+  </Card>
+</Cards>

@@ -1,0 +1,10 @@
+{
+  "$schema": "../../../.source/json-schema/docs.meta.json",
+  "title": "@piplup/utils",
+  "collapsible": false,
+  "pages": [
+    "installation",
+    "helpers",
+    "hooks"
+  ]
+}

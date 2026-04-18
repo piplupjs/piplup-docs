@@ -1,0 +1,46 @@
+---
+title: MuiXStaticDateTimePickerElement
+description: A pre-integrated MuiXStaticDateTimePickerElement component for connecting MUI X StaticDateTimePicker to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiXStaticDateTimePickerElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-x-date-pickers/static-date-time-picker/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-x-date-pickers/static-date-time-picker/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiXStaticDateTimePickerElementProps"
+  cwd
+/>
+
+`MuiXStaticDateTimePickerElement` supports all standard props of the MUI X StaticDateTimePicker component, along with additional adapter-specific props. For a complete list of available StaticDateTimePicker properties, refer to the MUI X Date Pickers [API documentation](https://mui.com/x/api/date-pickers/static-date-time-picker/).
+
+> The `ref` is forwarded to the underlying `<StaticDateTimePicker />` component.
+
+## Notes
+
+- For custom static date-time pickers, build on `useMuiXStaticDateTimePickerAdapter`.
+
+## See also
+
+- [useMuiXStaticDateTimePickerAdapter](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-static-date-time-picker-adapter)
+- [StaticDateTimePicker](https://mui.com/x/api/date-pickers/static-date-time-picker/)

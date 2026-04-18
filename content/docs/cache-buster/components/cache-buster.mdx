@@ -1,0 +1,34 @@
+---
+title: CacheBuster
+description: Automatically reload your app when a new version is detected using the CacheBuster component.
+---
+
+`CacheBuster` is a convenience wrapper around the `useReleaseStatus` hook.
+
+It automatically checks for new deployments and **reloads the page when a new version is detected**.
+
+## Basic usage
+
+```tsx
+import { CacheBuster } from '@piplup/cache-buster';
+
+function App() {
+  return (
+    <CacheBuster storageKey="RELEASE">
+      <YourApp />
+    </CacheBuster>
+  );
+}
+```
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="CacheBusterProps"
+  cwd
+/>
+
+## See also
+
+- [useReleaseStatus](/docs/cache-buster/hooks/use-release-status)

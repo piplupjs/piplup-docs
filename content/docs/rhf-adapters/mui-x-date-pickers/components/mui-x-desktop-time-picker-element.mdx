@@ -1,0 +1,46 @@
+---
+title: MuiXDesktopTimePickerElement
+description: A pre-integrated MuiXDesktopTimePickerElement component for connecting MUI X DesktopTimePicker¸ to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiXDesktopTimePickerElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-x-date-pickers/desktop-time-picker/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-x-date-pickers/desktop-time-picker/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiXDesktopTimePickerElementProps"
+  cwd
+/>
+
+`MuiXDesktopTimePickerElement` supports all standard props of the MUI X DesktopTimePicker component, along with additional adapter-specific props. For a complete list of available DesktopTimePicker properties, refer to the MUI X Date Pickers [API documentation](https://mui.com/x/api/date-pickers/desktop-time-picker/).
+
+> The `ref` is forwarded to the underlying `<DesktopTimePicker />` component.
+
+## Notes
+
+- For custom desktop time pickers, build on `useMuiXDesktopTimePickerAdapter`.
+
+## See also
+
+- [useMuiXDesktopTimePickerAdapter](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-desktop-time-picker-adapter)
+- [DesktopTimePicker](https://mui.com/x/api/date-pickers/desktop-time-picker/)

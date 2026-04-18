@@ -1,0 +1,46 @@
+---
+title: MuiFormLabelElement
+description: A pre-integrated MuiFormLabelElement component for field-state-aware MUI labels with React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiFormLabelElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/form-label/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/form-label/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiFormLabelElementProps"
+  cwd
+/>
+
+`MuiFormLabelElement` supports props of the MUI FormLabel component, along with additional adapter-specific props. For a complete list of available FormLabel properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/form-label/).
+
+> The `ref` is forwarded to the underlying `<FormLabel />` component.
+
+## Notes
+
+- For custom label UIs, build on `useMuiFormLabelAdapter`.
+
+## See also
+
+- [useMuiFormLabelAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-form-label-adapter)
+- [FormLabel](https://mui.com/material-ui/api/form-label/)

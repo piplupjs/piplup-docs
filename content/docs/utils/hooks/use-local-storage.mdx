@@ -1,0 +1,67 @@
+---
+title: useLocalStorage
+description: Reactive localStorage hook that synchronizes a key with state.
+---
+
+```tsx
+import { useLocalStorage } from "@piplup/utils";
+
+function Component() {
+  const [value, setValue] = useLocalStorage('my-key', 'default');
+
+  return (
+    <div>
+      <div>Value: {value}</div>
+      <button onClick={() => setValue('updated')}>Set</button>
+    </div>
+  );
+}
+```
+
+## Props
+
+<TypeTable type={{
+  key: {
+    description: (
+      <>
+        Storage key used to persist the value in `localStorage`.
+      </>
+    ),
+    type: "string",
+    required: true,
+  },
+  initialValue: {
+    description: (
+      <>
+        Initial value returned when no value exists in storage. If present,
+        it is returned as the initial state.
+      </>
+    ),
+    type: "string | null | (() => string | null)",
+    required: false,
+  },
+}} />
+
+## Return value
+
+<TypeTable type={{
+  value: {
+    description: (
+      <>
+        Current value read from `localStorage` (or `initialValue` when empty).
+      </>
+    ),
+    type: "string | null",
+    required: true,
+  },
+  setValue: {
+    description: (
+      <>
+        Setter to update the stored value. Accepts a new value or an updater
+        function.
+      </>
+    ),
+    type: "(value: string | null | ((prev: string | null) => string | null)) => void",
+    required: true,
+  },
+}} />

@@ -1,0 +1,46 @@
+---
+title: MuiInputBaseElement
+description: A pre-integrated MuiInputBaseElement component for connecting MUI InputBase to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiInputBaseElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/input-base/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/input-base/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiInputBaseElementProps"
+  cwd
+/>
+
+`MuiInputBaseElement` supports props of the MUI InputBase component, along with additional adapter-specific props. For a complete list of available InputBase properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/input-base/).
+
+> The `ref` is forwarded to the underlying `<InputBase />` component.
+
+## Notes
+
+- For custom InputBase UIs, build on `useMuiInputBaseAdapter`.
+
+## See also
+
+- [useMuiInputBaseAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-input-base-adapter)
+- [InputBase](https://mui.com/material-ui/api/input-base/)

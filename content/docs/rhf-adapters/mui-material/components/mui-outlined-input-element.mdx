@@ -1,0 +1,47 @@
+---
+title: MuiOutlinedInputElement
+description: A pre-integrated MuiOutlinedInputElement component for connecting MUI OutlinedInput to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiOutlinedInputElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/outlined-input/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/outlined-input/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiOutlinedInputElementProps"
+  cwd
+/>
+
+`MuiOutlinedInputElement` supports props of the MUI OutlinedInput component, along with additional adapter-specific props. For a complete list of available InputLabel properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/outlined-input/).
+
+> The `ref` is forwarded to the underlying `<OutlinedInput />` component.
+
+## Notes
+
+- For custom outlined-input UIs, build on `useMuiOutlinedInputAdapter`.
+
+## See also
+
+- [useMuiOutlinedInputAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-outlined-input-adapter)
+- [OutlinedInput](https://mui.com/material-ui/api/outlined-input/)
+

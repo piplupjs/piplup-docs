@@ -1,0 +1,53 @@
+---
+title: Helpers Overview
+description: Small utility functions exported by @piplup/utils.
+---
+
+## compact
+
+Removes `null`/`undefined` values from arrays.
+
+```tsx
+import { compact } from "@piplup/utils";
+
+const clean = compact([1, null, 2]); // [1,2]
+```
+
+## execSequentially
+
+Run multiple functions in sequence producing a new function.
+
+```tsx
+import { execSequentially } from "@piplup/utils";
+
+const combined = execSequentially(fn1, fn2);
+combined();
+```
+
+## forkRef 
+
+Utilities for combining multiple refs.
+
+```tsx
+import { forkRef } from "@piplup/utils";
+
+const ref = forkRef(refA, refB);
+```
+
+## hasOwnProperty
+
+Type-safe `hasOwnProperty` helper.
+
+```ts
+import { hasOwnProperty } from "@piplup/utils";
+
+if (hasOwnProperty(obj, 'key')) { /* ... */ }
+```
+
+## setRef
+
+Helper to set callback or mutable refs.
+
+## Storage helpers: `getItem`, `setItem`, `removeItem`
+
+Small wrappers around `localStorage` access; use `useLocalStorage` hook for reactive state.

@@ -1,0 +1,112 @@
+---
+title: useEventListener
+description: Attach DOM event listeners in a React-friendly way.
+---
+
+```tsx
+import { useEventListener } from "@piplup/utils";
+
+function Component() {
+  useEventListener('resize', () => {
+    console.log('resized');
+  });
+}
+```
+
+## Signature
+
+```tsx
+import * as React from 'react';
+
+export function useEventListener<EventName extends keyof MediaQueryListEventMap>(
+  eventName: EventName,
+  handler: (event: MediaQueryListEventMap[EventName]) => void,
+  element: React.RefObject<MediaQueryList>,
+  options?: AddEventListenerOptions | boolean
+): void;
+
+export function useEventListener<EventName extends keyof WindowEventMap>(
+  eventName: EventName,
+  handler: (event: WindowEventMap[EventName]) => void,
+  element?: undefined,
+  options?: AddEventListenerOptions | boolean
+): void;
+
+export function useEventListener<
+  EventName extends keyof HTMLElementEventMap,
+  T extends HTMLElement = HTMLDivElement
+>(
+  eventName: EventName,
+  handler: (event: HTMLElementEventMap[EventName]) => void,
+  element: React.RefObject<T>,
+  options?: AddEventListenerOptions | boolean
+): void;
+
+export function useEventListener<EventName extends keyof DocumentEventMap>(
+  eventName: EventName,
+  handler: (event: DocumentEventMap[EventName]) => void,
+  element: React.RefObject<Document>,
+  options?: AddEventListenerOptions | boolean
+): void;
+
+export function useEventListener<
+  EventName extends string,
+  EventElement extends HTMLElement = HTMLDivElement
+>(
+  eventName: EventName,
+  handler: (event: Event) => void,
+  element?: React.RefObject<EventElement>,
+  options?: AddEventListenerOptions | boolean
+): void;
+
+export function useEventListener<
+  EventName extends string,
+  EventNameWindow extends keyof WindowEventMap,
+  EventNameHTMLElement extends keyof HTMLElementEventMap,
+  EventNameMediaQuery extends keyof MediaQueryListEventMap,
+  EventElement extends HTMLElement | MediaQueryList | void = void
+>(
+  eventName: EventName | EventNameHTMLElement | EventNameMediaQuery | EventNameWindow,
+  handler: (
+    event:
+      | Event
+      | HTMLElementEventMap[EventNameHTMLElement]
+      | MediaQueryListEventMap[EventNameMediaQuery]
+      | WindowEventMap[EventNameWindow]
+  ) => void,
+  element?: React.RefObject<EventElement>,
+  options?: AddEventListenerOptions | boolean
+): void;
+```
+
+### Type parameters and overrides
+
+- `EventName`: union of allowed event string keys for the selected target (e.g. `keyof WindowEventMap` or `keyof HTMLElementEventMap`).
+- `T` / `EventElement`: when targeting an element, `T` (or `EventElement`) constrains the element/ref type (e.g. `HTMLButtonElement`).
+- `EventNameWindow`, `EventNameHTMLElement`, `EventNameMediaQuery`: internal helpers used by the broad overload that accepts any of the supported event maps.
+
+When you need to force a specific overload or narrow the handler/event types you can provide explicit generics. Examples:
+
+```tsx
+// Narrow to an HTML element event (click on a button)
+useEventListener<'click', HTMLButtonElement>(
+  'click',
+  (e) => { /* e is MouseEvent */ },
+  buttonRef
+);
+
+// Window event (no element required)
+useEventListener<'resize'>(
+  'resize',
+  (e) => { /* e is UIEvent */ }
+);
+
+// MediaQueryList event
+useEventListener<'change'>(
+  'change',
+  (e: MediaQueryListEvent) => { /* ... */ },
+  mediaQueryRef
+);
+```
+
+These overloads allow the hook to infer the correct event type based on the chosen overload and optional explicit generic arguments. The final broad overload accepts any string event and falls back to `Event` when a more specific map does not apply.

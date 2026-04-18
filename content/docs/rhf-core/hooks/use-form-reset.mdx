@@ -1,0 +1,65 @@
+---
+title: useFormReset
+description: Returns a reset function for restoring form values from form context or a provided control.
+---
+
+`useFormReset` returns a `reset` function that behaves like the one returned by React Hook Form's `useForm`. It is useful when a nested component needs to reset the form without receiving the full form instance as a prop.
+
+If you do not pass a `control`, the hook reads it from form context, which makes it a good fit for components rendered inside `FormContainer` or `FormProvider`.
+
+## Import
+
+```tsx
+import { useFormReset } from "@piplup/rhf-core";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "demo/core/hooks/use-form-reset.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseFormResetProps" cwd />
+
+# Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseFormResetReturnType" cwd />
+
+## Passing values and options
+
+The returned function accepts the same arguments as React Hook Form's `reset`: an optional values object and an optional reset options object.
+
+Reset to the current `defaultValues`:
+
+```ts
+reset();
+```
+
+Reset with new values:
+
+```ts
+reset({ name: "" });
+```
+
+Forward RHF reset options such as `keepDirty`:
+
+```ts
+reset({}, { keepDirty: true, keepValues: false });
+```
+
+## Notes
+
+- Pass `control` explicitly when you want to use the hook outside form context.
+- The returned function mirrors React Hook Form's `reset` behavior and supported options.
+
+## See also
+
+- [reset](https://react-hook-form.com/docs/useform/reset)
+- [useFormContext](https://react-hook-form.com/docs/useformcontext)

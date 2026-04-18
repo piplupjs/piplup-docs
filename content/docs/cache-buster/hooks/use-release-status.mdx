@@ -1,0 +1,45 @@
+---
+title: useReleaseStatus
+description: Use the useReleaseStatus hook to detect when a new version of your app is available.
+---
+
+# Usage
+
+`useReleaseStatus` allows you to detect whether a new release is available and decide how your app should respond.
+
+## Basic example
+
+```tsx
+import { useReleaseStatus } from '@piplup/cache-buster';
+
+function App() {
+  const status = useReleaseStatus({
+    storageKey: 'RELEASE',
+  });
+
+  if (status === 'new-release') {
+    return (
+      <div>
+        <p>New version available</p>
+        <button onClick={() => window.location.reload()}>
+          Refresh
+        </button>
+      </div>
+    );
+  }
+
+  return <YourApp />;
+}
+```
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseReleaseStatusProps"
+  cwd
+/>
+
+## Return value
+
+The `useReleaseStatus` hook returns one of the following statuses: `error`, `new-release`, `no-release` or `null`.

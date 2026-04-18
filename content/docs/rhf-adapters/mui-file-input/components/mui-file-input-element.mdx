@@ -1,0 +1,28 @@
+---
+title: MuiFileInputElement
+description: A pre-integrated MuiFileInputElement component for connecting file selection to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiFileInputElement } from "@piplup/rhf-adapters/mui-file-input";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    { label: "useForm", path: "demo/adapters/mui-file-input/use-form.tsx" },
+    { label: "FormContainer", path: "demo/adapters/mui-file-input/form-container.tsx" },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiFileInputElementProps" cwd />
+
+## Notes
+
+- Use this component for single-file or multi-file RHF fields.
+- For custom file inputs, build on `useMuiFileInputAdapter`.

@@ -1,0 +1,30 @@
+---
+title: Installation
+description: React Hook Form adapters for mui-color-input components.
+---
+
+`@piplup/rhf-adapters/mui-color-input` connects `mui-color-input` fields to React Hook Form.
+
+First, install the core packages, if not installed already:
+
+```package-install
+@piplup/rhf-core react-hook-form
+```
+
+Then, install the adapters package together with the MUI Material and mui-color-input peer dependencies:
+
+```package-install
+@piplup/rhf-adapters @mui/material @emotion/react @emotion/styled @mui/x-date-pickers mui-color-input
+```
+
+## Import
+
+```tsx
+import { MuiColorInputElement, useMuiColorInputAdapter } from "@piplup/rhf-adapters/mui-color-input";
+```
+
+Use `/mui-color-input` subpath when you need `mui-chips-input` components to stay in sync with `react-hook-form`.
+
+## See also
+
+- [mui-color-input](https://viclafouch.github.io/mui-color-input/)

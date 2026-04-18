@@ -1,0 +1,60 @@
+---
+title: useEventCallback
+description: Creates a stable callback hook that preserves function identity between renders.
+---
+
+
+```tsx
+import { useEventCallback } from "@piplup/utils";
+
+function Component() {
+  const handle = useEventCallback((value: string) => {
+    console.log(value);
+  });
+
+  return <button onClick={() => handle('hi')}>Click</button>;
+}
+```
+
+## Props
+
+<TypeTable type={{
+  fn: {
+    description: (
+      <>
+        The callback to wrap. Receives the same arguments as the returned
+        handler and its return value is forwarded.
+      </>
+    ),
+    type: "(...args: Args) => Return",
+    typeDescription: (
+      <>
+        Generic callback signature — the hook preserves the callback identity
+        across renders while forwarding arguments and return value.
+      </>
+    ),
+    required: true,
+  },
+}} />
+
+## Return value
+
+<TypeTable type={{
+  handler: {
+    description: (
+      <>
+        Stable callback with the same signature as the input `fn`. Call this
+        returned handler from event handlers or effects without recreating
+        closures on every render.
+      </>
+    ),
+    type: "(...args: Args) => Return",
+    typeDescription: (
+      <>
+        A memoized function that forwards arguments to the original callback
+        and returns its result.
+      </>
+    ),
+    required: true,
+  },
+}} />

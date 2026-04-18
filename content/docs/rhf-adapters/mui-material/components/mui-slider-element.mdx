@@ -1,0 +1,42 @@
+---
+title: MuiSliderElement
+description: A pre-integrated MuiSliderElement component for connecting MUI Slider to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiSliderElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/slider/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/slider/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiSliderElementProps" cwd />
+
+`MuiSliderElement` supports props of the MUI Slider component, along with additional adapter-specific props. For a complete list of available Slider properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/slider/).
+
+> The `ref` is forwarded to the underlying `<Slider />` component.
+
+## Notes
+
+- For custom slider UIs, build on `useMuiSliderAdapter`.
+
+## See also
+
+- [useMuiSliderAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-slider-adapter)
+- [Slider](https://mui.com/material-ui/api/slider/)

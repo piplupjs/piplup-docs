@@ -1,0 +1,33 @@
+---
+title: NumberFormatBaseElement
+description: A pre-integrated NumberFormatBaseElement component for low-level formatted inputs with React Hook Form.
+---
+
+## Import
+
+```tsx
+import { NumberFormatBaseElement } from "@piplup/rhf-adapters/react-number-format";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    { label: "useForm", path: "demo/adapters/react-number-format/number-format-base/use-form.tsx" },
+    { label: "FormContainer", path: "demo/adapters/react-number-format/number-format-base/form-container.tsx" },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="NumberFormatBaseElementProps" cwd />
+
+`NumberFormatBaseElement` supports all standard props of the `NumberFormatBase` component, along with additional adapter-specific props.
+
+> The `ref` is forwarded to the underlying `<NumberFormatBase />` component.
+
+
+## Notes
+
+- Use this component for low-level formatting scenarios when `NumericFormatElement` or `PatternFormatElement` are too specialized.
+- For custom formatted inputs, build on `useNumberFormatBaseAdapter`.

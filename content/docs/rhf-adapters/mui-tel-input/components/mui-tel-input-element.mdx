@@ -1,0 +1,28 @@
+---
+title: MuiTelInputElement
+description: A pre-integrated MuiTelInputElement component for connecting telephone values to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiTelInputElement } from "@piplup/rhf-adapters/mui-tel-input";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    { label: "useForm", path: "demo/adapters/mui-tel-input/use-form.tsx" },
+    { label: "FormContainer", path: "demo/adapters/mui-tel-input/form-container.tsx" },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiTelInputElementProps" cwd />
+
+## Notes
+
+- Use this component for international phone-number input managed by RHF.
+- For custom telephone inputs, build on `useMuiTelInputAdapter`.

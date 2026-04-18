@@ -1,0 +1,46 @@
+---
+title: MuiXMobileTimePickerElement
+description: A pre-integrated MuiXMobileTimePickerElement component for connecting MUI X MobileTimePicker to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiXMobileTimePickerElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-x-date-pickers/mobile-time-picker/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-x-date-pickers/mobile-time-picker/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiXMobileTimePickerElementProps"
+  cwd
+/>
+
+`MuiXMobileTimePickerElement` supports all standard props of the MUI X MobileTimePicker component, along with additional adapter-specific props. For a complete list of available MobileTimePicker properties, refer to the MUI X Date Pickers [API documentation](https://mui.com/x/api/date-pickers/mobile-time-picker/).
+
+> The `ref` is forwarded to the underlying `<MobileTimePicker />` component.
+
+## Notes
+
+- For custom mobile time pickers, build on `useMuiXMobileTimePickerAdapter`.
+
+## See also
+
+- [useMuiXMobileTimePickerAdapter](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-mobile-time-picker-adapter)
+- [MobileTimePicker](https://mui.com/x/api/date-pickers/mobile-time-picker/)

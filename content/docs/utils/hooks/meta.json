@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../../.source/json-schema/docs.meta.json",
+  "title": "Hooks",
+  "pages": [
+    "use-event-callback",
+    "use-event-listener",
+    "use-fork-ref",
+    "use-isomorphic-effect",
+    "use-local-storage"
+  ]
+}

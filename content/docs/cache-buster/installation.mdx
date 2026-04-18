@@ -1,0 +1,60 @@
+---
+title: Installation
+description: Install and configure piplup cachebuster to detect build version changes and force-refresh stale client caches.
+---
+
+`@piplup/cache-buster` is a lightweight React utility that ensures users always get the latest deployed version of your app.
+
+```package-install
+@piplup/cache-buster
+```
+
+## Setup build integration
+
+Cache busting requires a release ID to be generated at build time.
+
+### Option 1: CLI
+
+Update your package.json:
+
+```json
+{
+  "scripts": {
+    "build": "piplup-cache-buster --publicDir=public && react-scripts build"
+  }
+}
+```
+
+This will:
+
+- Generate a unique release ID
+- Save it in your public/ directory
+- Allow runtime comparison
+
+### Option 2: Vite plugin
+
+If you're using Vite:
+
+```package-install
+@piplup/vite-plugin-cache-buster
+```
+
+Update `vite.config.(ts|mts|js|mjs)`:
+
+```tsx
+import { vitePluginCacheBuster } from "@piplup/vite-plugin-cache-buster";
+
+export default {
+  plugins: [vitePluginCacheBuster()],
+};
+```
+
+### Why this step is required
+
+The library works by comparing:
+
+- Current release ID (from server)
+- Stored release ID (in browser)
+
+Without generating this file at build time, cache busting cannot work.
+

@@ -1,0 +1,46 @@
+---
+title: MuiFormHelperTextElement
+description: A pre-integrated MuiFormHelperTextElement component for rendering helper and error text from React Hook Form field state.
+---
+
+## Import
+
+```tsx
+import { MuiFormHelperTextElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/form-helper-text/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/form-helper-text/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiFormHelperTextElementProps"
+  cwd
+/>
+
+`MuiFormHelperTextElement` supports all standard props of the MUI FormHelperText component, along with additional adapter-specific props. For a complete list of available FormHelperText properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/form-helper-text/).
+
+> The `ref` is forwarded to the underlying `<FormHelperText />` component.
+
+## Notes
+
+- For custom helper-text UIs, build on `useMuiFormHelperTextAdapter`.
+
+## See also
+
+- [useMuiFormHelperTextAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-form-helper-text-adapter)
+- [FormHelperText](https://mui.com/material-ui/api/form-helper-text/)

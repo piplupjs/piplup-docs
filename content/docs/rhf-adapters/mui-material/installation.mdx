@@ -1,0 +1,35 @@
+---
+title: Installation
+description: Material UI adapters and element wrappers for connecting MUI components to React Hook Form.
+---
+
+`@piplup/rhf-adapters/mui-material` provides pre-integrated Material UI components and adapter hooks for React Hook Form.
+
+First, install the core packages, if not installed already:
+
+```package-install
+@piplup/rhf-core react-hook-form
+```
+
+Then install the adapters package together with the MUI Material peer dependencies:
+
+```package-install
+@piplup/rhf-adapters @mui/material @emotion/react @emotion/styled
+```
+
+## Import
+
+```tsx
+import {
+  MuiTextFieldElement,
+  useMuiTextFieldAdapter,
+} from "@piplup/rhf-adapters/mui-material";
+```
+
+Use `/mui-material` subpath when you want MUI components to participate in form state, validation, helper text composition, and `react-hook-form` controlled value handling without writing the wiring yourself.
+
+## See also
+
+- [Components](./components/mui-autocomplete-element)
+- [Hooks](./hooks/use-mui-autocomplete-adapter)
+- [useControllerAdapter](/Users/Sadik/code/piplup-react-hook-form-docs/content/docs/rhf-core/hooks/use-controller-adapter.mdx)

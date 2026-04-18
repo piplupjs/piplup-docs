@@ -1,0 +1,50 @@
+---
+title: useHtmlInputAdapter
+description: Returns normalized input props for building custom HTML input components connected to React Hook Form.
+---
+
+`useHtmlInputAdapter` returns value, event handlers, and field-state-aware props for custom input components that should behave like React Hook Form-controlled fields.
+
+## Import
+
+```tsx
+import { useHtmlInputAdapter } from "@piplup/rhf-adapters/html";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/html/input/element.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseHtmlInputAdapterProps"
+  cwd
+/>
+
+## Return value
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseHtmlInputAdapterReturnType"
+  cwd
+/>
+
+## Notes
+
+- Use this hook for bespoke input components that still need React Hook Form registration and value synchronization.
+- The hook is built on top of `useControllerAdapter`.
+- `transform`, `checked`, and `indeterminate` are useful when DOM values do not match your stored form value exactly.
+
+## See also
+
+- [HtmlInputElement](/docs/rhf-adapters/html/components/html-input-element)
+- [useControllerAdapter](/docs/rhf-core/hooks/use-controller-adapter)

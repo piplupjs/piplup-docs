@@ -1,0 +1,10 @@
+{
+    "$schema": "../../../.source/json-schema/docs.meta.json",
+    "title": "@piplup/cache-buster",
+    "collapsible": false,
+    "pages": [
+        "installation",
+        "components",
+        "hooks"
+    ]
+}

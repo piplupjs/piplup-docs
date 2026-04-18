@@ -1,0 +1,46 @@
+---
+title: MuiFilledInputElement
+description: A pre-integrated MuiFilledInputElement component for connecting MUI FilledInput to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiFilledInputElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/filled-input/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/filled-input/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiFilledInputElementProps"
+  cwd
+/>
+
+`MuiFilledInputElement` supports all standard props of the MUI FilledInput component, along with additional adapter-specific props. For a complete list of available FilledInput properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/filled-input/).
+
+> The `ref` is forwarded to the underlying `<FilledInput />` component.
+
+## Notes
+
+- For custom filled-input UIs, build on `useMuiFilledInputAdapter`.
+
+## See also
+
+- [useMuiFilledInputAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-filled-input-adapter)
+- [FilledInput](https://mui.com/material-ui/api/filled-input/)

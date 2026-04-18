@@ -1,0 +1,44 @@
+---
+title: useFieldStateAdapter
+description: Composes field-level UI state such as error, helper text, disabled, className, and style.
+---
+
+`useFieldStateAdapter` is a lightweight adapter hook for components that need to react to a field's state without becoming the field input itself. It is useful for labels, helper text, wrappers, and other companion UI that should reflect validation or submission state.
+
+Unlike `useControllerAdapter`, this hook does not return `value`, `onChange`, or `onBlur`. It focuses only on presentation-oriented field state.
+
+## Import
+
+```tsx
+import { useFieldStateAdapter } from "@piplup/rhf-core";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "demo/core/hooks/use-field-state-adapter.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseFieldStateAdapterProps" cwd />
+
+## Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseFieldStateAdapterReturnType" cwd />
+
+## Notes
+
+- Use this hook for field-adjacent UI, not for the interactive input element itself.
+- The hook reads state from a single field path and composes helper text from the current field error when available.
+- If your component also needs field value binding, switch to `useControllerAdapter`.
+
+## See also
+
+- [useFieldState](./use-field-state)
+- [useControllerAdapter](./use-controller-adapter)

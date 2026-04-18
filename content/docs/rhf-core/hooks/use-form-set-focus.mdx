@@ -1,0 +1,44 @@
+---
+title: useFormSetFocus
+description: Returns a setFocus function for focusing registered fields from form context or a provided control.
+---
+
+`useFormSetFocus` returns a `setFocus` function for moving focus to a registered field. It is useful when buttons, error summaries, or other nested components need to focus a form field without receiving the full form instance as a prop.
+
+If you do not pass a `control`, the hook reads it from form context, which makes it easy to use inside `FormContainer` or `FormProvider`.
+
+## Import
+
+```tsx
+import { useFormSetFocus } from "@piplup/rhf-core";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "demo/core/hooks/use-form-set-focus.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseFormSetFocusProps" cwd />
+
+## Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseFormSetFocusReturnType" cwd />
+
+## Notes
+
+- Use this hook when nested components need focus control.
+- The returned function mirrors the familiar `react-hookf-form` `setFocus` API, including support for `shouldSelect`.
+- The field must be registered and backed by a focusable element for focus to succeed.
+
+## See also
+
+- [setFocus](https://react-hook-form.com/docs/useform/setfocus)
+- [useFormContext](https://react-hook-form.com/docs/useformcontext)

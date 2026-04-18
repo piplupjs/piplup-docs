@@ -1,0 +1,8 @@
+{
+    "$schema": "../../../.source/json-schema/docs.meta.json",
+    "title": "@piplup/vite-plugin-cache-buster",
+    "collapsible": false,
+    "pages": [
+        "installation"
+    ]
+}

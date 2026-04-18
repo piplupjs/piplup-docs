@@ -1,0 +1,26 @@
+---
+title: useAcl
+description: Hook to query ACL state and run programmatic authorization checks.
+---
+
+## Import
+
+```tsx
+import { useAcl } from "@piplup/react-acl";
+```
+
+## Basic example
+
+```tsx
+function CheckAccess() {
+  const { isAuthorized, loading } = useAcl();
+
+  if (loading) return <div>Loading ACL...</div>;
+
+  return <div>{isAuthorized({ permissions: 'read' }) ? 'Allowed' : 'Denied'}</div>;
+}
+```
+
+## Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseAclReturnType" cwd />

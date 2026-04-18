@@ -1,0 +1,68 @@
+---
+title: Installation
+description: Material UI adapters and element wrappers for connecting MUI X Date Picker components to React Hook Form.
+---
+
+`@piplup/rhf-adapters/mui-x-date-pickers` provides pre-integrated MUI X Date Picker components and adapter hooks for React Hook Form.
+
+First, install the core packages, if not installed already:
+
+```package-install
+@piplup/rhf-core react-hook-form
+```
+
+Then install the adapters package together with the MUI Material and MUI X Date Pickers peer dependencies:
+
+```package-install
+@piplup/rhf-adapters @mui/material @emotion/react @emotion/styled @mui/x-date-pickers
+```
+
+Additionally, install the date library of your choice for MUI X Date Pickers
+
+<Tabs items={["dayjs", "date-fns", "luxon", "moment"]}>
+  <Tab value="dayjs">
+
+```package-install
+dayjs
+```
+
+  </Tab>
+  <Tab value="date-fns">
+
+```package-install
+date-fns
+```
+
+  </Tab>
+  <Tab value="luxon">
+
+```package-install
+luxon
+```
+
+  </Tab>
+  <Tab value="moment">
+
+```package-install
+moment
+```
+
+  </Tab>
+</Tabs>
+
+## Import
+
+```tsx
+import {
+  MuiXDatePickerElement,
+  useMuiXDatePickerAdapter,
+} from "@piplup/rhf-adapters/mui-x-date-pickers";
+```
+
+Use `/mui-x-date-pickers` subpath when you want MUI X Date Pickers components to participate in form state, validation, helper text composition, and `react-hook-form` controlled value handling without writing the wiring yourself.
+
+## See also
+
+- [Components](./components/mui-x-date-calendar-element)
+- [Hooks](./hooks/use-mui-x-date-calendar-adapter)
+- [MUI X Date Pickers - QuickStart](https://mui.com/x/react-date-pickers/quickstart/)

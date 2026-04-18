@@ -1,0 +1,48 @@
+---
+title: MuiCheckboxElement
+description: A pre-integrated MuiCheckboxElement component for connecting MUI Checkbox to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiCheckboxElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/checkbox/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/checkbox/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiCheckboxElementProps"
+  cwd
+/>
+
+`MuiCheckboxElement` supports all standard props of the MUI Checkbox component, along with additional adapter-specific props. For a complete list of available Checkbox properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/checkbox/).
+
+> The `ref` is forwarded to the underlying `<Fab />` component.
+
+
+## Notes
+
+- For custom checkbox UIs, build on `useMuiCheckboxAdapter`.
+- `MuiCheckboxElement` always expects the input value to be an array. Use transform.input and transform.output when working with values that are not arrays.
+
+## See also
+
+- [useMuiCheckboxAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-checkbox-adapter)
+- [Checkbox](https://mui.com/material-ui/api/checkbox/)

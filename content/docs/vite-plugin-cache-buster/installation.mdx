@@ -1,0 +1,59 @@
+---
+title: Installation
+description: Install and configure the Vite plugin to generate release IDs at build time for cache busting.
+---
+
+`@piplup/vite-plugin-cache-buster` generates a release ID during your Vite build, enabling `@piplup/cache-buster` to detect new deployments and refresh stale client caches.
+
+```package-install
+@piplup/vite-plugin-cache-buster
+```
+
+## Setup
+
+Add the plugin to your Vite config:
+
+```tsx
+import { vitePluginCacheBuster } from "@piplup/vite-plugin-cache-buster";
+
+export default {
+  plugins: [vitePluginCacheBuster()],
+};
+```
+
+## How it works
+
+During build, the plugin:
+
+- Generates a unique release ID
+- Writes it to a static file (e.g. `/release.txt`)
+- Makes it accessible to the browser at runtime
+
+This file is later fetched by `@piplup/cache-buster` to detect updates.
+
+## Why this is required
+
+Cache busting relies on comparing:
+
+- **Current release ID (from server file)**
+- **Stored release ID (in browser storage)**
+
+Without generating this file during build, the app cannot detect updates.
+
+## When to use
+
+Use this plugin if:
+
+- You're using **Vite**
+- You're using `@piplup/cache-buster`
+- You want **automatic release ID generation**
+
+## Next step
+
+Integrate the runtime check — use `useReleaseStatus` or `<CacheBuster />` in your app.
+
+## See also
+
+- [Cache Buster - Installation](/docs/cache-buster/installation)
+- [useReleaseStats](/docs/cache-buster/hooks/use-release-status)
+- [CacheBuster](/docs/cache-buster/components/cache-buster)

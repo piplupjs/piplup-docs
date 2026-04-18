@@ -1,0 +1,42 @@
+---
+title: MuiSelectElement
+description: A pre-integrated MuiSelectElement component for connecting MUI Select to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiSelectElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/select/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/select/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiSelectElementProps" cwd />
+
+`MuiSelectElement` supports props of the MUI Select component, along with additional adapter-specific props. For a complete list of available Select properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/select/).
+
+> The `ref` is forwarded to the underlying `<Select />` component.
+
+## Notes
+
+- For custom select UIs, build on `useMuiSelectAdapter`.
+
+## See also
+
+- [useMuiSelectAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-select-adapter)
+- [Select](https://mui.com/material-ui/api/select/)

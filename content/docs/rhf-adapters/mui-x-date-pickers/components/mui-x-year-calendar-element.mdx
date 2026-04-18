@@ -1,0 +1,46 @@
+---
+title: MuiXYearCalendarElement
+description: A pre-integrated MuiXYearCalendarElement component for connecting MUI X YearCalendar to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiXYearCalendarElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-x-date-pickers/year-calendar/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-x-date-pickers/year-calendar/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiXYearCalendarElementProps"
+  cwd
+/>
+
+`MuiXYearCalendarElement` supports all standard props of the MUI X YearCalendar component, along with additional adapter-specific props. For a complete list of available YearCalendar properties, refer to the MUI X Date Pickers [API documentation](https://mui.com/x/api/date-pickers/year-calendar/).
+
+> The `ref` is forwarded to the underlying `<YearCalendar />` component.
+
+## Notes
+
+- For custom year calendars, build on `useMuiXYearCalendarAdapter`.
+
+## See also
+
+- [useMuiXTimePickerAdapter](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-year-calendar-adapter)
+- [YearCalendar](https://mui.com/x/api/date-pickers/year-calendar/)

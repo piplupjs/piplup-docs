@@ -1,0 +1,31 @@
+---
+title: useMuiChipsInputAdapter
+description: Returns adapter props for building custom mui-chips-input integrations with React Hook Form.
+---
+
+## Import
+
+```tsx
+import { useMuiChipsInputAdapter } from "@piplup/rhf-adapters/mui-chips-input";
+```
+
+## Usage
+
+<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-chips-input/element.tsx" }]} />
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiChipsInputAdapterProps" cwd />
+
+## Return value
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseMuiChipsInputAdapterReturnType"
+  cwd
+/>
+
+## Notes
+
+- Use this hook for custom chip inputs that still need `react-hoook-form` controlled value handling.
+- It builds on `useControllerAdapter`.

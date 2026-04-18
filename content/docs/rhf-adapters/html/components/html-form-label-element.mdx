@@ -1,0 +1,52 @@
+---
+title: HtmlFormLabelElement
+description: A form label component that reads React Hook Form field state for styling and error-aware labeling.
+---
+
+`HtmlFormLabelElement` wraps the native `<label>` element and exposes field-state-aware styling without requiring manual state plumbing.
+
+## Import
+
+```tsx
+import { HtmlFormLabelElement } from "@piplup/rhf-adapters/html";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-form-label-element/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-form-label-element/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="HtmlFormLabelElementProps" cwd />
+
+`HtmlFormLabelElement` accepts standard label attributes together with adapter props such as `name`, `control`, and custom state-driven styling.
+
+> The `ref` is forwarded to the underlying `<label>` element.
+
+## Notes
+
+- Use `htmlFor` to associate the label with an input `id`.
+- The adapter exposes `error`, `disabled`, and helper-text-aware styling composition through field state.
+- For custom label components, build on [`useHtmlFormLabelAdapter`](../hooks/use-html-form-label-adapter).
+
+## See also
+
+<Cards>
+  <Card title="useHtmlFormLabelAdapter" href="../hooks/use-html-form-label-adapter">
+    Reuse label adapter behavior in a custom component.
+  </Card>
+  <Card title="useFieldStateAdapter" href="/docs/rhf-core/hooks/use-field-state-adapter">
+    Core hook that powers label field-state wiring.
+  </Card>
+</Cards>

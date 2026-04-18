@@ -1,0 +1,41 @@
+---
+title: Installation
+description: Install @piplup/rhf-adapters and start using the HTML adapter subpath with React Hook Form.
+---
+
+`@piplup/rhf-adapters` provides prebuilt adapter hooks and components that connect UI elements to React Hook Form. The package is organized by subpath, so you only import the adapter family you need.
+
+
+First, install the core packages, if not installed already:
+
+```package-install
+@piplup/rhf-core react-hook-form
+```
+
+Then, install the adapters package:
+
+```package-install
+@piplup/rhf-adapters
+```
+
+## Import
+
+Import HTML adapters from the `html` subpath:
+
+```tsx
+import {
+  HtmlInputElement,
+  HtmlTextareaElement,
+  useHtmlInputAdapter,
+} from "@piplup/rhf-adapters/html";
+```
+
+The root `@piplup/rhf-adapters` entrypoint is not where the practical component and hook APIs live. Use the package `/html` subpath instead.
+
+## See also
+
+<Cards>
+  <Card title="@piplup/rhf-core" href="/docs/rhf-core/installation">
+    Install the core primitives that the adapter hooks build on.
+  </Card>
+</Cards>

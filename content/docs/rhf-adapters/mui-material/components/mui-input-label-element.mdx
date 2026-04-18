@@ -1,0 +1,47 @@
+---
+title: MuiInputLabelElement
+description: A pre-integrated MuiInputLabelElement component for field-state-aware MUI input labels with React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiInputLabelElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/input-label/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/input-label/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiInputLabelElementProps"
+  cwd
+/>
+
+`MuiInputLabelElement` supports props of the MUI InputLabel component, along with additional adapter-specific props. For a complete list of available InputLabel properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/input-label/).
+
+> The `ref` is forwarded to the underlying `<InputLabel />` component.
+
+## Notes
+
+- Use this component when MUI InputLabel should react to RHF field state.
+- For custom input-label UIs, build on `useMuiInputLabelAdapter`.
+
+## See also
+
+- [useMuiInputLabelAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-input-label-adapter)
+- [InputLabel](https://mui.com/material-ui/api/input-label/)

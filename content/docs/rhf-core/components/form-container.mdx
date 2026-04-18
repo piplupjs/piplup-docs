@@ -1,0 +1,49 @@
+---
+title: FormContainer
+description: Wires up <form> element, FormProvider and FormErrorProvider components together in a single component.
+---
+
+## Import
+
+```tsx
+import { FormContainer } from "@piplup/rhf-core";
+```
+
+## Usage
+
+Basic usage with `FormContainer`. It accepts the same options you would normally pass to `useForm` (for example: `defaultValues`, `resolver`, etc.) and handles form registration and submission wiring for you.
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "demo/core/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="FormContainerProps" cwd />
+
+`FormContainer` forwards refs to the underlying `<form>` element and exposes the `onSubmit` prop for reading the submitted form data.
+
+## Notes
+
+- Use `useFormContext()` inside nested components to access `register`, `watch`, `setValue`, etc.
+- You can pass any options accepted by `useForm` directly to `FormContainer` or `formContext` returned by `useForm` hook.
+- Because `FormContainer` renders a native `<form>` with `noValidate` prop, therefore, browser-level validations are ignored unless explicitly enabled.
+
+## See also
+
+<Cards>
+  <Card title="useForm" href="https://react-hook-form.com/docs/useform">
+    Custom hook for managing forms with ease.
+  </Card>
+  <Card
+    title="useFormContext"
+    href="https://react-hook-form.com/docs/useformcontext"
+  >
+    Hook to access form context values in nested components.
+  </Card>
+</Cards>

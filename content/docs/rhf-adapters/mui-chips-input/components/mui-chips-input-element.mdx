@@ -1,0 +1,28 @@
+---
+title: MuiChipsInputElement
+description: A pre-integrated MuiChipsInputElement component for connecting string chip arrays to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiChipsInputElement } from "@piplup/rhf-adapters/mui-chips-input";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    { label: "useForm", path: "demo/adapters/mui-chips-input/use-form.tsx" },
+    { label: "FormContainer", path: "demo/adapters/mui-chips-input/form-container.tsx" },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiChipsInputElementProps" cwd />
+
+## Notes
+
+- Use this component when the field value is an array of strings.
+- For custom chip inputs, build on `useMuiChipsInputAdapter`.

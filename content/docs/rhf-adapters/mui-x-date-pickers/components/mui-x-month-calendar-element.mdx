@@ -1,0 +1,46 @@
+---
+title: MuiXMonthCalendarElement
+description: A pre-integrated MuiXMonthCalendarElement component for connecting MUI X MonthCalendar to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiXMonthCalendarElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-x-date-pickers/month-calendar/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-x-date-pickers/month-calendar/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiXMonthCalendarElementProps"
+  cwd
+/>
+
+`MuiXMonthCalendarElement` supports all standard props of the MUI X MonthCalendar component, along with additional adapter-specific props. For a complete list of available MonthCalendar properties, refer to the MUI X Date Pickers [API documentation](https://mui.com/x/api/date-pickers/month-calendar/).
+
+> The `ref` is forwarded to the underlying `<MonthCalendar />` component.
+
+## Notes
+
+- For custom month calendars, build on `useMuiXMonthCalendarAdapter`.
+
+## See also
+
+- [useMuiXMonthCalendarAdapter](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-month-calendar-adapter)
+- [MonthCalendar](https://mui.com/x/api/date-pickers/month-calendar/)

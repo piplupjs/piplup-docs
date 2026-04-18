@@ -1,0 +1,84 @@
+---
+title: HtmlButtonElement
+description: A pre-integrated button component that connects native button behavior to React Hook Form form state.
+---
+
+`HtmlButtonElement` is a native `<button>` wrapper for React Hook Form-aware actions such as submit, reset, and state-driven button disabling.
+
+## Import
+
+```tsx
+import { HtmlButtonElement } from "@piplup/rhf-adapters/html";
+```
+
+## Usage
+
+### Submit
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-button-element/submit/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-button-element/submit/form-container.tsx",
+    },
+  ]}
+/>
+
+### Reset
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-button-element/reset/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-button-element/reset/form-container.tsx",
+    },
+  ]}
+/>
+
+### Button
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-button-element/button/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-button-element/button/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="HtmlButtonElementProps" cwd />
+
+`HtmlButtonElement` accepts standard native button attributes alongside adapter props such as `control`, `disableOnError`, and `disableOnIsSubmitting`.
+
+> The `ref` is forwarded to the underlying `<button>` element.
+
+## Notes
+
+- Use `type="submit"` or `type="reset"` to delegate to the surrounding form.
+- Use `disableOnError` or `disableOnIsSubmitting` when the button should react to form state automatically.
+- For custom button UIs, build on [`useHtmlButtonAdapter`](../hooks/use-html-button-adapter).
+
+## See also
+
+<Cards>
+  <Card title="useHtmlButtonAdapter" href="../hooks/use-html-button-adapter">
+    Build a custom button component with the same adapter behavior.
+  </Card>
+  <Card title="useFormStateAdapter" href="/docs/rhf-core/hooks/use-form-state-adapter">
+    Core hook that powers the button adapter's form-state wiring.
+  </Card>
+</Cards>

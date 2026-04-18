@@ -1,0 +1,46 @@
+---
+title: MuiXDateCalendarElement
+description: A pre-integrated MuiXDateCalendarElement component for connecting MUI X DateCalendar to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiXDateCalendarElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-x-date-pickers/date-calendar/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-x-date-pickers/date-calendar/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiXDateCalendarElementProps"
+  cwd
+/>
+
+`MuiXDateCalendarElement` supports all standard props of the MUI X DateCalendar component, along with additional adapter-specific props. For a complete list of available DateCalendar properties, refer to the MUI X Date Pickers [API documentation](https://mui.com/x/api/date-pickers/date-calendar/).
+
+> The `ref` is forwarded to the underlying `<DateCalendar />` component.
+
+## Notes
+
+- For custom calendar UIs, build on `useMuiXDateCalendarAdapter`.
+
+## See also
+
+- [useMuiXDateCalendarAdapter](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-calendar-adapter)
+- [DateCalendar](https://mui.com/x/api/date-pickers/date-calendar/)

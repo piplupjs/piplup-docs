@@ -1,0 +1,32 @@
+---
+title: NumericFormatElement
+description: A pre-integrated NumericFormatElement component for formatted numeric input with React Hook Form.
+---
+
+## Import
+
+```tsx
+import { NumericFormatElement } from "@piplup/rhf-adapters/react-number-format";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    { label: "useForm", path: "demo/adapters/react-number-format/numeric-format/use-form.tsx" },
+    { label: "FormContainer", path: "demo/adapters/react-number-format/numeric-format/form-container.tsx" },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="NumericFormatElementProps" cwd />
+
+`NumericFormatElement` supports all standard props of the `NumericFormat` component, along with additional adapter-specific props.
+
+> The `ref` is forwarded to the underlying `<NumericFormat />` component.
+
+## Notes
+
+- Use this component when numeric display formatting should stay separate from stored `react-hook-form` values.
+- For custom numeric format inputs, build on `useNumericFormatAdapter`.

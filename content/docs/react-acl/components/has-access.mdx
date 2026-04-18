@@ -1,0 +1,27 @@
+---
+title: HasAccess
+description: Conditionally render content based on roles or permissions.
+---
+
+## Import
+
+```tsx
+import { HasAccess } from "@piplup/react-acl";
+```
+
+## Basic example
+
+```tsx
+<HasAccess permissions={["read"]}>
+  <div>Visible to users with read permission</div>
+</HasAccess>
+```
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="HasAccessProps" cwd />
+
+## Examples
+
+- `fallback` can be used to render alternative UI when access is denied.
+- `loading` prop can be supplied to show a loading placeholder while ACL data resolves.

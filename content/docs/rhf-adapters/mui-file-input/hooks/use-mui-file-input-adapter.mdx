@@ -1,0 +1,27 @@
+---
+title: useMuiFileInputAdapter
+description: Returns adapter props for building custom mui-file-input integrations with React Hook Form.
+---
+
+## Import
+
+```tsx
+import { useMuiFileInputAdapter } from "@piplup/rhf-adapters/mui-file-input";
+```
+
+## Usage
+
+<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-file-input/element.tsx" }]} />
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiFileInputAdapterProps" cwd />
+
+## Return value
+
+- Return value: adapter props including `value`, `multiple`, `onChange`, `onBlur`, `inputRef`, `error`, and `helperText`.
+
+## Notes
+
+- Use this hook when your file picker UI is custom but should still be RHF-aware.
+- It builds on `useControllerAdapter`.

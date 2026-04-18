@@ -1,0 +1,42 @@
+---
+title: useControllerAdapter
+description: Connects a custom input component to React Hook Form while composing UI state and helper props.
+---
+
+`useControllerAdapter` is one of the main adapter building hook. It wraps React Hook Form's `useController` and returns an object for custom input components, including `value`, `onChange`, `onBlur`, `ref`, validation rules, helper text, and composed disabled or error state.
+
+Use it when you are building an input-like component that needs both field binding and UI state in one place. If you only need field state for surrounding UI, `useFieldStateAdapter` is usually a better fit.
+
+## Import
+
+```tsx
+import { useControllerAdapter } from "@piplup/rhf-core";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "demo/core/hooks/use-controller-adapter.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseControllerAdapterProps" cwd />
+
+## Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseControllerAdapterReturnType" cwd />
+
+## Notes
+
+- `transform.input` changes the value your component receives, while `transform.output` changes what gets stored in the form.
+
+## See also
+
+- [useController](https://react-hook-form.com/docs/usecontroller)
+- [useFieldStateAdapter](./use-field-state-adapter)

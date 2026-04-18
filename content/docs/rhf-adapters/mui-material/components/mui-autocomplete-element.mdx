@@ -1,0 +1,48 @@
+---
+title: MuiAutocompleteElement
+description: A pre-integrated MuiAutocompleteElement component for connecting MUI Autocomplete to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiAutocompleteElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/autocomplete/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/autocomplete/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiAutocompleteElementProps"
+  cwd
+/>
+
+`MuiAutocompleteElement` supports all standard props of the MUI Autocomplete component, along with additional adapter-specific props. For a complete list of available Autocomplete properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/autocomplete/).
+
+> The `ref` is forwarded to the underlying `<Autocomplete />` component.
+
+## Notes
+
+- Use this component when MUI Autocomplete should behave like an `react-hook-form` controlled field.
+- For custom autocomplete UIs, build on `useMuiAutocompleteAdapter`.
+
+## See also
+
+- [useMuiAutocompleteAdapter](/docs/rhf-adapters/hooks/use-mui-autocomplete-adapter)
+- [useControllerAdapter](/docs/rhf-core/hooks/use-controller-adapter)
+- [Autocomplete](https://mui.com/material-ui/api/autocomplete/)

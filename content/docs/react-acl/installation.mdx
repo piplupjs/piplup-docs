@@ -1,0 +1,35 @@
+---
+title: Installation
+description: Install and configure @piplup/react-acl to manage roles and permissions in your React app.
+---
+
+`@piplup/react-acl` provides a small ACL context, a `HasAccess` conditional component, and a `useAcl` hook for programmatic checks.
+
+```package-install
+@piplup/react-acl
+```
+
+## Quickstart
+
+Wrap your app with `AclProvider` and pass roles/permissions (can be loaded asynchronously):
+
+```tsx
+import { AclProvider } from "@piplup/react-acl";
+
+export default function App({ children }) {
+  // load roles/permissions from API
+  return (
+    <AclProvider loading={false} roles={["user"]} permissions={["read"]}>
+      {children}
+    </AclProvider>
+  );
+}
+```
+
+See the `AclProvider`, `HasAccess`, and `useAcl` pages for API details and examples.
+
+## See also
+
+- [AclProvider](/docs/react-acl/components/acl-provider)
+- [HasAccess](/docs/react-acl/components/has-access)
+- [useAcl](/docs/react-acl/hooks/use-acl)

@@ -1,0 +1,16 @@
+{
+    "$schema": "../../../.source/json-schema/docs.meta.json",
+    "title": "@piplup/rhf-adapters",
+    "collapsible": false,
+    "pages": [
+        "html",
+        "mui-material",
+        "mui-x-date-pickers",
+        "mui-chips-input",
+        "mui-color-input",
+        "mui-file-input",
+        "mui-one-time-password-input",
+        "mui-tel-input",
+        "react-number-format"
+    ]
+}

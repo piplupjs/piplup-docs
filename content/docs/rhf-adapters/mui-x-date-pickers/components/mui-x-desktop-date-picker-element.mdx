@@ -1,0 +1,46 @@
+---
+title: MuiXDesktopDatePickerElement
+description: A pre-integrated MuiXDesktopDatePickerElement component for connecting MUI X DesktopDatePicker to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiXDesktopDatePickerElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-x-date-pickers/desktop-date-picker/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-x-date-pickers/desktop-date-picker/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiXDesktopDatePickerElementProps"
+  cwd
+/>
+
+`MuiXDesktopDatePickerElement` supports all standard props of the MUI X DesktopDatePicker component, along with additional adapter-specific props. For a complete list of available DesktopDatePicker properties, refer to the MUI X Date Pickers [API documentation](https://mui.com/x/api/date-pickers/desktop-date-picker/).
+
+> The `ref` is forwarded to the underlying `<DesktopDatePicker />` component.
+
+## Notes
+
+- For custom desktop date pickers, build on `useMuiXDesktopDatePickerAdapter`.
+
+## See also
+
+- [useMuiXDesktopDatePickerAdapter](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-desktop-date-picker-adapter)
+- [DesktopDatePicker](https://mui.com/x/api/date-pickers/desktop-date-picker/)

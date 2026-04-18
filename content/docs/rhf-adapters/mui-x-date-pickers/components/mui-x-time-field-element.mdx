@@ -1,0 +1,46 @@
+---
+title: MuiXTimeFieldElement
+description: A pre-integrated MuiXTimeFieldElement component for connecting MUI X TimeField to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiXTimeFieldElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-x-date-pickers/time-field/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-x-date-pickers/time-field/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiXTimeFieldElementProps"
+  cwd
+/>
+
+`MuiXTimeFieldElement` supports all standard props of the MUI X TimeField component, along with additional adapter-specific props. For a complete list of available TimeField properties, refer to the MUI X Date Pickers [API documentation](https://mui.com/x/api/date-pickers/time-field/).
+
+> The `ref` is forwarded to the underlying `<TimeField />` component.
+
+## Notes
+
+- For custom time fields, build on `useMuiXTimeFieldAdapter`.
+
+## See also
+
+- [useMuiXTimeFieldAdapter](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-field-adapter)
+- [TimeField](https://mui.com/x/api/date-pickers/time-field/)

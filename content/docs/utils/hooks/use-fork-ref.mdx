@@ -1,0 +1,57 @@
+---
+title: useForkRef
+description: Hook to combine multiple refs into a single ref callback.
+---
+
+```tsx
+import { useForkRef } from "@piplup/utils";
+
+function Component({ externalRef }) {
+  const localRef = React.useRef(null);
+  const combined = useForkRef(localRef, externalRef);
+
+  return <div ref={combined} />;
+}
+```
+
+## Props
+
+<TypeTable type={{
+  refs: {
+    description: (
+      <>
+        One or more refs to merge. Each item can be a `RefObject`, a ref
+        callback, or `null`/`undefined`.
+      </>
+    ),
+    type: "(...refs: Array<React.Ref<any> | undefined>) => void",
+    typeDescription: (
+      <>
+        Accepts multiple refs and returns a single callback ref that updates
+        all provided refs when invoked by React.
+      </>
+    ),
+    required: true,
+  },
+}} />
+
+## Return value
+
+<TypeTable type={{
+  combinedRef: {
+    description: (
+      <>
+        A callback ref suitable for assigning to an element's `ref` prop.
+        When React calls this callback with the element, all input refs are
+        updated to reference that element.
+      </>
+    ),
+    type: "(instance: T | null) => void",
+    typeDescription: (
+      <>
+        Typical usage: `const combined = useForkRef(refA, refB)` 
+      </>
+    ),
+    required: true,
+  },
+}} />

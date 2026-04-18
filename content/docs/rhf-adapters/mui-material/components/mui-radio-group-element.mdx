@@ -1,0 +1,46 @@
+---
+title: MuiRadioGroupElement
+description: A pre-integrated MuiRadioGroupElement component for connecting MUI RadioGroup to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiRadioGroupElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/radio-group/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/radio-group/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiRadioGroupElementProps"
+  cwd
+/>
+
+`MuiRadioGroupElement` supports props of the MUI RadioGroup component, along with additional adapter-specific props. For a complete list of available RadioGroup properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/radio-group/).
+
+> The `ref` is forwarded to the underlying `<RadioGroup />` component.
+
+## Notes
+
+- For custom radio-group UIs, build on `useMuiRadioGroupAdapter`.
+
+## See also
+
+- [useMuiRadioGroupAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-radio-group-adapter)
+- [RadioGroup](https://mui.com/material-ui/api/radio-group/)

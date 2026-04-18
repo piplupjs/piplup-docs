@@ -1,0 +1,50 @@
+---
+title: useHtmlTextareaAdapter
+description: Returns normalized textarea props for building custom textarea components connected to React Hook Form.
+---
+
+`useHtmlTextareaAdapter` exposes the value, events, and field-state-aware props needed to build a custom textarea component on top of React Hook Form.
+
+## Import
+
+```tsx
+import { useHtmlTextareaAdapter } from "@piplup/rhf-adapters/html";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/html/textarea/element.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseHtmlTextareaAdapterProps"
+  cwd
+/>
+
+## Return value
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseHtmlTextareaAdapterReturnType"
+  cwd
+/>
+
+## Notes
+
+- Use this hook when a custom multiline input should still participate in React Hook Form validation and state management.
+- The hook is built on top of `useControllerAdapter`.
+- It is a textarea-specific variant of the HTML input adapter with checkbox- and type-specific props removed.
+
+## See also
+
+- [HtmlTextareaElement](/docs/rhf-adapters/html/components/html-textarea-element)
+- [useControllerAdapter](/docs/rhf-core/hooks/use-controller-adapter)

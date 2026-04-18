@@ -1,0 +1,32 @@
+---
+title: PatternFormatElement
+description: A pre-integrated PatternFormatElement component for masked and pattern-based input with React Hook Form.
+---
+
+## Import
+
+```tsx
+import { PatternFormatElement } from "@piplup/rhf-adapters/react-number-format";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    { label: "useForm", path: "demo/adapters/react-number-format/pattern-format/use-form.tsx" },
+    { label: "FormContainer", path: "demo/adapters/react-number-format/pattern-format/form-container.tsx" },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="PatternFormatElementProps" cwd />
+
+`PatternFormatElement` supports all standard props of the `PatternFormat` component, along with additional adapter-specific props.
+
+> The `ref` is forwarded to the underlying `<PatternFormat />` component.
+
+## Notes
+
+- Use this component for masked values such as card, phone, or code patterns.
+- For custom masked inputs, build on `usePatternFormatAdapter`.

@@ -1,0 +1,52 @@
+---
+title: HtmlTextareaElement
+description: A pre-integrated textarea component for native multi-line input with React Hook Form value and validation wiring.
+---
+
+`HtmlTextareaElement` connects a native `<textarea>` to React Hook Form while preserving the ergonomics of a regular textarea component.
+
+## Import
+
+```tsx
+import { HtmlTextareaElement } from "@piplup/rhf-adapters/html";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/html/html-textarea-element/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/html/html-textarea-element/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="HtmlTextareaElementProps" cwd />
+
+`HtmlTextareaElement` accepts textarea props together with adapter props such as `control`, `rules`, `messages`, and `transform`.
+
+> The `ref` is forwarded to the underlying `<textarea>` element.
+
+## Notes
+
+- Use this component when a field should behave like a regular textarea but still participate in React Hook Form validation and state.
+- The component is built on top of `useHtmlTextareaAdapter`.
+- For custom multiline inputs, compose directly with [`useHtmlTextareaAdapter`](../hooks/use-html-textarea-adapter).
+
+## See also
+
+<Cards>
+  <Card title="useHtmlTextareaAdapter" href="../hooks/use-html-textarea-adapter">
+    Build a custom textarea-like component with the same adapter logic.
+  </Card>
+  <Card title="useControllerAdapter" href="/docs/rhf-core/hooks/use-controller-adapter">
+    Core hook that powers textarea field registration and value mapping.
+  </Card>
+</Cards>

@@ -1,0 +1,28 @@
+---
+title: Installation
+description: React Hook Form adapters for mui-one-time-password-input components and custom OTP input composition.
+---
+
+`@piplup/rhf-adapters/mui-one-time-password-input` connects `mui-one-time-password-input` components to `react-hook-form`.
+
+```package-install
+@piplup/rhf-core react-hook-form
+```
+
+Then, install the adapters package together with the MUI Material and mui-one-time-password-input peer dependencies:
+
+```package-install
+@piplup/rhf-adapters @mui/material @emotion/react @emotion/styled @mui/x-date-pickers mui-one-time-password-input
+```
+
+## Import
+
+```tsx
+import { MuiOtpInputElement, useMuiOtpInputAdapter } from "@piplup/rhf-adapters/mui-one-time-password-input";
+```
+
+Use `/mui-one-time-password-input` subpath when you need `mui-one-time-password-input` components to stay in sync with `react-hook-form`.
+
+## See also
+
+- [mui-one-time-password-input](https://viclafouch.github.io/mui-otp-input/)

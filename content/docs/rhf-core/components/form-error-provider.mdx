@@ -1,0 +1,38 @@
+---
+title: FormErrorProvider
+description: Provider component from @piplup/rhf-core that centralizes form error handling and mapping for friendly error messages.
+---
+
+## Import
+
+```tsx
+import { FormErrorProvider } from "@piplup/rhf-core";
+```
+
+## Usage
+
+Wrap your form with `FormErrorProvider`. Provide an `errorParser` function to translate raw error objects into user-friendly messages, or rely on default behavior.
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "demo/core/form-error-parser.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="FormErrorProviderProps" cwd />
+
+## Patterns
+
+- **Global mapping:** Use a single `errorParser` at the app root to ensure consistent copy and localization.
+- **Field-level overrides:** Components can still render custom error messages when they need special phrasing.
+- **i18n:** Combine `errorParser` with your localization system to return translated messages.
+
+## Notes
+
+- `FormErrorProvider` does not replace form validation — it only maps and exposes error messages for rendering.
+- `FormContainer` is pre-configured with `FormErrorProvider`, so you can directly use `errorParser` prop without wrapping with another FormErrorProvider.

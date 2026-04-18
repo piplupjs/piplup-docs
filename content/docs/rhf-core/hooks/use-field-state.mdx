@@ -1,0 +1,44 @@
+---
+title: useFieldState
+description: Reads validation and interaction state for a single field path.
+---
+
+`useFieldState` is a low-level hook for reading the state of one field from the current form. It is helpful when you want to react to a field being invalid, touched, dirty, disabled, or currently validating, but you do not need the adapter props returned by `useFieldStateAdapter` or `useControllerAdapter`.
+
+The hook returns field-level state plus a few useful form-derived flags such as `disabled` and `isSubmitting`.
+
+## Import
+
+```tsx
+import { useFieldState } from "@piplup/rhf-core";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "demo/core/hooks/use-field-state.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseFieldStateProps" cwd />
+
+## Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseFieldStateReturnType" cwd />
+
+## Notes
+
+- This hook is best when you want state only and plan to render your own UI from it.
+- It reads a single field path and does not provide input binding helpers such as `value` or `onChange`.
+- If you want helper text, class names, or style to be composed for you, use `useFieldStateAdapter` instead.
+
+## See also
+
+- [useFieldStateAdapter](./use-field-state-adapter)
+- [useFormState](https://react-hook-form.com/docs/useformstate)

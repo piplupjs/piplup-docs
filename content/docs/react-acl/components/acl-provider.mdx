@@ -1,0 +1,27 @@
+---
+title: AclProvider
+description: Provide roles and permissions to the ACL context.
+---
+
+## Import
+
+```tsx
+import { AclProvider } from "@piplup/react-acl";
+```
+
+## Usage
+
+```tsx
+<AclProvider loading={false} roles={["admin"]} permissions={["read","write"]}>
+  <App />
+</AclProvider>
+```
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="AclProviderProps" cwd />
+
+## Notes
+
+- `roles` and `permissions` accept `string` or `number` values.
+- Use the `loading` prop while your identity/ACL data is being fetched.

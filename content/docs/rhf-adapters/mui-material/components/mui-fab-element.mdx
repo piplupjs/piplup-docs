@@ -1,0 +1,43 @@
+---
+title: MuiFabElement
+description: A pre-integrated MuiFabElement component for React Hook Form-aware floating action button behavior.
+---
+
+## Import
+
+```tsx
+import { MuiFabElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/fab/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/fab/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiFabElementProps" cwd />
+
+`MuiFabElement` supports all standard props of the MUI Fab component, along with additional adapter-specific props. For a complete list of available Fab properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/fab/).
+
+> The `ref` is forwarded to the underlying `<Fab />` component.
+
+
+## Notes
+
+- For custom FAB UIs, build on `useMuiFabAdapter`.
+
+## See also
+
+- [useMuiFabAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-fab-adapter)
+- [Fab](https://mui.com/material-ui/api/fab/)

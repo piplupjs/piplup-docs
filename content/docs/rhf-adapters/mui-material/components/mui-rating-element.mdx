@@ -1,0 +1,42 @@
+---
+title: MuiRatingElement
+description: A pre-integrated MuiRatingElement component for connecting MUI Rating to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiRatingElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/rating/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/rating/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="MuiRatingElementProps" cwd />
+
+`MuiRatingElement` supports props of the MUI Rating component, along with additional adapter-specific props. For a complete list of available Rating properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/rating/).
+
+> The `ref` is forwarded to the underlying `<Rating />` component.
+
+## Notes
+
+- For custom rating UIs, build on `useMuiRatingAdapter`.
+
+## See also
+
+- [useMuiRatingAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-rating-adapter)
+- [Rating](https://mui.com/material-ui/api/rating/)

@@ -1,0 +1,30 @@
+---
+title: Installation
+description: React Hook Form adapters for react-number-format components and custom formatted numeric inputs.
+---
+
+`@piplup/rhf-adapters/react-number-format` provides adapters for `react-number-format` inputs that need `react-hook-form` controlled value handling.
+
+First, install the core packages, if not installed already:
+
+```package-install
+@piplup/rhf-core react-hook-form
+```
+
+Then install the adapters package together with the MUI Material and `react-number-format` peer dependencies:
+
+```package-install
+@piplup/rhf-adapters @mui/material @emotion/react @emotion/styled react-number-format
+```
+
+## Import
+
+```tsx
+import { NumericFormatElement, useNumericFormatAdapter } from "@piplup/rhf-adapters/react-number-format";
+```
+
+Use `/react-number-format` subpath when you need `react-number-format` components to stay in sync with `react-hook-form`.
+
+## See also 
+
+- [React Number Format](https://s-yadav.github.io/react-number-format/docs/intro/)

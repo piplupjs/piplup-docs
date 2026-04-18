@@ -1,0 +1,46 @@
+---
+title: MuiTextFieldElement
+description: A pre-integrated MuiTextFieldElement component for connecting MUI TextField to React Hook Form.
+---
+
+## Import
+
+```tsx
+import { MuiTextFieldElement } from "@piplup/rhf-adapters/mui-material";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "useForm",
+      path: "demo/adapters/mui-material/text-field/use-form.tsx",
+    },
+    {
+      label: "FormContainer",
+      path: "demo/adapters/mui-material/text-field/form-container.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="MuiTextFieldElementProps"
+  cwd
+/>
+
+`MuiTextFieldElement` supports props of the MUI TextField component, along with additional adapter-specific props. For a complete list of available TextField properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/text-field/).
+
+> The `ref` is forwarded to the underlying `<TextField />` component.
+
+## Notes
+
+- For custom text field UIs, build on `useMuiTextFieldAdapter`.
+
+## See also
+
+- [useMuiTextFieldAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-text-field-adapter)
+- [TextField](https://mui.com/material-ui/api/text-field/)

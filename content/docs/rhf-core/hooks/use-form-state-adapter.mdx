@@ -1,0 +1,44 @@
+---
+title: useFormStateAdapter
+description: Composes form-level UI state such as disabled, error, helper text, className, and style.
+---
+
+`useFormStateAdapter` adapts React Hook Form's `useFormState` output into a UI-friendly object that can be consumed by form-level components. It is useful for submit buttons, banners, summaries, and other components that should react to overall form validity, submission state, or scoped errors.
+
+Compared with `useFieldStateAdapter`, this hook works from form state and optional field subscriptions rather than a single field's controller state.
+
+## Import
+
+```tsx
+import { useFormStateAdapter } from "@piplup/rhf-core";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "demo/core/hooks/use-form-state-adapter.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseFormStateAdapterProps" cwd />
+
+## Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseFormStateAdapterReturnType" cwd />
+
+## Notes
+
+- Use `name` when the component should react only to a subset of form fields.
+- `exact` matters when you want to avoid broader subscriptions for nested field paths.
+- This hook is a good fit for form-level UI, while `useFieldStateAdapter` is better for UI tied to one field.
+
+## See also
+
+- [useFormState](https://react-hook-form.com/docs/useformstate)
+- [useFieldStateAdapter](./use-field-state-adapter)

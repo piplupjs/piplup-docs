@@ -1,0 +1,49 @@
+---
+title: useHtmlFormHelperTextAdapter
+description: Returns helper text props for building custom field help and error-message components connected to React Hook Form.
+---
+
+`useHtmlFormHelperTextAdapter` derives helper text content and state from a field so custom helper text components can react to validation without manual field-state wiring.
+
+## Import
+
+```tsx
+import { useHtmlFormHelperTextAdapter } from "@piplup/rhf-adapters/html";
+```
+
+## Usage
+
+<Demo
+  tabs={[
+    {
+      label: "Code",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/html/form-helper-text/element.tsx",
+    },
+  ]}
+/>
+
+## Props
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseHtmlFormHelperTextAdapterProps"
+  cwd
+/>
+
+## Return value
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseHtmlFormHelperTextAdapterReturnType"
+  cwd
+/>
+
+## Notes
+
+- The hook is built on top of `useFieldStateAdapter`.
+- Pair the rendered helper text with the field's `aria-describedby` for accessibility.
+
+## See also
+
+- [HtmlFormHelperTextElement](/docs/rhf-adapters/html/components/html-form-helper-text-element)
+- [useFieldStateAdapter](/docs/rhf-core/hooks/use-field-state-adapter)
