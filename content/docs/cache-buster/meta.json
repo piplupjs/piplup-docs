@@ -3,7 +3,7 @@
     "title": "@piplup/cache-buster",
     "collapsible": false,
     "pages": [
-        "installation",
+        "[Installation](/docs/cache-buster/installation)",
         "components",
         "hooks"
     ]

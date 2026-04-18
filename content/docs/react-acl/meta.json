@@ -3,7 +3,7 @@
   "title": "@piplup/react-acl",
   "collapsible": false,
   "pages": [
-    "installation",
+    "[Installation](/docs/react-acl/installation)",
     "components",
     "hooks"
   ]

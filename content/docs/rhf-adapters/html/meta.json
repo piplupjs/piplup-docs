@@ -1,3 +1,8 @@
 {
-    "title": "html"
+    "title": "html",
+    "pages": [
+        "[Installation](/docs/rhf-adapters/html/installation)",
+        "components",
+        "hooks"
+    ]
 }

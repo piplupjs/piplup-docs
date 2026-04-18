@@ -3,6 +3,6 @@
     "title": "@piplup/vite-plugin-cache-buster",
     "collapsible": false,
     "pages": [
-        "installation"
+        "[Installation](/docs/vite-plugin-cache-buster/installation)"
     ]
 }

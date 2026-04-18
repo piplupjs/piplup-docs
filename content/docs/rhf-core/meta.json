@@ -1,5 +1,10 @@
 {
     "$schema": "../../../.source/json-schema/docs.meta.json",
     "title": "@piplup/rhf-core",
-    "collapsible": false
+    "collapsible": false,
+    "pages": [
+        "[Installation](/docs/rhf-core/installation)",
+        "components",
+        "hooks"
+    ]
 }

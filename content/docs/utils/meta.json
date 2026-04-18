@@ -3,7 +3,7 @@
   "title": "@piplup/utils",
   "collapsible": false,
   "pages": [
-    "installation",
+    "[Installation](/docs/utils/installation)",
     "helpers",
     "hooks"
   ]

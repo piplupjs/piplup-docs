@@ -1,4 +1,8 @@
 {
   "title": "react-number-format",
-  "pages": ["overview", "components", "hooks"]
+  "pages": [
+    "[Installation](/docs/rhf-adapters/react-number-format/installation)",
+    "components",
+    "hooks"
+  ]
 }

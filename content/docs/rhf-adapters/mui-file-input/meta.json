@@ -1,4 +1,8 @@
 {
   "title": "mui-file-input",
-  "pages": ["installation", "components", "hooks"]
+  "pages": [
+    "[Installation](/docs/rhf-adaptes/mui-file-input/installation)",
+    "components",
+    "hooks"
+  ]
 }
