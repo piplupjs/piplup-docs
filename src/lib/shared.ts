@@ -1,4 +1,5 @@
 export const appName = 'Piplup';
+export const domain = "https://piplupjs.com"
 export const docsRoute = '/docs';
 export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
