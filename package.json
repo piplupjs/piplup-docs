@@ -24,7 +24,7 @@
     "@piplup/utils": "^3.2.4",
     "dayjs": "^1.11.20",
     "fumadocs-core": "16.7.16",
-    "fumadocs-mdx": "14.3.0",
+    "fumadocs-mdx": "14.3.2",
     "fumadocs-typescript": "^5.2.6",
     "fumadocs-ui": "16.7.16",
     "lucide-react": "^1.8.0",
