@@ -31,7 +31,7 @@
     "mui-chips-input": "^8.0.0",
     "mui-color-input": "^8.0.0",
     "mui-file-input": "^8.0.1",
-    "mui-one-time-password-input": "^6.0.0",
+    "mui-one-time-password-input": "^7.0.0",
     "mui-tel-input": "^10.0.0",
     "next": "16.2.4",
     "react": "^19.2.5",
