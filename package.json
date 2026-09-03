@@ -26,7 +26,7 @@
     "fumadocs-core": "16.7.16",
     "fumadocs-mdx": "14.3.0",
     "fumadocs-typescript": "^5.2.6",
-    "fumadocs-ui": "16.7.16",
+    "fumadocs-ui": "16.15.5",
     "lucide-react": "^1.8.0",
     "mui-chips-input": "^8.0.0",
     "mui-color-input": "^8.0.0",
