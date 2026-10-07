@@ -1,8 +1,11 @@
 ---
 title: useMuiXMobileDatePickerAdapter
-description: Returns adapter props for building custom mobile MUI X DatePicker integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for MUI X MobileDatePicker with React Hook Form, with month-level rules through shouldDisableMonth.
 ---
+
+`useMuiXMobileDatePickerAdapter` returns React Hook Form props for MUI X's `MobileDatePicker`. It's what [`MuiXMobileDatePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-mobile-date-picker-element) uses internally.
+
+Use the element for most forms. Use the hook when you build a touch-first date field with your own rules, for example a booking field for a service that only runs in certain months.
 
 ## Import
 
@@ -12,7 +15,30 @@ import { useMuiXMobileDatePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/mobile-date-picker/element.tsx" }]} />
+This `FerryDateField` opens on the month view and only accepts April to October, up to the end of next year. Open the dialog to see the closed months greyed out, or submit empty to see the `required` message.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/mobile-date-picker/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/mobile-date-picker/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+This hook calls [`useMuiXDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter) with the same props and returns its result unchanged. Value handling, the full list of validation messages and the text field wiring are documented there.
+
+The difference is the component. `DatePicker` picks a layout with a media query. `MobileDatePicker` always opens the calendar in a modal dialog with action buttons, whatever the device.
+
+**Month and year rules.** `shouldDisableMonth` and `shouldDisableYear` receive the full selected date during validation, and fail with their own keys (`shouldDisableMonth`, `shouldDisableYear`). The same functions grey out months and years in the dialog's month and year views. Checks run in a fixed order, `shouldDisableDate`, `shouldDisableMonth`, `shouldDisableYear`, then `disablePast`/`disableFuture`, `minDate` and `maxDate`, and only the first failure is reported. A past date in January shows the `shouldDisableMonth` message in the example, not the `disablePast` one.
+
+**Errors and blur.** The text field gets `error`, `helperText` and `onBlur` through `slotProps.textField`. The hook also wraps `onClose`, so closing the dialog with either action button marks the field as touched. In `onTouched` mode, opening and cancelling the dialog on an empty required field shows the `required` message.
 
 ## Props
 

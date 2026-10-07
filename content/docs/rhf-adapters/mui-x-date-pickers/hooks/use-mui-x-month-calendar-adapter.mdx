@@ -1,8 +1,11 @@
 ---
 title: useMuiXMonthCalendarAdapter
-description: Returns adapter props for building custom MUI X MonthCalendar integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for MUI X MonthCalendar with React Hook Form, and explains why month rules belong in shouldDisableMonth rather than disablePast or minDate.
 ---
+
+`useMuiXMonthCalendarAdapter` returns React Hook Form props for MUI X's `MonthCalendar`, a grid of the twelve months of one year. It's what [`MuiXMonthCalendarElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-month-calendar-element) uses internally.
+
+Use the hook instead of the element when you need to show the validation message, add a visible label for the grid, or keep month rules for something like a billing start in one component.
 
 ## Import
 
@@ -12,7 +15,34 @@ import { useMuiXMonthCalendarAdapter } from "@piplup/rhf-adapters/mui-x-date-pic
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/month-calendar/element.tsx" }]} />
+This `BillingMonthField` accepts the current month or a later one. Submit without choosing to see the `required` message under the grid.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/month-calendar/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/month-calendar/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+The wiring is the same as [`useMuiXDateCalendarAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-calendar-adapter): there is no text field, so render the message yourself. `MonthCalendar` passes unknown props to its root `<div>`, and the result contains more of them than the DateCalendar one: remove `error`, `helperText`, `required`, `shouldDisableDate` and `shouldDisableYear` before spreading, as the example does. Otherwise React warns about unknown DOM props. The returned `onBlur` also lands on that root, so the field becomes touched when focus leaves a month button.
+
+**The value is still a full date.** Selecting a month calls the date library's "set month" on the current value, so the day and time are kept. If the field is empty, `MonthCalendar` starts from the first day of the current month. In the example, picking March stores 1 March of this year. Normalize it on submit (the example calls `startOf("month")`) or with `transform.output`.
+
+**Validation compares days, not months.** The hook runs the same date validation as [`useMuiXDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter), with its keys and default messages. `disablePast`, `disableFuture`, `minDate` and `maxDate` are checked to the day, while `MonthCalendar` enables and disables whole months.
+
+<Callout type="warn">
+  With `disablePast`, picking the current month on an empty field stores the 1st of the month. Unless today is the 1st, that date is in the past and the form rejects a month the grid shows as enabled. A mid-month `minDate` has the same problem. Express month limits with `shouldDisableMonth` instead, comparing by month as the example does: `(month) => month.isBefore(dayjs(), "month")`.
+</Callout>
+
+`shouldDisableMonth` is checked in both places: `MonthCalendar` uses it to disable buttons, and the hook uses it to validate the stored value with the `shouldDisableMonth` message. `shouldDisableDate` and `shouldDisableYear` are accepted and validated too, but `MonthCalendar` does not use them to disable buttons, which is why they are removed before spreading.
 
 ## Props
 

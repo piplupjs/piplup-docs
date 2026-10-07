@@ -1,8 +1,11 @@
 ---
 title: useMuiXDesktopDateTimePickerAdapter
-description: Returns adapter props for building custom desktop MUI X DateTimePicker integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for MUI X DesktopDateTimePicker with React Hook Form, with per-view time rules through shouldDisableTime.
 ---
+
+`useMuiXDesktopDateTimePickerAdapter` returns React Hook Form props for MUI X's `DesktopDateTimePicker`. It's what [`MuiXDesktopDateTimePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-desktop-date-time-picker-element) uses internally.
+
+Use the element for most forms. Use the hook when you want a desktop date-time field with your own rules built in, for example one that always opens as a popover and blocks hours your team is not available.
 
 ## Import
 
@@ -12,7 +15,32 @@ import { useMuiXDesktopDateTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/desktop-date-time-picker/element.tsx" }]} />
+This `CallbackField` only accepts hours between 08:00 and 20:00, skips the 13:00 lunch hour, and rejects past times. Open the picker to see the blocked hours, or type 13:15 and submit.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/desktop-date-time-picker/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/desktop-date-time-picker/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+This hook calls [`useMuiXDateTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-time-picker-adapter) with the same props and returns its result unchanged. Validation rules, default messages and the `minTime`/`maxTime` behavior are documented there.
+
+The difference is the component you spread the props onto. `DateTimePicker` picks the desktop or mobile layout with a `@media (pointer: fine)` query. `DesktopDateTimePicker` always uses the desktop layout: the calendar and time columns open in a popover next to the field.
+
+**`shouldDisableTime` runs once per time view.** The hook calls `shouldDisableTime(value, "hours")`, then `"minutes"`, then `"seconds"`, and reports the first one that returns `true` under its own key: `shouldDisableTime-hours`, `shouldDisableTime-minutes` or `shouldDisableTime-seconds`. Check the `view` argument and only return `true` for the view your rule is about, as the example does. A rule that ignores `view` always fails on hours first, so only the hours message ever shows.
+
+The same function greys out options in the popover's time columns, so users mostly hit the message when they type a time.
+
+**Errors and blur.** `error`, `helperText` and `onBlur` go to the text field through `slotProps.textField`. You can pass `slotProps.textField` as a function of the picker's owner state, as the example does. The hook calls it and merges the result with its own props: an error message wins over your `helperText`, and both `onBlur` handlers run. Leaving the text field and closing the popover both mark the field as touched.
 
 ## Props
 

@@ -1,8 +1,11 @@
 ---
 title: useMuiFormHelperTextAdapter
-description: Returns adapter props for building custom MUI helper text integrations with React Hook Form field state.
-noindex: true
+description: Returns props for an MUI FormHelperText that shows a React Hook Form field's error message without registering a value.
 ---
+
+`useMuiFormHelperTextAdapter` returns props for MUI's `FormHelperText` that show the validation message of a field registered by another hook. It's what [`MuiFormHelperTextElement`](/docs/rhf-adapters/mui-material/components/mui-form-helper-text-element) uses internally.
+
+Use the hook when the message is part of a custom field component, or when you want control the element doesn't give you: your own markup for the message, a different place in the layout, or your own rule for when it renders.
 
 ## Import
 
@@ -12,14 +15,43 @@ import { useMuiFormHelperTextAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+`PhoneField` uses [`useMuiInputBaseAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-input-base-adapter) for the input. `PhoneError` is a separate component that reads the same field's error, formats it with an `errorParser`, and renders nothing while the field is valid. Submit empty, then type letters, to see both messages.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Custom field",
+      path: "demo/adapters/mui-material/form-helper-text/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/form-helper-text/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+The hook reads the field's state by `name` and registers nothing, like [useMuiFormLabelAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-form-label-adapter#how-it-works). It returns `children`, `error`, `disabled`, `className`, `style`, `classes` and `ref`, all of which `FormHelperText` accepts, so the result can be spread as is.
+
+**Children and the error message.** You pass the normal text as `children`. What comes back as `children` depends on `composeHelperText`:
+
+| `composeHelperText` | Field valid | Field invalid |
+| --- | --- | --- |
+| not set (default) | your `children` | your `children` (only `error` changes) |
+| `true` | your `children` | the error message |
+
+The element always sets `composeHelperText: true`; the hook doesn't. If the error has no message, your `children` are shown.
+
+**Showing it only on error.** The element's `renderOnError` prop isn't part of the hook. Check `error` yourself and return `null`, as `PhoneError` does.
+
+**Formatting the message.** By default the message is `error.message` when it's a string. Pass `errorParser` to return any React node instead. It receives the field's error object, or `undefined` when there is none.
+
+<Callout type="warn">
+  A parser from [`FormErrorProvider`](/docs/rhf-core/components/form-error-provider) takes priority over the `errorParser` you pass to this hook. Inside a provider, your per-field parser is ignored.
+</Callout>
+
+**Accessibility.** The hook doesn't link the message to the input. Give `FormHelperText` an `id` and point the input's `aria-describedby` at it, as the demo does.
 
 ## Props
 

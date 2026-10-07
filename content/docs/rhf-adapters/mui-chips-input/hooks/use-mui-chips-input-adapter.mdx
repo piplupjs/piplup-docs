@@ -1,8 +1,11 @@
 ---
 title: useMuiChipsInputAdapter
-description: Returns adapter props for building custom mui-chips-input integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for wiring mui-chips-input's MuiChipsInput to React Hook Form, including custom storage formats for the chip array.
 ---
+
+`useMuiChipsInputAdapter` connects a field to React Hook Form and returns props you spread onto `MuiChipsInput` from `mui-chips-input`. It's what [`MuiChipsInputElement`](/docs/rhf-adapters/mui-chips-input/components/mui-chips-input-element) uses internally.
+
+Use the element for most forms. Reach for the hook when you want a reusable tags field with its chip rules built in, or when the form should store the chips as something other than a `string[]`, like the comma-separated string in the example below.
 
 ## Import
 
@@ -12,7 +15,32 @@ import { useMuiChipsInputAdapter } from "@piplup/rhf-adapters/mui-chips-input";
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-chips-input/element.tsx" }]} />
+This `KeywordsField` shows chips but stores `"react,forms"`. Added keywords are lowercased and de-duplicated, so adding `React` again does nothing. A keyword with a comma is refused by the input.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-chips-input/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-chips-input/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+**Value.** By default the chip array goes both ways unchanged: the form value is passed as `value`, and the array from `onChange` is written back. `transform.input` turns the form value into the array the input shows; `transform.output` receives the new array (and the current value) and returns what to store. The two must round-trip: whatever `output` stores, `input` must turn back into chips.
+
+**Validation.** `required` treats an empty array (and `undefined`) as empty; its default message is "Please fill out this field." `min`, `max`, `minLength`, `maxLength` and `pattern` are not accepted, because they don't apply to arrays. Limit the number of chips with `rules.validate`, for example `(chips) => chips.length <= 5 || "Up to 5 tags"`.
+
+**Per-chip checks.** `MuiChipsInput`'s own `validate` prop only stops new chips from being added, and its `textError` replaces the helper text until the user types again. It never runs against values already in the form, such as `defaultValues` or values set with `setValue`. To check those too, wrap the same function with `validateChipValues` and use it as a form rule. See [`MuiChipsInputElement`](/docs/rhf-adapters/mui-chips-input/components/mui-chips-input-element#validating-each-chip) for an example.
+
+**Errors and helper text.** The hook returns `error` from the field state. With `composeHelperText: true`, `helperText` becomes the error message while the field is invalid.
+
+**Refs and blur.** The returned `inputRef` is React Hook Form's field ref merged with your `inputRef`, so focus-on-error lands in the text input. The second argument to the hook is returned as `ref` for the component root. `onBlur` marks the field as touched when the text input loses focus.
 
 ## Props
 
@@ -25,8 +53,3 @@ import { useMuiChipsInputAdapter } from "@piplup/rhf-adapters/mui-chips-input";
   name="UseMuiChipsInputAdapterReturnType"
   cwd
 />
-
-## Notes
-
-- Use this hook for custom chip inputs that still need `react-hoook-form` controlled value handling.
-- It builds on `useControllerAdapter`.

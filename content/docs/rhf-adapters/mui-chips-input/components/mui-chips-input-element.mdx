@@ -1,8 +1,9 @@
 ---
 title: MuiChipsInputElement
-description: A pre-integrated MuiChipsInputElement component for connecting string chip arrays to React Hook Form.
-noindex: true
+description: A mui-chips-input field connected to React Hook Form that stores chips as a string array, with per-chip and whole-array validation.
 ---
+
+`MuiChipsInputElement` renders `MuiChipsInput` from `mui-chips-input` and stores its chips in React Hook Form as a `string[]`. It accepts all `MuiChipsInput` and `TextField` props. To build your own chips field, or store the chips in another shape, use [`useMuiChipsInputAdapter`](/docs/rhf-adapters/mui-chips-input/hooks/use-mui-chips-input-adapter).
 
 ## Import
 
@@ -19,11 +20,29 @@ import { MuiChipsInputElement } from "@piplup/rhf-adapters/mui-chips-input";
   ]}
 />
 
+## Validating each chip
+
+Chips can be checked in two places, and you usually want both:
+
+- `validate` (a `MuiChipsInput` prop) runs when the user presses Enter. A chip that fails is not added. If it returns `{ isError: true, textError }`, the input shows `textError` as its helper text until the user types again.
+- `validateChipValues(fn)` turns the same function into a React Hook Form rule that checks every chip already in the value. That covers `defaultValues`, `setValue` and `reset`, which never go through the input.
+
+In this demo, `ben@example` comes from `defaultValues`, so only the form rule catches it. Submit to see the error, then remove the chip. The form also limits the list to three recipients.
+
+<Demo tabs={[{ label: "Validation", path: "demo/adapters/mui-chips-input/validation.tsx" }]} />
+
+`validateChipValues` skips non-string entries and returns the first failing chip's `textError`. If your function returns `false`, or an empty `textError`, the field is marked invalid with an empty message, so the red state shows but your `helperText` stays. Return a `textError` to get a message.
+
+## How it works
+
+**Value.** The form value is passed to `MuiChipsInput` as `value`, and `onChange` stores the new array. An `undefined` value shows no chips.
+
+**Rules.** `required` fails for an empty array, with the default message "Please fill out this field." (override it with `messages.required`). Length and range props (`minLength`, `maxLength`, `min`, `max`, `pattern`) are not supported, because they would apply to the array. Count chips in `rules.validate` instead, as in the demo.
+
+**Errors and helper text.** The element always shows the field's error message in place of `helperText` while the field is invalid. A `textError` from the `validate` prop takes priority over both while it is showing.
+
+**Refs.** `inputRef` reaches the text input and is merged with React Hook Form's ref, so the input gets focus when the field fails validation on submit. A `ref` on the element goes to the `MuiChipsInput` root.
+
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="MuiChipsInputElementProps" cwd />
-
-## Notes
-
-- Use this component when the field value is an array of strings.
-- For custom chip inputs, build on `useMuiChipsInputAdapter`.

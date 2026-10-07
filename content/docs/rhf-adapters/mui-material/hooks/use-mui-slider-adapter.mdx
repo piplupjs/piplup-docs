@@ -1,8 +1,11 @@
 ---
 title: useMuiSliderAdapter
-description: Returns adapter props for building custom MUI slider integrations with React Hook Form.
-noindex: true
+description: Returns props that connect an MUI Slider to React Hook Form, for single and range sliders, with fallbacks for empty values and transforms for custom shapes.
 ---
+
+`useMuiSliderAdapter` connects an MUI `Slider` to a React Hook Form field and returns props you spread onto it. It's what [`MuiSliderElement`](/docs/rhf-adapters/mui-material/components/mui-slider-element) uses internally.
+
+Use the element for a bare slider. Reach for the hook when the slider needs a label, value formatting or an error message as part of one component, or when the form stores the value in a different shape than MUI's number or `[min, max]` array.
 
 ## Import
 
@@ -12,14 +15,36 @@ import { useMuiSliderAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+A price range slider that stores `{ min, max }` instead of an array, and requires the two thumbs to stay at least $100 apart. Drag them close together and submit to see the error.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Price range",
+      path: "demo/adapters/mui-material/slider/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/slider/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+**Empty value.** If the field value is `undefined`, the slider shows the hook's `defaultValue`, or `min` (`0` unless you set it) when there's none. The `min` fallback is display only: the field stays `undefined` until the user moves the slider, so `required` still fails.
+
+**Stored value.** On change, the hook stores the value `Slider` reports: a number, or an array for a range slider. `Slider` fires `onChange` continuously while the thumb is dragged, so the field updates (and validates, depending on your `mode`) at every step.
+
+**Custom shapes.** `transform.input` turns the field value into what `Slider` expects, and `transform.output` receives `(event, value)` and returns what to store. Each key you set replaces the default for that direction, so your `input` also replaces the empty-value fallback above. In the demo, the default values guarantee the field is never empty.
+
+**`min` and `max`.** The hook passes your `min` and `max` through to `Slider` unchanged. Internally it uses `0` and `100` when they're missing, matching MUI. They also become validation rules: `max` always, and `min` when it isn't `0`. The slider can't move outside its range, so these rules only fail for a single-number value that starts outside it, for example from `defaultValues` or `setValue`. They don't check arrays or objects.
+
+**Errors.** `Slider` has no helper text. Render the returned `helperText` in a `FormHelperText`. With `composeHelperText: true`, it's the field's error message, falling back to your `helperText` when there's no error.
+
+<Callout type="warn">
+  For a range slider, give the field an array default (in `defaultValues` or the hook's `defaultValue`). If the field is empty, the fallback is the single number `min`, and `Slider` renders one thumb instead of two.
+</Callout>
 
 ## Props
 

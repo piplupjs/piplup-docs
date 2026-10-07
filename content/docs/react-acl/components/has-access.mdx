@@ -1,8 +1,11 @@
 ---
 title: HasAccess
-description: Conditionally render content based on roles or permissions.
-noindex: true
+description: Render content only when the current user has the required roles or permissions, with any/all matching, a fallback and a loading placeholder.
 ---
+
+`HasAccess` renders its children only when the current user passes a role and permission check. It reads the user's lists from the nearest [`AclProvider`](/docs/react-acl/components/acl-provider) and throws if there is none.
+
+Use it for markup: buttons, menu items, page sections. When you need the result as a boolean, for example to filter a list or check access in an event handler, use [`useAcl`](/docs/react-acl/hooks/use-acl) instead.
 
 ## Import
 
@@ -10,19 +13,65 @@ noindex: true
 import { HasAccess } from "@piplup/react-acl";
 ```
 
-## Basic example
+## Usage
+
+Toggle the user's permissions and role to see how `any`, `all`, and a combined role and permission check respond.
+
+<Demo
+  tabs={[
+    {
+      label: "Matching modes",
+      path: "demo/react-acl/has-access.tsx",
+    },
+  ]}
+/>
+
+## What it renders
+
+`HasAccess` renders exactly one of its three slots, checked in this order:
+
+| Provider state | Renders | Default |
+| --- | --- | --- |
+| `loading` is `true` | `loading` | nothing |
+| Check fails | `fallback` | nothing |
+| Check passes | `children` | — |
+
+No wrapper element is added around any of them.
+
+## How access is decided
+
+`roles` and `permissions` are checked separately, and **both** must pass.
+
+| Requirement | `any` (default) | `all` |
+| --- | --- | --- |
+| Prop omitted or `[]` | Passes | Passes |
+| `["a"]` | User has `a` | User has `a` |
+| `["a", "b"]` | User has `a` or `b` | User has `a` and `b` |
+
+A few consequences:
+
+- `<HasAccess>` with no `roles` and no `permissions` renders its children for every user once loading is done.
+- `roles={["admin"]}` with no `permissions` checks only the role.
+- `roles={["admin"]} permissions={["invoice:write"]}` requires the `admin` role **and** the `invoice:write` permission. To allow either one, use two `HasAccess` blocks or `useAcl`.
+- Values are compared with `===`, so `1` and `"1"` are different.
+
+Set the mode for each list with `validationMode`. A key you leave out uses `any`:
 
 ```tsx
-<HasAccess permissions={["read"]}>
-  <div>Visible to users with read permission</div>
+<HasAccess
+  roles={["editor", "owner"]}
+  permissions={["post:publish", "post:schedule"]}
+  validationMode={{ permissions: "all" }}
+>
+  {/* editor OR owner, AND both post:publish and post:schedule */}
+  <PublishMenu />
 </HasAccess>
 ```
+
+<Callout type="warn">
+  `HasAccess` hides UI. It does not protect data. Anything the user must not access also needs a check on your server.
+</Callout>
 
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="HasAccessProps" cwd />
-
-## Examples
-
-- `fallback` can be used to render alternative UI when access is denied.
-- `loading` prop can be supplied to show a loading placeholder while ACL data resolves.

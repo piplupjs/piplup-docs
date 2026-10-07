@@ -1,8 +1,11 @@
 ---
 title: useMuiXYearCalendarAdapter
-description: Returns adapter props for building custom MUI X YearCalendar integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for MUI X YearCalendar with React Hook Form, including how year selection interacts with day-level date validation.
 ---
+
+`useMuiXYearCalendarAdapter` returns React Hook Form props for MUI X's `YearCalendar`, a scrollable grid of years. It's what [`MuiXYearCalendarElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-year-calendar-element) uses internally.
+
+Use the hook instead of the element when you need to show the validation message, label the grid, or reuse a year field with fixed limits, such as a start year that can't be in the future.
 
 ## Import
 
@@ -12,7 +15,34 @@ import { useMuiXYearCalendarAdapter } from "@piplup/rhf-adapters/mui-x-date-pick
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/year-calendar/element.tsx" }]} />
+This `JoinedYearField` lists years from 1970 to the current year, newest first, using `minDate` and `maxDate`. Submit without choosing to see the `required` message replace the hint under the grid.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/year-calendar/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/year-calendar/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+The wiring is the same as [`useMuiXDateCalendarAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-calendar-adapter): there is no text field, so render the message yourself. `YearCalendar` passes unknown props to its root `<div>`, so remove `error`, `helperText`, `required`, `shouldDisableDate` and `shouldDisableMonth` from the result before spreading, as the example does. `YearCalendar` only understands `shouldDisableYear`. The hook still validates the other two if you pass them. The returned `onBlur` lands on the root too, so leaving a year button marks the field as touched.
+
+**The value is still a full date.** Selecting a year sets the year on the current value and keeps the month and day. If the field is empty, `YearCalendar` starts from 1 January of the current year, so picking 2015 stores 1 January 2015. Read it with `.year()` as the example does, or store a number in a separate field if your API expects one.
+
+**`minDate` and `maxDate` limit the grid.** The hook spreads them onto `YearCalendar`, so they also decide which years are listed. Without them, the grid uses the `LocalizationProvider` defaults and runs from 1900 to 2099.
+
+**Validation compares days, not years.** The hook runs the same date validation as [`useMuiXDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter), with its keys and default messages. An upper limit such as `maxDate: dayjs()` or `disableFuture` works for a first pick, because 1 January of the current year is never in the future. Lower limits do not.
+
+<Callout type="warn">
+  With `disablePast`, picking the current year on an empty field stores 1 January, which is in the past for most of the year, so the form rejects a year the grid shows as enabled. A `minDate` that is not 1 January has the same problem for its own year. Use `shouldDisableYear` for year limits instead, for example `(year) => year.year() < dayjs().year()`. The same applies to upper limits once a value exists: changing 20 December 2015 to the current year stores 20 December of this year, which is still in the future until that day.
+</Callout>
 
 ## Props
 

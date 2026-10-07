@@ -1,8 +1,9 @@
 ---
 title: MuiFileInputElement
-description: A pre-integrated MuiFileInputElement component for connecting file selection to React Hook Form.
-noindex: true
+description: A mui-file-input field connected to React Hook Form that stores a File, or a File[] with multiple, and supports size and type validation.
 ---
+
+`MuiFileInputElement` renders `MuiFileInput` from `mui-file-input` and stores the selected file in React Hook Form: a `File` (or `null`) by default, or a `File[]` when `multiple` is set. To build your own file field, use [`useMuiFileInputAdapter`](/docs/rhf-adapters/mui-file-input/hooks/use-mui-file-input-adapter).
 
 ## Import
 
@@ -19,11 +20,32 @@ import { MuiFileInputElement } from "@piplup/rhf-adapters/mui-file-input";
   ]}
 />
 
+`JSON.stringify` turns a `File` into `{}`, which is why the alert above shows an empty object. Read `name`, `size` and `type` from the `File` instead, or append it to a `FormData` to upload it.
+
+## Validating files
+
+The element has no size or type options of its own. Write those checks as `rules.validate` functions; they receive the `File` or `File[]` from the form. This demo accepts up to three images of 1 MB or less, and the Reset button clears the selection.
+
+<Demo tabs={[{ label: "Validation", path: "demo/adapters/mui-file-input/validation.tsx" }]} />
+
+`slotProps.htmlInput.accept` only filters what the browser's file picker shows. Users can still choose "All files", so keep a type check in your rules.
+
+## How it works
+
+**Single vs. multiple.** Without `multiple`, the form value is a `File`, or `null` when nothing is selected or the clear button is pressed. With `multiple`, it is always an array: `[]` when empty. A value that isn't an array (for example `undefined` from missing `defaultValues`) is shown as `[]` in multiple mode and as `null` otherwise.
+
+<Callout type="warn">
+  Set `multiple` on the element, not through `slotProps.htmlInput.multiple`. With the latter, the browser lets users pick several files but only the first one is stored.
+</Callout>
+
+**Rules.** `required` fails for `null` and for an empty array, with the default message "Please fill out this field." Text rules (`minLength`, `maxLength`, `min`, `max`, `pattern`) are not supported. To limit the number of files, check `files.length` in `rules.validate`.
+
+**Resetting.** `reset()` or `setValue(name, null)` clears the field, and the element also clears the underlying `<input type="file">`, so the same file can be chosen again afterwards.
+
+**Errors and helper text.** While the field is invalid, its error message replaces `helperText`.
+
+**Refs.** `inputRef` is merged with React Hook Form's ref. A `ref` on the element goes to the `MuiFileInput` root.
+
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="MuiFileInputElementProps" cwd />
-
-## Notes
-
-- Use this component for single-file or multi-file RHF fields.
-- For custom file inputs, build on `useMuiFileInputAdapter`.

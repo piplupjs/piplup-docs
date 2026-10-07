@@ -1,8 +1,9 @@
 ---
 title: MuiOtpInputElement
-description: A pre-integrated MuiOtpInputElement component for connecting OTP and verification code input to React Hook Form.
-noindex: true
+description: A mui-one-time-password-input field connected to React Hook Form that stores the code as one string, with length checks and error display.
 ---
+
+`MuiOtpInputElement` renders `MuiOtpInput` from `mui-one-time-password-input` and stores the code in React Hook Form as a single string, such as `"482913"`. It accepts all `MuiOtpInput` props, including `length`, `validateChar`, `onComplete` and `TextFieldsProps`. To build your own code field, use [`useMuiOtpInputAdapter`](/docs/rhf-adapters/mui-one-time-password-input/hooks/use-mui-otp-input-adapter).
 
 ## Import
 
@@ -19,11 +20,30 @@ import { MuiOtpInputElement } from "@piplup/rhf-adapters/mui-one-time-password-i
   ]}
 />
 
+## Requiring a complete code
+
+This demo accepts digits only, requires all six, and shows errors under the boxes. Submit with three digits filled in to see the length error.
+
+<Demo tabs={[{ label: "Validation", path: "demo/adapters/mui-one-time-password-input/validation.tsx" }]} />
+
+Three things make that work:
+
+- **`minLength` equal to `length`.** The value is just the characters entered so far, so `"482"` is not empty and passes `required`. `minLength={6}` rejects it. The default message is "Please lengthen this text to 6 characters or more", so set `messages.minLength`.
+- **`validateChar`.** A `MuiOtpInput` prop that refuses characters as they are typed or pasted. It does not check values set through `defaultValues` or `setValue`; add `pattern={/^\d+$/}` if those can contain other characters.
+- **A separate helper text.** `MuiOtpInput` has no helper text, and the element ignores the `helperText` prop. Errors only turn the boxes red. To show the message, render [`MuiFormHelperTextElement`](/docs/rhf-adapters/mui-material/components/mui-form-helper-text-element) with the same `name`. It shows its children normally and the error message while the field is invalid.
+
+## How it works
+
+**Value.** The form value is passed to `MuiOtpInput` as `value`, and every change stores the full code string. `MuiOtpInput` only shows the first `length` characters, but a longer value set from code is stored as is. `onComplete` is passed through and fires when the last box is filled.
+
+**Errors.** While the field is invalid, each box gets `error`. If you pass `TextFieldsProps` (an object or a function of the box index), its props are kept and `error` is added on top.
+
+**Blur.** The field is marked as touched only when focus leaves the whole group, not when it moves from one box to the next.
+
+<Callout type="warn">
+  The field's ref is not attached to any of the boxes. React Hook Form can't focus this field when validation fails, and `setFocus("code")` does nothing. A `ref` on the element goes to the `MuiOtpInput` root `Box`.
+</Callout>
+
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="MuiOtpInputElementProps" cwd />
-
-## Notes
-
-- Use this component for OTP and verification flows that store a single string value.
-- For custom OTP inputs, build on `useMuiOtpInputAdapter`.

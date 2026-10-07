@@ -1,8 +1,11 @@
 ---
 title: useMuiXStaticDatePickerAdapter
-description: Returns adapter props for building custom static MUI X DatePicker integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for MUI X StaticDatePicker with React Hook Form. The picker has no text field, so you render the error message yourself.
 ---
+
+`useMuiXStaticDatePickerAdapter` returns React Hook Form props for MUI X's `StaticDatePicker`, the always-visible date picker. It's what [`MuiXStaticDatePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-static-date-picker-element) uses internally.
+
+The element validates but never shows a message. Use the hook when the picker is the main input on the page, such as a booking screen, and users need to see why their date was rejected.
 
 ## Import
 
@@ -12,7 +15,34 @@ import { useMuiXStaticDatePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-date-picker/element.tsx" }]} />
+This `TourDateField` blocks sold-out days and dates more than 60 days ahead. Submit without picking a day to see the message rendered under the picker.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/static-date-picker/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-date-picker/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+Validation is the same as in [`useMuiXDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter), with the same rules, keys and default messages. The difference is that there is no text field and no popup to attach errors and blur to.
+
+**Error display is up to you.** The hook does not build `slotProps.textField`. It returns `error`, `helperText` and `required` as plain values, and `StaticDatePicker` has no props for them. Take them off the result before spreading, then render them, as the example does with `FormHelperText`. Set `composeHelperText: true` so that `helperText` holds the error message.
+
+**No hint text.** The hook does not accept a `helperText` prop (it is cleared even if passed), so `helperText` in the result is either the error message or `undefined`. Write any hint text directly in your component.
+
+**No touched state.** Any `onBlur` you pass is ignored. The returned `onBlur` is React Hook Form's, but `StaticDatePicker` never calls it, so the field is never marked as touched. In `onBlur` or `onTouched` mode it is only validated after the first submit.
+
+**Ref.** React Hook Form's ref and your `ref` are merged and attached to the picker's root element. There is no input to focus, so `setFocus` and `shouldFocusError` have no effect on this field.
+
+The validation props are also spread onto the picker, so sold-out days and dates past `maxDate` are greyed out in the calendar. The form-level check still catches values set through `defaultValues`, `reset` or `setValue`.
 
 ## Props
 

@@ -1,8 +1,11 @@
 ---
 title: useMuiOutlinedInputAdapter
-description: Returns adapter props for building custom MUI OutlinedInput integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for building custom MUI OutlinedInput fields with React Hook Form, such as a password field with a show/hide toggle.
 ---
+
+`useMuiOutlinedInputAdapter` connects a field to React Hook Form and returns props you spread onto MUI's `OutlinedInput`. It's what [`MuiOutlinedInputElement`](/docs/rhf-adapters/mui-material/components/mui-outlined-input-element) uses internally.
+
+Use it when you build an outlined field from parts, typically because you need adornments with their own state, like a show/hide button on a password, that you want to keep inside one reusable component.
 
 ## Import
 
@@ -12,14 +15,30 @@ import { useMuiOutlinedInputAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+This `PasswordField` requires 8 to 64 characters and has a button that switches between hidden and visible text. The value and validation state are kept when you toggle.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Custom field",
+      path: "demo/adapters/mui-material/outlined-input/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/outlined-input/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+The hook has the same logic as [useMuiInputAdapterProps](/docs/rhf-adapters/mui-material/hooks/use-mui-input-adapter-props): it falls back to a surrounding `FormControl` for `required` and `disabled`, and you should pass the returned `ref` to `inputRef`. Value handling, transforms and the validation rules are described on [useMuiInputBaseAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-input-base-adapter#how-it-works).
+
+**Changing the input type.** The result always contains a `type` key, even when you don't pass one. In `<OutlinedInput type="password" {...adapter} />`, the spread replaces your `type` with `undefined` and the password shows as plain text. Pass the type to the hook instead, as the demo does with `type: visible ? "text" : "password"`. Changing it re-renders the same field, so the value is kept.
+
+**Label notch.** `OutlinedInput` only leaves a gap in its border for the floating label when you give it the same text through its `label` prop. This is MUI behavior, but it's easy to miss when the label comes from an `InputLabel` next to it.
+
+**Length messages.** The demo's `minLength` message is a function, `` (length) => `Use at least ${length} characters` ``, so the number in the text follows the rule. `maxLength` keeps its default, "Please shorten this text to 64 characters or less."
 
 ## Props
 

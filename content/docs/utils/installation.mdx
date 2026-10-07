@@ -1,23 +1,86 @@
 ---
 title: Installation — @piplup/utils
-description: Install utility helpers and hooks from @piplup/utils.
-noindex: true
+description: Install @piplup/utils, check its React peer dependency, and see which helpers and hooks it exports and how they behave during server rendering.
 ---
 
-`@piplup/utils` contains small helpers and React hooks used across Piplup packages.
+`@piplup/utils` is a set of small functions and React hooks that other Piplup packages are built on: ref helpers, an event listener hook, and `localStorage` helpers that keep components in sync. You can use them directly in your own code.
 
 ```package-install
 @piplup/utils
 ```
 
-## Quick usage
+## Peer dependencies
 
-Import individual helpers:
+| Package | Version |
+| --- | --- |
+| `react` | `^18.2.0 \|\| ^19.0.0` |
+| `@types/react` (optional) | `^18.2.0 \|\| ^19.0.0` |
+
+If you use `@piplup/rhf-core`, this package is already installed: rhf-core depends on `@piplup/utils` `3.2.4` directly. `@piplup/rhf-adapters` lists the same version as a peer dependency.
+
+## Entry point
+
+There is a single entry point, the package root. It ships ES module and CommonJS builds with TypeScript types, and is marked `sideEffects: false`, so bundlers drop the exports you don't import.
 
 ```tsx
-import { compact } from "@piplup/utils";
-
-const arr = compact([1, null, 2]);
+import {
+  // helpers
+  compact,
+  execSequentially,
+  forkRef,
+  hasOwnProperty,
+  setRef,
+  // localStorage helpers
+  getItem,
+  removeItem,
+  setItem,
+  // hooks
+  useEventCallback,
+  useEventListener,
+  useForkRef,
+  useIsomorphicEffect,
+  useLocalStorage,
+} from "@piplup/utils";
 ```
 
-See the `helpers` and `hooks` pages for API details and examples.
+## Server rendering
+
+The bundle starts with a `"use client"` directive, so in the Next.js App Router the hooks must be called from Client Components. The exports are safe to import on the server:
+
+- `getItem` returns `null` when there is no `window`, and `setItem` and `removeItem` do nothing.
+- `useLocalStorage` starts from its `initialValue` on the server and reads the stored value after hydration.
+- `useIsomorphicEffect` is `useLayoutEffect` in the browser and `useEffect` on the server.
+- `useEventListener` attaches its listener in an effect, so it never touches `window` on the server.
+
+## Quick example
+
+`setItem` notifies every `useLocalStorage` hook that reads the same key, in the current tab as well as in other tabs. Two components can share a value without a context:
+
+```tsx
+"use client";
+
+import { setItem, useLocalStorage } from "@piplup/utils";
+
+function ThemeLabel() {
+  const theme = useLocalStorage("theme", "light");
+  return <span>Theme: {theme}</span>;
+}
+
+function ThemeToggle() {
+  const theme = useLocalStorage("theme", "light");
+  return (
+    <button onClick={() => setItem("theme", theme === "dark" ? "light" : "dark")}>
+      Toggle theme
+    </button>
+  );
+}
+```
+
+Writing with `localStorage.setItem` directly does not update hooks in the same tab, because the browser's `storage` event only fires in other tabs. Use the exported `setItem` and `removeItem` instead.
+
+## Next steps
+
+- [Helpers overview](/docs/utils/helpers/overview)
+- [useLocalStorage](/docs/utils/hooks/use-local-storage)
+- [useEventListener](/docs/utils/hooks/use-event-listener)
+- [useForkRef](/docs/utils/hooks/use-fork-ref)

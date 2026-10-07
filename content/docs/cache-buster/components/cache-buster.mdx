@@ -1,26 +1,71 @@
 ---
 title: CacheBuster
-description: Automatically reload your app when a new version is detected using the CacheBuster component.
-noindex: true
+description: Check for a new deployment when your app loads, and hold back rendering until the check is done, with the CacheBuster component.
 ---
 
-`CacheBuster` is a convenience wrapper around the `useReleaseStatus` hook.
+`CacheBuster` checks once, when it mounts, whether a new build has been deployed since the user's last visit. Until the check finishes it renders `loading`; then it renders your app, or `error` if the check failed. It is a small wrapper around [`useReleaseStatus`](/docs/cache-buster/hooks/use-release-status).
 
-It automatically checks for new deployments and **reloads the page when a new version is detected**.
+Use `CacheBuster` when you want a gate around your app. Use `useReleaseStatus` when you want to act on the result yourself, for example to reload the page or show an "update available" banner.
 
 ## Basic usage
 
 ```tsx
-import { CacheBuster } from '@piplup/cache-buster';
+import { CacheBuster } from "@piplup/cache-buster";
 
 function App() {
   return (
-    <CacheBuster storageKey="RELEASE">
+    <CacheBuster
+      enabled={process.env.NODE_ENV === "production"}
+      loading={<SplashScreen />}
+      error={<YourApp />}
+    >
       <YourApp />
     </CacheBuster>
   );
 }
 ```
+
+The check needs a `RELEASE` file in your deployed site. Generate it at build time with the `piplup-cache-buster` CLI or the Vite plugin, as described in [Installation](/docs/cache-buster/installation).
+
+## How the check works
+
+1. On mount, it requests `/RELEASE?v=<current timestamp>`. The timestamp makes the URL unique, so the browser and CDN caches are skipped.
+2. It reads the response body as the release ID and compares it with the value saved in `localStorage` under `storageKey` (default `"RELEASE"`).
+3. If the two differ, it saves the new ID. The result is `new-release` when the new ID is non-empty, and `no-release` otherwise.
+4. If they match, the result is `no-release`.
+5. If the request throws, for example when the user is offline, the result is `error`.
+
+The check runs once per mount, and again only if `enabled`, `storageKey` or `verbose` change. There is no polling interval, so a tab that stays open will not notice a deployment until `CacheBuster` mounts again or the page is reloaded.
+
+On a user's first visit nothing is stored yet, so the first check always reports `new-release`.
+
+<Callout type="warn">
+  `CacheBuster` does not reload the page. A `new-release` result renders `children`, just like `no-release`, even though `verbose` logs "New release detected. Reloading page". To reload, use [`useReleaseStatus`](/docs/cache-buster/hooks/use-release-status) and call `window.location.reload()` when it returns `new-release`. The new ID is already saved by then, so the reloaded page reports `no-release` and does not loop.
+</Callout>
+
+## What it renders
+
+| State | Renders | Default |
+| --- | --- | --- |
+| Check in progress | `loading` | nothing |
+| `error` | `error` | nothing |
+| `new-release` or `no-release` | `children` | nothing |
+| `enabled={false}` | `children` after mount, without a request | — |
+
+During server rendering the check cannot run, so the server output is `loading`. The package is marked `"use client"`, so you can render `CacheBuster` from a Next.js layout.
+
+If you only want the check and its side effect on `localStorage`, render `CacheBuster` without children next to your app instead of around it. Your app then renders straight away and is not hidden while the request is in flight.
+
+## Gotchas
+
+<Callout type="warn">
+  `error` has no default, so if you wrap your app and the request fails, nothing renders. Pass your app (or a message) as `error` too, as in the example above.
+</Callout>
+
+- The file is always requested from the site root as `/RELEASE`. `storageKey` only changes the `localStorage` key, not the URL. If your app is served under a sub-path, the file must still be reachable at the root.
+- The HTTP status is not checked. If `/RELEASE` is missing and your server answers with a 404 page or an SPA fallback `index.html`, that body is used as the release ID.
+- The last result is kept in memory for the page session. A `CacheBuster` that mounts later, for example after a route change, starts from that result and checks again in the background.
+- Set `verbose` to log each result to the console while you set things up.
 
 ## Props
 
@@ -33,3 +78,4 @@ function App() {
 ## See also
 
 - [useReleaseStatus](/docs/cache-buster/hooks/use-release-status)
+- [Installation and build setup](/docs/cache-buster/installation)

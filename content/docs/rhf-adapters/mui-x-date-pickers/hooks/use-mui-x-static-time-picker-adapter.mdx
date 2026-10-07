@@ -1,8 +1,11 @@
 ---
 title: useMuiXStaticTimePickerAdapter
-description: Returns adapter props for building custom static MUI X TimePicker integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for building custom MUI X StaticTimePicker integrations with React Hook Form, including how to show validation errors without a text field.
 ---
+
+`useMuiXStaticTimePickerAdapter` connects a field to React Hook Form and returns props you spread onto MUI X's `StaticTimePicker`. It's what [`MuiXStaticTimePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-static-time-picker-element) uses internally.
+
+The element renders the picker only, so it never shows an error message. Use the hook when you want the always-visible picker and also want to show validation errors next to it.
 
 ## Import
 
@@ -12,7 +15,36 @@ import { useMuiXStaticTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-time-picker/element.tsx" }]} />
+This `ReportTimeField` requires a time no later than 20:00 and shows the error below the picker. Submit without picking a time, or pick 21:00, to see it.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/static-time-picker/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-time-picker/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+Validation, the default messages and value handling are the same as [`useMuiXTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-picker-adapter#how-it-works). The return value is different, because `StaticTimePicker` has no text field:
+
+- There is no `slotProps`, `inputRef` or `onClose` in the result, and the hook does not accept them.
+- The result has plain `error` and `helperText` values. With `composeHelperText: true`, `helperText` is the current error message, or `undefined` when the field is valid. There is no `helperText` prop, so put any hint in your own markup, as the example does with `helperText || "..."`.
+- The hook's second argument is merged with React Hook Form's ref and returned as `ref`.
+
+Take `error` and `helperText` out of the result before spreading it, and render them yourself, for example with `FormHelperText`. The element drops them for the same reason.
+
+<Callout type="warn">
+  A static picker is never closed and has no input to blur, so nothing calls the returned `onBlur` and the field is never marked as touched. `mode: "onBlur"` and `"onTouched"` first validate on submit. Use `mode: "onChange"` to show errors while the user picks.
+</Callout>
+
+**When the value changes.** By default `StaticTimePicker` uses `displayStaticWrapperAs="mobile"`: an analog clock with a toolbar. The value reaches the form through `onChange` each time the user changes the clock, not only when they accept it.
 
 ## Props
 

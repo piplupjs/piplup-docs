@@ -5,12 +5,13 @@ description: Small utility functions exported by @piplup/utils.
 
 ## compact
 
-Removes `null`/`undefined` values from arrays.
+Removes falsy values (`null`, `undefined`, `false`, `0`, `""` and `NaN`) from an array. A non-array argument returns `[]`.
 
 ```tsx
 import { compact } from "@piplup/utils";
 
-const clean = compact([1, null, 2]); // [1,2]
+compact([1, null, 2, undefined]); // [1, 2]
+compact([0, 1, "", "a", false]); // [1, "a"]
 ```
 
 ## execSequentially

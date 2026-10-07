@@ -1,8 +1,11 @@
 ---
 title: useAcl
-description: Hook to query ACL state and run programmatic authorization checks.
-noindex: true
+description: Read the ACL loading state and run role and permission checks in code with isAuthorized.
 ---
+
+`useAcl` returns the `isAuthorized` function and `loading` flag from the nearest [`AclProvider`](/docs/react-acl/components/acl-provider). [`HasAccess`](/docs/react-acl/components/has-access) is built on it.
+
+Use `HasAccess` when you show or hide a piece of markup. Use `useAcl` when you need the answer as a value: filtering a list of actions, disabling instead of hiding, choosing a redirect, or checking access inside an event handler.
 
 ## Import
 
@@ -10,17 +13,54 @@ noindex: true
 import { useAcl } from "@piplup/react-acl";
 ```
 
-## Basic example
+## Usage
+
+The toolbar keeps only the actions the current user may run, and the Export button checks the user's role when it is clicked.
+
+<Demo
+  tabs={[
+    {
+      label: "Toolbar",
+      path: "demo/react-acl/use-acl.tsx",
+    },
+  ]}
+/>
+
+## isAuthorized
+
+```ts
+type IsAuthorized = (check: {
+  roles?: (number | string)[] | number | string;
+  permissions?: (number | string)[] | number | string;
+  validationMode?: { roles?: "all" | "any"; permissions?: "all" | "any" };
+}) => boolean;
+```
+
+It follows the same rules as `HasAccess`: roles and permissions must both pass, an omitted or empty list passes, and each list defaults to `any`. See [how access is decided](/docs/react-acl/components/has-access#how-access-is-decided).
+
+Unlike the `HasAccess` props, `roles` and `permissions` also accept a single value, so `isAuthorized({ permissions: "post:delete" })` works without wrapping it in an array.
+
+## Loading
+
+`isAuthorized` returns `false` for every call while the provider's `loading` is `true`, even for a check with no requirements. Check `loading` first, so you can tell "still loading" apart from "denied":
 
 ```tsx
-function CheckAccess() {
+function DeleteButton() {
   const { isAuthorized, loading } = useAcl();
 
-  if (loading) return <div>Loading ACL...</div>;
-
-  return <div>{isAuthorized({ permissions: 'read' }) ? 'Allowed' : 'Denied'}</div>;
+  return (
+    <button disabled={loading || !isAuthorized({ permissions: "post:delete" })}>
+      Delete
+    </button>
+  );
 }
 ```
+
+`isAuthorized` changes identity when the provider's `roles`, `permissions` or `loading` change. If you use it inside `useEffect`, `useMemo` or `useCallback`, list it as a dependency so the result is recomputed after a role change.
+
+<Callout type="warn">
+  `useAcl` throws `AclProvider must be rendered as parent before using useAcl` when it is called outside an `AclProvider`. This also applies to `HasAccess`.
+</Callout>
 
 ## Return value
 

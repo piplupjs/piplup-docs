@@ -1,67 +1,55 @@
 ---
 title: useLocalStorage
-description: Reactive localStorage hook that synchronizes a key with state.
+description: Reactive hook that reads a localStorage key and re-renders when it changes.
 ---
 
-```tsx
-import { useLocalStorage } from "@piplup/utils";
+`useLocalStorage` returns the current string value of a `localStorage` key and re-renders when that key changes. It is read-only: write with `setItem` and `removeItem`, also exported from `@piplup/utils`.
 
-function Component() {
-  const [value, setValue] = useLocalStorage('my-key', 'default');
+```tsx
+import { removeItem, setItem, useLocalStorage } from "@piplup/utils";
+
+function ThemeToggle() {
+  const theme = useLocalStorage("theme", "light");
 
   return (
     <div>
-      <div>Value: {value}</div>
-      <button onClick={() => setValue('updated')}>Set</button>
+      <div>Theme: {theme}</div>
+      <button onClick={() => setItem("theme", theme === "light" ? "dark" : "light")}>
+        Toggle
+      </button>
+      <button onClick={() => removeItem("theme")}>Reset</button>
     </div>
   );
 }
 ```
 
-## Props
+## When it updates
+
+- **Same tab:** `setItem` and `removeItem` dispatch an event that every `useLocalStorage` for that key listens to. Writing with `localStorage.setItem` directly does not notify the hook.
+- **Other tabs:** the browser's `storage` event updates the hook when another tab changes the key.
+- **Server rendering:** `localStorage` isn't available on the server, so the hook returns `initialValue` there and reads the stored value after mounting.
+
+When the key is missing or removed, the hook returns `initialValue`.
+
+<Callout type="warn">
+  Values are strings only. `initialValue` must be a string or `null`; anything else throws a `TypeError`. Use `JSON.stringify` / `JSON.parse` to store other data.
+</Callout>
+
+## Parameters
 
 <TypeTable type={{
   key: {
-    description: (
-      <>
-        Storage key used to persist the value in `localStorage`.
-      </>
-    ),
+    description: "Storage key to read and watch.",
     type: "string",
     required: true,
   },
   initialValue: {
-    description: (
-      <>
-        Initial value returned when no value exists in storage. If present,
-        it is returned as the initial state.
-      </>
-    ),
-    type: "string | null | (() => string | null)",
-    required: false,
+    description: "Returned when the key has no stored value, and during server rendering.",
+    type: "string | null",
+    default: "null",
   },
 }} />
 
 ## Return value
 
-<TypeTable type={{
-  value: {
-    description: (
-      <>
-        Current value read from `localStorage` (or `initialValue` when empty).
-      </>
-    ),
-    type: "string | null",
-    required: true,
-  },
-  setValue: {
-    description: (
-      <>
-        Setter to update the stored value. Accepts a new value or an updater
-        function.
-      </>
-    ),
-    type: "(value: string | null | ((prev: string | null) => string | null)) => void",
-    required: true,
-  },
-}} />
+`string | null`: the stored value, or `initialValue` when the key is not set.

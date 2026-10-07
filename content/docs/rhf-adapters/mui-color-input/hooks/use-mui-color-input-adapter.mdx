@@ -1,8 +1,11 @@
 ---
 title: useMuiColorInputAdapter
-description: Returns adapter props for building custom mui-color-input integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for wiring mui-color-input's MuiColorInput to React Hook Form, for color fields with your own format and checks.
 ---
+
+`useMuiColorInputAdapter` connects a field to React Hook Form and returns props you spread onto `MuiColorInput` from `mui-color-input`. It's what [`MuiColorInputElement`](/docs/rhf-adapters/mui-color-input/components/mui-color-input-element) uses internally.
+
+Use the element for most forms. Reach for the hook when you want a color field with a fixed format and project rules, such as brand or theme colors that must meet a contrast requirement, reused across forms.
 
 ## Import
 
@@ -12,7 +15,34 @@ import { useMuiColorInputAdapter } from "@piplup/rhf-adapters/mui-color-input";
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-color-input/element.tsx" }]} />
+This `ButtonColorField` accepts hex colors only, hides the alpha slider, and rejects colors too light for white text. Try `#ffeb3b` or an invalid value like `#12`, then submit. The preview button reads the stored value with `useWatch`.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-color-input/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-color-input/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+**Value.** The form value is passed to `MuiColorInput` as `value`, and the first argument of its `onChange` is stored: the color as a string in the component's `format` (`rgb` unless you set one). So with `format="hex"`, typing `red` stores `"#ff0000"`.
+
+Text that isn't a valid color is stored exactly as typed, for example `"#12"`, and clearing the input stores `""`. The hook adds no color check of its own, so add one with `rules.validate` and `matchIsValidColor` from `mui-color-input`. `required` only rejects the empty string.
+
+**Other formats.** `onChange` also receives an object with the color in every format (`hex`, `hex8`, `rgb`, `hsl`, `hsv`). `transform.output` gets the same arguments, so `(value, colors) => colors.hex` would store hex whatever the `format`. Those strings are empty while the typed text is invalid, though, and storing `""` mid-typing clears the input. Setting `format` is the safer way to choose the stored format.
+
+**Validation.** All standard props apply to the stored string. `pattern`, for instance, can restrict values to six-digit hex (`/^#[0-9a-f]{6}$/i`). Its default message is "Please match the requested format."
+
+**Errors and helper text.** The hook returns `error` from the field state. With `composeHelperText: true`, `helperText` becomes the error message while the field is invalid.
+
+**Refs and blur.** The returned `inputRef` is React Hook Form's field ref merged with your `inputRef`, so the text input gets focus when validation fails. The second argument to the hook is returned as `ref` for the root. `onBlur` marks the field as touched when the text input loses focus, then calls your `onBlur`.
 
 ## Props
 
@@ -21,8 +51,3 @@ import { useMuiColorInputAdapter } from "@piplup/rhf-adapters/mui-color-input";
 ## Return value
 
 <AutoTypeTable path="content/docs/props.ts" name="UseMuiColorInputAdapterReturnType" cwd />
-
-## Notes
-
-- Use this hook for custom color inputs that still need RHF-controlled field state.
-- It builds on `useControllerAdapter`.

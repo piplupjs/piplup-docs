@@ -1,8 +1,11 @@
 ---
 title: useMuiXDateCalendarAdapter
-description: Returns adapter props for building custom MUI X DateCalendar integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for MUI X DateCalendar with React Hook Form. The calendar has no text field, so you remove error props before spreading and render the message yourself.
 ---
+
+`useMuiXDateCalendarAdapter` returns React Hook Form props for MUI X's `DateCalendar`, the inline month grid. It's what [`MuiXDateCalendarElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-calendar-element) uses internally.
+
+The element validates but shows no message. Use the hook when the calendar is the input and users need to see why a date was rejected, or when you want to place the message, a label or a summary around the grid yourself.
 
 ## Import
 
@@ -12,7 +15,48 @@ import { useMuiXDateCalendarAdapter } from "@piplup/rhf-adapters/mui-x-date-pick
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-calendar/element.tsx" }]} />
+This `DeliveryCalendar` starts with a saved date from yesterday. The calendar shows it, but validation rejects it on submit. Sundays and dates more than 30 days ahead are blocked too.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/date-calendar/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-calendar/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+Validation uses the same rules, keys and default messages as [`useMuiXDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter). The validation props are also spread onto the calendar, so blocked days are greyed out and cannot be clicked. That means the error usually comes from a value the user did not click: `defaultValues`, `reset`, `setValue`, or a date that became invalid over time, like the one in the example.
+
+**Remove the error props before spreading.** The hook returns `error`, `helperText` and `required` with the other props. `DateCalendar` has no props with those names and passes unknown props to its root `<div>`, so they would end up in the DOM. Take them off first, as the example does:
+
+```tsx
+const { error, helperText, required: _required, ...adapter } = useMuiXDateCalendarAdapter({
+  control,
+  name: "delivery",
+  composeHelperText: true,
+  helperText: "We deliver Monday to Saturday.",
+});
+
+return (
+  <div>
+    <DateCalendar {...adapter} />
+    <FormHelperText error={error}>{helperText}</FormHelperText>
+  </div>
+);
+```
+
+With `composeHelperText: true`, `helperText` is your hint while the value is valid and the error message when it is not.
+
+**Blur.** The returned `onBlur` is passed to the calendar's root element. React's `onBlur` on a container fires when focus leaves any element inside it, so the field is marked as touched once focus moves away from a day button, even to another day in the same grid.
+
+**Ref.** React Hook Form's ref and your `ref` are merged and attached to the root `<div>`. It is not focusable, so `setFocus` and `shouldFocusError` do not move focus to the calendar.
 
 ## Props
 
@@ -21,4 +65,3 @@ import { useMuiXDateCalendarAdapter } from "@piplup/rhf-adapters/mui-x-date-pick
 ## Return value
 
 <AutoTypeTable path="content/docs/props.ts" name="UseMuiXDateCalendarAdapterReturnType" cwd />
-

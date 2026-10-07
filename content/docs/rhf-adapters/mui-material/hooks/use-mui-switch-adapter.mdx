@@ -1,8 +1,11 @@
 ---
 title: useMuiSwitchAdapter
-description: Returns adapter props for building custom MUI switch integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for building custom MUI Switch fields with React Hook Form, with boolean checked handling and custom stored values.
 ---
+
+`useMuiSwitchAdapter` connects a field to React Hook Form and returns props you spread onto MUI's `Switch`. It's what [`MuiSwitchElement`](/docs/rhf-adapters/mui-material/components/mui-switch-element) uses internally.
+
+The element drops the error state and has no place for a message. Use the hook when a switch must show why it's invalid, like a required terms switch, or when the form should store something other than `true`/`false`.
 
 ## Import
 
@@ -12,14 +15,34 @@ import { useMuiSwitchAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+The terms switch must be on to submit. The newsletter switch stores `"subscribed"` or `"unsubscribed"` instead of a boolean.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Custom field",
+      path: "demo/adapters/mui-material/switch/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/switch/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+**Checked, not value.** The hook returns `checked` instead of `value`. By default, `checked` is the field value converted to a boolean (`!!value`), and a toggle stores `event.target.checked`. So `undefined`, `null`, `0` and `""` all show as off, and the form always stores a boolean after the first toggle.
+
+**Storing other values.** `transform.input` maps the stored value to `checked`, and `transform.output` maps the change event to the stored value. Each replaces its default separately, so when the form stores anything other than a boolean, pass both. With only `output`, the default `!!value` still runs, and a stored `"unsubscribed"` shows as on because it's a non-empty string.
+
+**Required.** `required: true` adds a rule with the message "Please fill out this field.", which you can change through `messages.required`. React Hook Form treats `false` as empty for `required`, so a boolean switch must be on to pass. With a transform that stores strings, both strings are non-empty and `required` never fails. Use `rules.validate` in that case, e.g. `` validate: (value) => value === "subscribed" || "Please subscribe" ``.
+
+The text rules (`min`, `max`, `minLength`, `maxLength`, `pattern`) are accepted but have nothing useful to check on a switch.
+
+**Errors and helper text.** The result includes `error` and `helperText`, but `Switch` has neither prop. Take them out before spreading and render the message yourself, for example in a `FormHelperText`. With `composeHelperText: true`, `helperText` holds the error message while the field is invalid.
+
+**Generics.** Without a transform, TypeScript can't infer the type of `checked`. Pass the generics explicitly: `useMuiSwitchAdapter<boolean, FormValues, "terms">(...)`.
 
 ## Props
 

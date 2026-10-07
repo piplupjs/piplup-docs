@@ -1,8 +1,11 @@
 ---
 title: useMuiInputLabelAdapter
-description: Returns adapter props for building custom MUI input label integrations with React Hook Form field state.
-noindex: true
+description: Returns props for an MUI InputLabel that follows a React Hook Form field's error state without registering a value.
 ---
+
+`useMuiInputLabelAdapter` returns props for MUI's floating `InputLabel` that reflect the state of a field registered by another hook. It's what [`MuiInputLabelElement`](/docs/rhf-adapters/mui-material/components/mui-input-label-element) uses internally.
+
+Use the hook inside a custom field component built from `FormControl`, `InputLabel`, an input and `FormHelperText`, so the floating label turns red with the input without passing `error` around by hand.
 
 ## Import
 
@@ -12,14 +15,30 @@ import { useMuiInputLabelAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+`PromoCodeField` uses [`useMuiInputAdapterProps`](/docs/rhf-adapters/mui-material/hooks/use-mui-input-adapter-props) for the input and this hook for the label. The code is uppercased as you type. Enter `SAVE24` and submit to see the label, underline and helper text switch to the error state.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Custom field",
+      path: "demo/adapters/mui-material/input-label/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/input-label/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+The hook reads the field's state by `name` and registers nothing, exactly like [useMuiFormLabelAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-form-label-adapter#how-it-works). That page covers the returned props and the cases the label can't see, such as an input disabled through its own `disabled` prop.
+
+**What differs from the FormLabel hook.** This hook doesn't read MUI's `FormControl`. It always returns `disabled` as a boolean, and `InputLabel` lets that value override the control's state. Inside `<FormControl disabled>`, the label keeps its normal color unless you also pass `disabled` to this hook. The same applies to `error`.
+
+`InputLabel` still takes `required`, `focused`, `variant` and `size` from the `FormControl`, so the asterisk, the focus color and the floating position work as usual. Shrinking follows the input's value through the `FormControl`, not this hook.
+
+**Types.** Remove `helperText` from the result before spreading, since `InputLabel` doesn't accept it. If TypeScript rejects the returned `ref`, pass the element type as the third generic: `useMuiInputLabelAdapter<FormValues, "promoCode", HTMLLabelElement>(...)`.
 
 ## Props
 

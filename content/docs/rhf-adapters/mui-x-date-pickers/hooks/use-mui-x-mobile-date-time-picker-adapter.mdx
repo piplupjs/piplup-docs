@@ -1,8 +1,11 @@
 ---
 title: useMuiXMobileDateTimePickerAdapter
-description: Returns adapter props for building custom mobile MUI X DateTimePicker integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for MUI X MobileDateTimePicker with React Hook Form, including how to validate an earliest allowed date and time.
 ---
+
+`useMuiXMobileDateTimePickerAdapter` returns React Hook Form props for MUI X's `MobileDateTimePicker`. It's what [`MuiXMobileDateTimePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-mobile-date-time-picker-element) uses internally.
+
+Use the element for most forms. Use the hook when you build a touch-first date-time field with rules that depend on the current moment, such as a pickup time that must be at least two hours away.
 
 ## Import
 
@@ -12,7 +15,36 @@ import { useMuiXMobileDateTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-d
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/mobile-date-time-picker/element.tsx" }]} />
+This `PickupField` rejects anything earlier than two hours from now and only accepts half-hour slots. Open the dialog to see the earlier times greyed out, or submit without a value to see the `required` message.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/mobile-date-time-picker/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/mobile-date-time-picker/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+This hook calls [`useMuiXDateTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-time-picker-adapter) with the same props and returns its result unchanged. The validation keys and default messages are listed there.
+
+The difference is the component. `DateTimePicker` switches between layouts with a media query. `MobileDateTimePicker` always opens the date and time views in a modal dialog with its own action buttons.
+
+**An earliest date and time.** The hook does not read `minDateTime`. To validate "not before this moment", the example passes the same value to `minDate` and `minTime` and sets `disableIgnoringDatePartForTimeValidation: true`:
+
+- `minDate` rejects earlier days with the `minDate` message.
+- `minTime` with the flag compares the full date and time, so an earlier time on the same day fails with the `minTime` message. Without the flag, `minTime` would act as a daily opening time: a limit of 14:30 would also reject 09:00 tomorrow.
+- `disablePast` is set as well. MUI X's picker ignores the flag you pass and only compares full dates when `disablePast`, `disableFuture`, `minDateTime` or `maxDateTime` is set. With `disablePast`, the dialog greys out the same times the form rejects.
+
+Create the limit once, for example with `useState(() => dayjs().add(2, "hour"))`. A new `dayjs()` on every render moves the limit forward while the user fills the form, so a value that passed a moment ago can fail on submit.
+
+**Errors and blur.** The text field gets `error`, `helperText` and `onBlur` through `slotProps.textField`. The hook also wraps `onClose`, so closing the dialog marks the field as touched, whether the user confirms or cancels. With `mode: "onTouched"`, opening and cancelling the dialog on an empty required field shows the `required` message straight away.
 
 ## Props
 

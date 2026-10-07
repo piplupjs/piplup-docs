@@ -1,8 +1,11 @@
 ---
 title: useMuiRadioAdapter
-description: Returns adapter props for building custom MUI radio integrations with React Hook Form.
-noindex: true
+description: Returns props that connect a single MUI Radio to React Hook Form, for radio layouts that don't use RadioGroup.
 ---
+
+`useMuiRadioAdapter` connects one MUI `Radio` to a React Hook Form field and returns props you spread onto it. It's what [`MuiRadioElement`](/docs/rhf-adapters/mui-material/components/mui-radio-element) uses internally.
+
+Each radio is wired to the field on its own, so the options can live anywhere: in a grid of cards, in table rows, or spread across a layout. If your options sit together in an MUI `RadioGroup`, use [`useMuiRadioGroupAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-radio-group-adapter) instead, which registers the field once for the whole group. Use the hook rather than the element when you want one component that renders an option with its label and logic.
 
 ## Import
 
@@ -12,14 +15,38 @@ import { useMuiRadioAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+Each `SeatOption` stores a number, not the string the DOM returns. The options don't set `required` themselves; they inherit it from the surrounding `FormControl`. Submit without choosing to see the error.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Seat picker",
+      path: "demo/adapters/mui-material/radio/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/radio/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+**Checked state.** The returned `checked` is `true` when the field value equals this radio's `value`. Values are compared as strings, so a field holding the number `2` checks a radio with `value="2"`. Pass a `checked` function to decide yourself; it receives the field value.
+
+**Stored value.** When a radio is selected, the hook stores `event.target.value`. The DOM always gives a string, so `value={2}` stores `"2"`. Pass `transform.output` to convert it, as the demo does with `Number(event.target.value)`. MUI only fires `onChange` on the radio being selected, so selecting another option is what changes the value.
+
+**Empty value.** An `undefined` field value is turned into `""` before comparison, so no radio is checked. `required` fails for `undefined`, `null` and `""`.
+
+**Inside a `FormControl`.** If you don't pass `disabled` or `required`, the hook takes them from the surrounding MUI `FormControl`. The demo sets `required` once on the `FormControl` and gives each option only the message.
+
+**Errors.** A radio can't show a message. Read the error at the group level and render it in a `FormHelperText`. The demo uses `useFormState`; you can also set `composeHelperText: true` on one of the options and render its `helperText`.
+
+**What's returned.** The usual field props (`name`, `value`, `onChange`, `onBlur`, `ref`, `disabled`, `required`) plus `checked`, `error`, `helperText`, `className` and `style`. `title` and `type` are not returned, so set `title` on the `Radio` directly if you need it.
+
+<Callout type="warn">
+  `Radio` has no `error` or `helperText` props. Remove them before spreading the result. Remove `required` as well when the radio sits in a `FormControlLabel`: otherwise the label shows an asterisk next to every option.
+</Callout>
 
 ## Props
 

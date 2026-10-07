@@ -1,8 +1,11 @@
 ---
 title: useMuiFabAdapter
-description: Returns adapter props for building custom MUI FAB integrations with React Hook Form form state.
-noindex: true
+description: Returns props for an MUI Fab that reacts to React Hook Form state, with form-state-driven disabling, styles and reset.
 ---
+
+`useMuiFabAdapter` returns props you spread onto MUI's `Fab` so it can submit or reset a React Hook Form form and react to its state. It's what [`MuiFabElement`](/docs/rhf-adapters/mui-material/components/mui-fab-element) uses internally.
+
+The hook behaves exactly like [`useMuiButtonAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-button-adapter): same props, same disabling rules, same reset handling. Use it instead of the element when you want `classes` that follow the form state (the element turns class composition off), when the Fab's content should change with the returned `disabled` or `error`, or when you wrap the Fab in your own component.
 
 ## Import
 
@@ -12,14 +15,34 @@ import { useMuiFabAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+`SendFab` stays clickable while the message is empty, so submitting shows the required error, but its `style` function dims it until the form is valid. It's disabled only while the (simulated) request runs.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Custom Fab",
+      path: "demo/adapters/mui-material/fab/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/fab/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+For the full behavior (form state subscription, the disabling table, reset on `type="reset"`, helper text) see [How it works on the button hook page](/docs/rhf-adapters/mui-material/hooks/use-mui-button-adapter#how-it-works). What's worth knowing for a Fab:
+
+**Styling from form state.** `style` can be an object or a function. A function receives `{ disabled, error }` and its result becomes the returned `style`. `MuiFabElement` accepts the same function. `error` is your `error` prop if you pass one, and otherwise `true` whenever the form's `isValid` is `false`, which includes fields the user hasn't touched yet. That's why the demo's Fab starts dimmed.
+
+**Dim instead of disable.** `disableOnError` disables the Fab for the same condition, which means the user can't click it to find out what's missing. A style (or a class through `classes.error`) gives the same hint and still lets submission run validation and show the errors.
+
+**`classes`.** With class composition on (the default for the hook), `classes.root` is always applied, and `classes.disabled` and `classes.error` are added while those states are active. The hook also returns `classes` unchanged, so the same object reaches `Fab`'s own `classes` prop.
+
+<Callout type="warn">
+  `Fab` has no `error` or `helperText` props. Remove them from the returned object before spreading it, as the demo and the element do.
+</Callout>
 
 ## Props
 

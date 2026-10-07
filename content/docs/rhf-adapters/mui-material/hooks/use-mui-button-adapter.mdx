@@ -1,8 +1,11 @@
 ---
 title: useMuiButtonAdapter
-description: Returns adapter props for building custom MUI button integrations with React Hook Form form state.
-noindex: true
+description: Returns props for an MUI Button that disables itself from React Hook Form state and resets the form when its type is "reset".
 ---
+
+`useMuiButtonAdapter` reads React Hook Form's form state and returns props you spread onto MUI's `Button`: a computed `disabled`, a click handler that resets the form for `type="reset"`, and a `className` and `style` that can react to the form state. It's what [`MuiButtonElement`](/docs/rhf-adapters/mui-material/components/mui-button-element) uses internally.
+
+Use the element for ordinary submit and reset buttons. Reach for the hook when the button's content depends on that state (a "Saving…" label), when you want `classes` or `style` driven by the form state (the element turns class composition off), or when you build a shared button for a design system. [`useMuiFabAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-fab-adapter) and [`useMuiIconButtonAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-icon-button-adapter) work the same way.
 
 ## Import
 
@@ -12,14 +15,52 @@ import { useMuiButtonAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+`SaveButton` is disabled and reads "Saving…" while the submit handler runs. `DiscardButton` is a reset button that asks for confirmation first, and cancels the reset if you say no.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Custom buttons",
+      path: "demo/adapters/mui-material/button/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/button/element.tsx",
     },
   ]}
 />
+
+Pass `control`, or render the button inside a `FormProvider` or [`FormContainer`](/docs/rhf-core/components/form-container) so the hook can find the form.
+
+## How it works
+
+The button isn't a field. It doesn't register anything with React Hook Form; it subscribes to the form state (`errors`, `isSubmitting`, `isValid`) and derives its props from it.
+
+**Disabling.** The returned `disabled` is `true` when any of these apply:
+
+| Prop | Disables the button when |
+| --- | --- |
+| `disabled` | Always. |
+| `disableOnIsSubmitting` | The form is submitting, which includes waiting for an async submit handler. |
+| `disableOnError` | The button is in the error state (see below). |
+
+**Error state.** The returned `error` is your `error` prop if you pass one. Otherwise it's `true` whenever the form's `isValid` is `false`. That's the whole form, not one field: `name` and `exact` narrow which updates re-render the button, but `isValid` still covers every registered field.
+
+**Click and reset.** The returned `onClick` calls your `onClick` first. Then, if `type` is `"reset"` and your handler didn't call `event.preventDefault()`, it calls React Hook Form's `reset()` with no arguments. That restores the form's default values, using any `resetOptions` you gave `useForm`. The demo uses `preventDefault()` to cancel the reset when the user doesn't confirm.
+
+**`type` and `name`.** `type` is passed through. `name` is returned for the DOM only when it's a string. An array of field names is only used to scope the form state subscription.
+
+**Class names and styles.** The hook builds `className` from `classes.root`, plus `classes.disabled` and `classes.error` while those states are active, plus your `className`. Set `composeClassName: false` to get your `className` back unchanged, as the element does. `style` can be a function that receives `{ disabled, error }` (see the [Fab demo](/docs/rhf-adapters/mui-material/hooks/use-mui-fab-adapter) for an example). The hook also returns your `classes` object as-is, so it reaches the component's own `classes` prop too.
+
+**Helper text.** The hook also returns `helperText`. With `composeHelperText: true`, the error parser receives the form's errors object rather than one field's error (filtered to the listed keys when `name` is an array). The default parser only reads a top-level `message`, so pass your own `errorParser` if you want to show anything from it. A parser set with [`FormErrorProvider`](/docs/rhf-core/components/form-error-provider) takes priority over the `errorParser` prop.
+
+<Callout type="warn">
+  MUI's `Button` has no `error` or `helperText` props. Remove them from the returned object before spreading it onto the button, as the element and the demo do, so they don't end up on the DOM element.
+</Callout>
+
+<Callout type="warn">
+  `isValid` is checked as soon as the form mounts and includes fields the user hasn't touched. With `disableOnError`, a form that starts with an empty required field has a disabled submit button, so the user can't submit to see which fields need attention. Use a validation `mode` such as `"onChange"` or `"onTouched"` so errors show as the user types, or skip `disableOnError` and signal the state another way.
+</Callout>
 
 ## Props
 

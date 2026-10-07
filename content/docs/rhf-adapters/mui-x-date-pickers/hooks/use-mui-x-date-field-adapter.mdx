@@ -1,8 +1,11 @@
 ---
 title: useMuiXDateFieldAdapter
-description: Returns adapter props for building custom MUI X DateField integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for MUI X DateField with React Hook Form. Errors, helper text and blur go straight to the field, with no slotProps.
 ---
+
+`useMuiXDateFieldAdapter` returns React Hook Form props for MUI X's `DateField`, the keyboard-only date input with no calendar popup. It's what [`MuiXDateFieldElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-field-element) uses internally.
+
+Use the element for most forms. Use the hook for typed dates where a calendar gets in the way, such as a date of birth, when you want the field's limits and messages defined once in your own component.
 
 ## Import
 
@@ -12,7 +15,34 @@ import { useMuiXDateFieldAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-field/element.tsx" }]} />
+This `BirthDateField` requires a full date, rejects future dates, and only accepts people aged 18 or older. Type part of a date and submit, or enter a date from last year.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/date-field/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-field/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+Validation uses the same rules, keys and default messages as [`useMuiXDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter). The difference is how the result reaches the component.
+
+**Props go straight to the field.** `DateField` is itself the text field, so the hook returns `error`, `helperText`, `onBlur` and `required` as top-level props. There is no `slotProps.textField` and no `onClose`. Pass hint text with the hook's `helperText` prop, not on `<DateField>`: with `composeHelperText: true` the hook returns your hint while the field is valid and the error message when it is not. A `helperText` written on `<DateField>` before the spread is overwritten.
+
+Blur is the only touch signal. Leaving the input marks the field as touched.
+
+**Partial input is an invalid date, not an empty one.** While the user is still typing, `DateField` reports an invalid date object, not `null`. So `required` passes and the `invalidDate` check fails instead. Give `invalidDate` a message that tells users to finish typing. Its type only allows a function, so write it as `() => "Finish typing the date"`.
+
+**Refs.** The hook merges React Hook Form's ref with your `inputRef` and returns it as `inputRef`, so form methods get the field's input element. Your `ref` is returned separately and goes to the root element.
+
+**Limits are checked by day.** `minDate`, `maxDate`, `disablePast` and `disableFuture` ignore the time. Computing `maxDate` as `dayjs().subtract(18, "year")`, as the example does, allows someone whose 18th birthday is today.
 
 ## Props
 

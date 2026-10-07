@@ -1,19 +1,104 @@
 ---
 title: "Installation — @piplup/rhf-core"
-description: Learn how to install the core and optional adapter packages for Piplup.
-noindex: true
+description: Install @piplup/rhf-core with React Hook Form, check the peer dependency versions, and set up a first form.
 ---
 
-## Install Core Package
+`@piplup/rhf-core` contains the building blocks for connecting your own input components to React Hook Form: the `FormContainer` component and adapter hooks such as `useControllerAdapter`. It has no UI of its own. The ready-made components for HTML, MUI and other libraries live in [`@piplup/rhf-adapters`](/docs/rhf-adapters/html/installation), which is built on this package.
 
-Install the core package:
+## Install
 
-```package-install
-@piplup/rhf-core
-```
-
-Optionally, install the adapters package for pre-built integrations:
+Install the package together with React Hook Form:
 
 ```package-install
-@piplup/rhf-adapters
+@piplup/rhf-core react-hook-form
 ```
+
+### Peer dependencies
+
+| Package | Version |
+| --- | --- |
+| `react` | `^19.0.0` |
+| `react-dom` | `^19.0.0` |
+| `react-hook-form` | `>=7.65.0 <8.0.0` |
+
+React 18 is not supported by this version. `@piplup/utils` is a regular dependency and is installed for you.
+
+## Entry point
+
+Everything is exported from the package root. The package ships ES module (`.mjs`) and CommonJS (`.js`) builds with TypeScript types.
+
+```tsx
+import {
+  FormContainer,
+  FormErrorProvider,
+  useControllerAdapter,
+  useFieldState,
+  useFieldStateAdapter,
+  useFormReset,
+  useFormSetFocus,
+  useFormStateAdapter,
+} from "@piplup/rhf-core";
+```
+
+The bundle starts with a `"use client"` directive, so its components are Client Components in the Next.js App Router. Function props such as `onSubmit` can't be passed from a Server Component, so put your forms in a file marked `"use client"`.
+
+## Minimal setup
+
+`FormContainer` creates the form with `useForm`, provides it through context and renders a `<form noValidate>`. Fields inside it find the form through context, so they don't need a `control` prop.
+
+```tsx
+"use client";
+
+import { FormContainer, useControllerAdapter } from "@piplup/rhf-core";
+
+function TextInput({ name, label }: { name: string; label: string }) {
+  const field = useControllerAdapter<string>({
+    name,
+    required: true,
+    composeHelperText: true,
+  });
+
+  return (
+    <label>
+      {label}
+      <input
+        ref={field.ref}
+        name={field.name}
+        value={field.value}
+        onChange={field.onChange}
+        onBlur={field.onBlur}
+        aria-invalid={field.error}
+      />
+      {field.error && <span role="alert">{field.helperText}</span>}
+    </label>
+  );
+}
+
+export default function SignupForm() {
+  return (
+    <FormContainer
+      defaultValues={{ email: "" }}
+      onSubmit={(values) => console.log(values)}
+    >
+      <TextInput name="email" label="Email" />
+      <button type="submit">Sign up</button>
+    </FormContainer>
+  );
+}
+```
+
+If you already create the form with `useForm`, pass the result as `formContext` instead of the `useForm` options. See [`FormContainer`](/docs/rhf-core/components/form-container).
+
+## Next steps
+
+<Cards>
+  <Card title="useControllerAdapter" href="/docs/rhf-core/hooks/use-controller-adapter">
+    Bind a custom input to a field, with rules, transforms and helper text.
+  </Card>
+  <Card title="FormErrorProvider" href="/docs/rhf-core/components/form-error-provider">
+    Change how error messages are turned into helper text across a form.
+  </Card>
+  <Card title="@piplup/rhf-adapters" href="/docs/rhf-adapters/html/installation">
+    Use prebuilt components for HTML, MUI and other UI libraries.
+  </Card>
+</Cards>

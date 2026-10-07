@@ -1,8 +1,11 @@
 ---
 title: useMuiAutocompleteAdapter
-description: Returns adapter props for building custom MUI Autocomplete integrations with React Hook Form.
-noindex: true
+description: Returns props that connect an MUI Autocomplete to React Hook Form, passing error, helperText and required into renderInput and supporting option-to-value transforms.
 ---
+
+`useMuiAutocompleteAdapter` connects an MUI `Autocomplete` to a React Hook Form field and returns props you spread onto it. It's what [`MuiAutocompleteElement`](/docs/rhf-adapters/mui-material/components/mui-autocomplete-element) uses internally.
+
+Use the element for most forms. Reach for the hook when you want a reusable field with its options, labels and messages built in, such as a country or user picker that's used across many forms.
 
 ## Import
 
@@ -12,14 +15,40 @@ import { useMuiAutocompleteAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+The options are `{ code, label }` objects, but the form stores only the code (`"IN"`). The transform maps the code to its option for display and back to a code on change. Clear the field and submit to see the error in the text field's helper text.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Country field",
+      path: "demo/adapters/mui-material/autocomplete/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/autocomplete/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+**`renderInput` gets the field state.** The returned `renderInput` calls yours with MUI's usual params plus `error`, `helperText` and `required`. Spread `params` onto your `TextField` and it shows the error state, the message and the required asterisk. These three are not returned for the `Autocomplete` itself.
+
+**Turn on `composeHelperText`.** The element sets it for you; the hook doesn't. Without it, `params.helperText` is only your `helperText` and validation messages never appear. With it, the error message replaces your `helperText` while the field is invalid.
+
+**Empty values.** With `multiple`, a field value that isn't an array is passed to `Autocomplete` as `[]`. Without it, `undefined` becomes `null`. Pass `multiple` to the hook; it's returned so it reaches `Autocomplete` when you spread.
+
+**Stored value.** On change, the hook stores the value `Autocomplete` reports: the selected option, the array of options with `multiple`, or `null` when cleared. `transform.output` receives `(event, value, reason, details)` and returns what to store; `transform.input` turns the stored value back into an option.
+
+**Validation.** `required` fails for `null` and for an empty array. React Hook Form's `minLength` and `maxLength` don't apply to arrays, so limit the number of selected options with `rules.validate`.
+
+<Callout type="warn">
+  Your `transform.input` replaces the default one, including the `undefined` → `null` / `[]` handling, so return `null` (or `[]`) yourself when there's no match. Return the same option objects you pass in `options`, or set `isOptionEqualToValue`, so MUI can match the value to an option.
+</Callout>
+
+<Callout type="warn">
+  `required` is passed to your `TextField`, which puts `required` on the text input. With `multiple`, the text input is usually empty after the user picks options, so the browser's own check blocks submission. Add `noValidate` to the form and let React Hook Form validate instead.
+</Callout>
 
 ## Props
 

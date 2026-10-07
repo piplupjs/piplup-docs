@@ -1,8 +1,11 @@
 ---
 title: AclProvider
-description: Provide roles and permissions to the ACL context.
-noindex: true
+description: Provide the current user's roles and permissions, and their loading state, to HasAccess and useAcl.
 ---
+
+`AclProvider` holds the current user's roles and permissions and exposes an `isAuthorized` check to everything below it. [`HasAccess`](/docs/react-acl/components/has-access) and [`useAcl`](/docs/react-acl/hooks/use-acl) both read from it, and both throw if no provider is rendered above them.
+
+The provider does not fetch anything. You load the ACL data however you like (an API call, a session token, a server prop) and pass the result in, along with a `loading` flag.
 
 ## Import
 
@@ -12,17 +15,63 @@ import { AclProvider } from "@piplup/react-acl";
 
 ## Usage
 
+This example loads roles and permissions from a fake API. Switch users to see the loading state, then the content each user can see.
+
+<Demo
+  tabs={[
+    {
+      label: "Remote ACL",
+      path: "demo/react-acl/acl-provider.tsx",
+    },
+  ]}
+/>
+
+## Loading ACL data asynchronously
+
+Set `loading` to `true` until your request resolves, then pass the real lists. While `loading` is `true`:
+
+- `isAuthorized` returns `false` for every check, whatever the lists contain.
+- `HasAccess` renders its `loading` prop. It does not render `fallback`, so users don't see an "access denied" message flash before the data arrives.
+- `useAcl().loading` is `true`, so your own components can show a placeholder.
+
+Start with `loading={true}` on the first render, not `false`. With `loading={false}` and empty lists, every check that names a role or permission fails and `HasAccess` shows its fallback until the data arrives.
+
 ```tsx
-<AclProvider loading={false} roles={["admin"]} permissions={["read","write"]}>
-  <App />
-</AclProvider>
+function AclRoot({ children }: { children: React.ReactNode }) {
+  const [acl, setAcl] = React.useState({ roles: [], permissions: [] });
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    fetch("/api/me/acl")
+      .then((res) => res.json())
+      .then((data) => setAcl({ roles: data.roles, permissions: data.permissions }))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <AclProvider loading={loading} roles={acl.roles} permissions={acl.permissions}>
+      {children}
+    </AclProvider>
+  );
+}
 ```
+
+If you already have the data when rendering, for example from the server or a decoded token, pass `loading={false}`.
+
+## How it works
+
+**Matching.** `isAuthorized` compares the roles and permissions a check asks for against the lists you passed to the provider. Values are compared with `===`, so the number `1` does not match the string `"1"`. The rules for each check are covered on the [`HasAccess`](/docs/react-acl/components/has-access#how-access-is-decided) page.
+
+**Updates.** When `roles`, `permissions` or `loading` change, the context value changes and every `HasAccess` and `useAcl` consumer re-renders with the new result. You don't need to remount anything after a login, logout or role change.
+
+<Callout type="warn">
+  The context value is rebuilt whenever the `roles` or `permissions` array is a new reference. Inline literals such as `roles={["admin"]}` create a new array on every render, which re-renders all consumers each time the provider renders. Keep the arrays in state, or wrap them in `useMemo`.
+</Callout>
+
+**Nesting.** A nested `AclProvider` replaces the outer one for its subtree. Lists are not merged, so the inner provider must receive the full set of roles and permissions that should apply there.
 
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="AclProviderProps" cwd />
 
-## Notes
-
-- `roles` and `permissions` accept `string` or `number` values.
-- Use the `loading` prop while your identity/ACL data is being fetched.
+`roles` and `permissions` accept `string` and `number` values, so you can use names like `"admin"` or numeric IDs from your backend.

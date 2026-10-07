@@ -1,8 +1,13 @@
 ---
 title: useMuiInputBaseAdapter
-description: Returns adapter props for building custom MUI InputBase integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for building custom MUI InputBase fields with React Hook Form, including number handling, transforms and validation rules.
 ---
+
+`useMuiInputBaseAdapter` connects a text-like field to React Hook Form and returns props you spread onto MUI's `InputBase`. It's what [`MuiInputBaseElement`](/docs/rhf-adapters/mui-material/components/mui-input-base-element) uses internally.
+
+`InputBase` has no border, label or helper text, so the element is rarely enough on its own. Use the hook when you draw the field yourself, for example a search bar, an inline table cell or a styled input, and need the error message and value handling in your own markup.
+
+The same input logic powers [`useMuiInputAdapterProps`](/docs/rhf-adapters/mui-material/hooks/use-mui-input-adapter-props), [`useMuiFilledInputAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-filled-input-adapter), [`useMuiOutlinedInputAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-outlined-input-adapter) and [`useMuiTextFieldAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-text-field-adapter). This page describes it once; those pages cover what differs.
 
 ## Import
 
@@ -12,14 +17,74 @@ import { useMuiInputBaseAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+This `SeatsField` stores a number, accepts 1 to 8, and renders its own label and helper text. Submit it empty, or type `0` or `12`, to see the messages.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Custom field",
+      path: "demo/adapters/mui-material/input-base/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/input-base/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+**Value.** The `type` prop decides how values move between the form and the input:
+
+| `type` | Value passed to the input | Value stored on change |
+| --- | --- | --- |
+| `number` | The field value, with `undefined` turned into `""` | `null` when the input is empty, otherwise a number (`+event.target.value`) |
+| `file` | Always `undefined`, so the input stays uncontrolled | `event.target.files` (a `FileList`) |
+| Anything else (`text`, `email`, `tel`, ...) | The field value, with `undefined` turned into `""` | `event.target.value` |
+
+There is no `valueAsNumber` option. Setting `type: "number"` is what makes the form store numbers.
+
+An emptied number field stores `null`, and that `null` is passed back to the input as its value. React expects a string there, so map it as the demo does: `transform: { input: (value) => value ?? "" }`.
+
+**Transforms.** `transform.input` and `transform.output` replace the defaults above one at a time. If you pass only `output`, the default `input` still runs, and the other way round. `output` receives the change event followed by the current (transformed) value, so `(event) => event.target.value.trim()` is enough for most cases.
+
+Your own `onChange` and `onBlur` run after React Hook Form's handlers and receive the original event, not the transformed value.
+
+**Validation.** The rule props become React Hook Form rules. Each has a default message, which you can replace through `messages`:
+
+| Prop | Rule | Default message |
+| --- | --- | --- |
+| `required` | Value must not be empty | Please fill out this field. |
+| `minLength` | Text length | Please lengthen this text to `{minLength}` characters or more |
+| `maxLength` | Text length | Please shorten this text to `{maxLength}` characters or less. |
+| `pattern` | Regular expression (a string is converted with `new RegExp`) | Please match the requested format. |
+| `min` | Numeric value | Value must be `{min}` or later. |
+| `max` | Numeric value | Value must be `{max}` or earlier. |
+
+Two types add a default on their own when you don't pass `pattern`:
+
+- `type: "email"` adds the pattern `/\S+@\S+\.\S+/` with the message "Please enter an email address."
+- `type: "url"` only sets the pattern message to "Please enter a valid url." It does not add a pattern, so nothing is checked until you pass one.
+
+A key in `rules` wins over the matching prop. For example, `rules.required` replaces `required` and `messages.required`. Messages other than `required` can be functions, e.g. `` maxLength: (max) => `Keep it under ${max} characters` ``.
+
+The rule props are not forwarded to the DOM. Only `required` is returned, and it sets the native `required` attribute, so add `noValidate` to your `<form>`. To limit the number spinner as well, set `slotProps.input` (`{ min: 1, max: 8 }` in the demo).
+
+<Callout type="warn">
+  - `min: 0` and `max: 0` add no rule, because zero is skipped. Use `rules: { min: { value: 0, message: "..." } }` instead.
+  - A string `pattern` is not anchored. `pattern: "[0-9]+"` accepts `abc1`. Write `^[0-9]+$`.
+  - Message functions receive their value wrapped in an array, e.g. `[8]`. Interpolating it into a string prints `8` as expected, but number methods such as `toFixed` will fail. A `pattern` message function never receives `title`, and the default pattern message does not include it either.
+</Callout>
+
+**Errors and helper text.** `error` is `true` when the field has a validation error, unless you pass `error` yourself. The returned `helperText` is your `helperText` as-is. With `composeHelperText: true`, it becomes the error message while the field is invalid.
+
+`InputBase` has no `helperText` prop and passes unknown props to its root `<div>`. Take `helperText` out of the result before spreading, as the demo does.
+
+**Disabled state.** `disabled` is `true` when you pass `disabled`, the form is disabled, `disableOnError` is set and the field has an error, or `disableOnIsSubmitting` is set while the form submits. The `disabled` prop and a disabled form also disable the field in React Hook Form, which skips its validation and leaves it out of the submitted values. `disableOnError` and `disableOnIsSubmitting` only disable the input.
+
+This hook does not read MUI's `FormControl`. Because it always returns `disabled` as a boolean, an `InputBase` inside `<FormControl disabled>` stays enabled unless you pass `disabled` to the hook. If you want `required` and `disabled` taken from a `FormControl`, use [`useMuiInputAdapterProps`](/docs/rhf-adapters/mui-material/hooks/use-mui-input-adapter-props) or its filled and outlined variants.
+
+**Ref.** The returned `ref` combines React Hook Form's field ref with the ref you pass as the hook's second argument. `InputBase` puts `ref` on its root `<div>`, so React Hook Form can't focus the field when validation fails. Pass the ref to `inputRef` instead, as the demo does.
 
 ## Props
 

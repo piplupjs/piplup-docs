@@ -1,8 +1,11 @@
 ---
 title: useMuiXStaticDateTimePickerAdapter
-description: Returns adapter props for building custom static MUI X DateTimePicker integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for MUI X StaticDateTimePicker with React Hook Form. The picker has no text field, so you render the error message yourself.
 ---
+
+`useMuiXStaticDateTimePickerAdapter` returns React Hook Form props for MUI X's `StaticDateTimePicker`, the always-visible date-time picker. It's what [`MuiXStaticDateTimePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-static-date-time-picker-element) uses internally.
+
+The element shows no validation message at all. Use the hook when the user needs to see why a value was rejected: you get the error state and message back and decide where to render them.
 
 ## Import
 
@@ -12,7 +15,32 @@ import { useMuiXStaticDateTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-d
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-date-time-picker/element.tsx" }]} />
+This `PublishAtField` schedules a post on the hour or half hour, up to two weeks ahead. Pick tomorrow, leave the time as it is, and submit to see the message rendered under the picker.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/static-date-time-picker/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-date-time-picker/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+Validation is the same as in [`useMuiXDateTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-time-picker-adapter): date checks first, then `minTime`, `maxTime`, `shouldDisableTime` and `minutesStep`, with the same keys and default messages. What changes is the wiring, because a static picker has no text field and no popup.
+
+**No `slotProps.textField`.** Unlike the DateTimePicker hook, this one does not take `slotProps` and does not build a text field slot. It returns `error`, `helperText` and `required` as plain values. `StaticDateTimePicker` has no props for them, so take them off the result before spreading and render them yourself, as the example does with `FormHelperText`. With `composeHelperText: true`, `helperText` holds the error message.
+
+**No touched state.** The hook ignores any `onBlur` you pass and has no `onClose` to wrap. The returned `onBlur` is React Hook Form's, but `StaticDateTimePicker` never calls it. The field is never marked as touched, so `mode: "onBlur"` and `mode: "onTouched"` do not validate it before the first submit. Use the default `onSubmit` mode or `onChange`.
+
+**Every pick changes the value.** The form value updates on each selection in the picker, not when the user presses an action button. Picking a day with no value yet keeps the current time of day, so in the example it usually fails the `:00`/`:30` rule until a minute is chosen. The example hides the action bar with `slotProps={{ actionBar: { actions: [] } }}` for that reason.
+
+**Ref.** React Hook Form's ref and your `ref` are merged and attached to the picker's root element. There is no input to focus, so `setFocus` and `shouldFocusError` do nothing for this field.
 
 ## Props
 

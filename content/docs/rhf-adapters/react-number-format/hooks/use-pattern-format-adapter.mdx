@@ -1,8 +1,11 @@
 ---
 title: usePatternFormatAdapter
-description: Returns adapter props for building custom PatternFormat integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for wiring react-number-format's PatternFormat masks (phone numbers, card numbers, codes) to React Hook Form.
 ---
+
+`usePatternFormatAdapter` connects a field to React Hook Form and returns props you spread onto `PatternFormat` from `react-number-format`. It's what [`PatternFormatElement`](/docs/rhf-adapters/react-number-format/components/pattern-format-element) uses internally. It calls [`useNumberFormatBaseAdapter`](/docs/rhf-adapters/react-number-format/hooks/use-number-format-base-adapter) with the same props; this page covers what matters for masked input.
+
+Use the element for one-off fields. Reach for the hook when the same mask and its completeness rules appear in several forms, for example a phone or card number field you want to define once.
 
 ## Import
 
@@ -12,7 +15,44 @@ import { usePatternFormatAdapter } from "@piplup/rhf-adapters/react-number-forma
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/pattern-format/element.tsx" }]} />
+This `UsPhoneField` shows `+1 (###) ###-####` and only accepts a complete number with a valid area code. Submit a partial number, or one starting with `0`, to see the errors. The alert shows that only the digits are stored.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/react-number-format/pattern-format/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/pattern-format/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+**Stored value is the raw input.** The form receives `values.value`: only the characters typed into `#` slots. Literal characters from `format` (including the `+1` above) and `mask` placeholders are dropped. With `format="(###) ###-####"`, the display `(212) 555-0100` is stored as `"2125550100"`, and a half-typed `(212) 55_-____` as `"21255"`.
+
+To keep the formatted text instead, pass `transform.output: (values) => values.formattedValue`. Note that a partly filled field then still contains the mask characters.
+
+**Default values.** Use the same raw form for `defaultValues`. `PatternFormat` formats a digits-only string like `"4085551212"` into `(408) 555-1212` on first render.
+
+**Checking for a complete value.** A partly filled mask is not empty, so `required` alone accepts it. Because the stored string holds only the typed characters, its length tells you how much is filled in:
+
+- `pattern: /^\d{10}$/` (as in the demo) or `minLength: 10` rejects incomplete numbers.
+- `rules.validate` can check parts of the value, such as the area code.
+
+| Key | Default message |
+| --- | --- |
+| `required` | Please fill out this field. |
+| `pattern` | Please match the requested format. |
+| `minLength` | Please lengthen this text to *n* characters or more |
+| `maxLength` | Please shorten this text to *n* characters or less. |
+
+The default length message talks about "text", which reads oddly for a phone or card number, so set `messages` for these.
+
+**Errors and helper text.** Set `composeHelperText: true` when rendering through `customInput={TextField}` to receive `error` and a `helperText` that switches to the error message. Without it, neither prop is returned. With `customInput`, the field ref is attached to the `TextField` root, so focus-on-error does not reach the input.
 
 ## Props
 
@@ -21,8 +61,3 @@ import { usePatternFormatAdapter } from "@piplup/rhf-adapters/react-number-forma
 ## Return value
 
 <AutoTypeTable path="content/docs/props.ts" name="UsePatternFormatAdapterReturnType" cwd />
-
-## Notes
-
-- Use this hook for custom masked or pattern-based inputs that still integrate with `react-hook-form`.
-- It builds on `useNumberFormatBaseAdapter`.

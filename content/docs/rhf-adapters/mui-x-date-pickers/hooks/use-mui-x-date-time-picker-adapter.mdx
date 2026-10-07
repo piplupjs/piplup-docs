@@ -1,8 +1,11 @@
 ---
 title: useMuiXDateTimePickerAdapter
-description: Returns adapter props for building custom MUI X DateTimePicker integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for MUI X DateTimePicker with React Hook Form, including time rules such as minTime, maxTime, minutesStep and shouldDisableTime.
 ---
+
+`useMuiXDateTimePickerAdapter` connects a field to React Hook Form and returns props you spread onto MUI X's `DateTimePicker`. It's what [`MuiXDateTimePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-time-picker-element) uses internally.
+
+Use the element for most forms. Use the hook when one kind of date-time field repeats across your app with the same rules, such as booking slots limited to opening hours, and you want those rules and messages defined once in your own component.
 
 ## Import
 
@@ -12,7 +15,65 @@ import { useMuiXDateTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pi
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-time-picker/element.tsx" }]} />
+This `MeetingField` accepts times from 09:00 to 17:00 in 15 minute steps, on any day from tomorrow. Type a time such as 08:30 or 10:07 and submit to see the time rules.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/date-time-picker/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-time-picker/element.tsx",
+    },
+  ]}
+/>
+
+Like the date-only hook, it must run inside a `LocalizationProvider`.
+
+## How it works
+
+Value handling, the text field wiring (`slotProps.textField`, `composeHelperText`) and the "closing the picker counts as a blur" behavior are the same as in [`useMuiXDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter). What differs is validation.
+
+**Date checks, then time checks.** The hook runs MUI X's `validateDateTime`. It first runs every date check from the DatePicker hook (`minDate`, `maxDate`, `shouldDisableDate` and so on, with the same keys and default messages). If those pass, it checks the time, in this order:
+
+| Key | Fails when | Default message |
+| --- | --- | --- |
+| `minTime` | The time is before `minTime` | Time is later than the maximum allowed time |
+| `maxTime` | The time is after `maxTime` | Time is earlier than the minimum allowed time |
+| `disableFuture` | The value is after the current moment | Future date is not allowed |
+| `disablePast` | The value is before the current moment | Past date is not allowed |
+| `shouldDisableTime-hours` | `shouldDisableTime(value, "hours")` returns `true` | Hour is disabled |
+| `shouldDisableTime-minutes` | `shouldDisableTime(value, "minutes")` returns `true` | Minute is disabled |
+| `shouldDisableTime-seconds` | `shouldDisableTime(value, "seconds")` returns `true` | Second is disabled |
+| `minutesStep` | The minutes are not a multiple of `minutesStep` | Minute step is not valid |
+
+Only the first failing check is reported. Override any message through `messages`, using the key from the table.
+
+<Callout type="warn">
+  The default `minTime` and `maxTime` messages describe the opposite limit: a time before `minTime` shows "Time is later than the maximum allowed time". Set your own `minTime` and `maxTime` messages whenever you use these props.
+</Callout>
+
+**`disablePast` and `disableFuture` work to the minute.** The date check compares by day, and the time check compares against the current time. So with `disablePast`, 08:00 today fails if it is already 10:00.
+
+**`minTime` and `maxTime` ignore the date by default.** Only the time of day is compared, so `minTime` set to 09:00 means "09:00 or later on any day". Set `disableIgnoringDatePartForTimeValidation: true` to compare the full date and time instead. To express "not before this exact moment", pass the same value to `minDate` and `minTime` with that flag. The [MobileDateTimePicker hook page](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-mobile-date-time-picker-adapter) has an example.
+
+<Callout type="warn">
+  The hook and the picker decide this flag differently. The hook uses the value you pass. MUI X's `DateTimePicker` ignores that prop and turns full date comparison on whenever `disablePast`, `disableFuture`, `minDateTime` or `maxDateTime` is set. If you combine a time-of-day `minTime` with `disablePast`, the picker lets users choose 07:00 tomorrow and the form then rejects it. Keep them aligned: use time-of-day limits without `disablePast`/`disableFuture`, or set the flag together with `disablePast` for an exact-moment limit.
+</Callout>
+
+The hook does not read `minDateTime` or `maxDateTime`. If you pass them straight to the picker, the picker greys out those times but the form still accepts a typed value outside the range. Use `minTime`/`maxTime` with the flag above so the rule is validated too.
+
+**The rules also drive the picker UI.** The validation props are returned with the adapter props, so spreading them onto `DateTimePicker` also disables the matching days, hours and minutes in its views (subject to the flag difference above). The form-level check still matters for typed values and for values set with `reset` or `setValue`.
+
+<Callout type="warn">
+  In TypeScript, `minDate` and `maxDate` are required props of the date-time hooks, unlike the date-only hooks. Pass real limits, as the example does. If they are missing at runtime, the hook falls back to the `LocalizationProvider` defaults (1900-01-01 and 2099-12-31).
+</Callout>
+
+<Callout type="warn">
+  A function message is called with a single array argument, `[value, limit]`, rather than with separate arguments as its type suggests. Plain string messages, as in the example, avoid this.
+</Callout>
 
 ## Props
 

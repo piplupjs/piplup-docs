@@ -1,8 +1,11 @@
 ---
 title: useMuiXTimeFieldAdapter
-description: Returns adapter props for building custom MUI X TimeField integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for building custom MUI X TimeField integrations with React Hook Form, for keyboard-only time inputs with blur validation.
 ---
+
+`useMuiXTimeFieldAdapter` connects a field to React Hook Form and returns props you spread onto MUI X's `TimeField`, a text input with no popup. It's what [`MuiXTimeFieldElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-time-field-element) uses internally.
+
+Use the hook instead of the element when you build your own typed time input, for example an arrival-time field with fixed opening hours. Prefer it over [`useMuiXTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-picker-adapter) when you need validation on blur, because this is the only time hook that marks the field as touched when the input loses focus.
 
 ## Import
 
@@ -12,7 +15,32 @@ import { useMuiXTimeFieldAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/time-field/element.tsx" }]} />
+This `CheckInField` accepts arrivals between 14:00 and 23:00. The form uses `mode: "onBlur"`, so type `11:00` and press Tab to see the error without submitting.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/time-field/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/time-field/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+Validation and default messages are the same as [`useMuiXTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-picker-adapter#how-it-works). Because `TimeField` is itself a text field, the result is flatter than the picker hooks:
+
+- `error` and `helperText` are returned as top-level props, not through `slotProps.textField`. Pass your hint as the `helperText` prop; with `composeHelperText: true` the error message replaces it while the field is invalid.
+- `onBlur` is React Hook Form's blur handler followed by your own `onBlur`. It goes on the input, so tabbing out marks the field as touched and runs `mode: "onBlur"` and `"onTouched"` validation.
+- React Hook Form's ref, merged with your `inputRef`, is returned as `inputRef`, so `setFocus` and focus-on-error move focus to the input. The hook's second argument becomes `ref` on the field root.
+
+**Partial input.** While a time is only partly typed, for example `1_:__`, `TimeField` reports an invalid date. That value is not empty, so it fails with the `invalidDate` message, "Date is not a valid date", instead of `required`. `invalidDate` is typed as a function, so override it with `invalidDate: () => "Enter a full time"`.
+
+**No popup, so no disabled options.** The validation props are still returned and passed to `TimeField`, but there is no clock to grey out times. Every rule is enforced only by validation, so give each one a clear message.
 
 ## Props
 

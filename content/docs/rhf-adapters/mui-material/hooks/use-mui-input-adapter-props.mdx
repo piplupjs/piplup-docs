@@ -1,8 +1,11 @@
 ---
 title: useMuiInputAdapterProps
-description: Returns adapter props for building custom MUI Input integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for building custom MUI Input fields with React Hook Form, taking required and disabled from a surrounding FormControl.
 ---
+
+`useMuiInputAdapterProps` connects a field to React Hook Form and returns props you spread onto MUI's standard (underlined) `Input`. It's what [`MuiInputElement`](/docs/rhf-adapters/mui-material/components/mui-input-element) uses internally.
+
+Use it when you assemble a field from `FormControl`, `InputLabel`, `Input` and `FormHelperText` instead of using `TextField`, for example to put a checkbox or other content between the parts, or to let a parent `FormControl` decide whether the input is required or disabled.
 
 ## Import
 
@@ -12,14 +15,39 @@ import { useMuiInputAdapterProps } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+The `EmailInput` below doesn't set `required` or `disabled`. It takes both from the `FormControl` around it. Turn the checkbox off and the field is disabled and left out of the submitted values. Turn it on and submit empty, or type an address without a domain, to see the messages.
+
 <Demo
   tabs={[
     {
-      label: "Code",
+      label: "Custom field",
+      path: "demo/adapters/mui-material/input/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
       path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/input/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+Value handling, `type: "number"`, transforms, and the validation rules with their default messages are the same as in [useMuiInputBaseAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-input-base-adapter#how-it-works). The demo relies on one of them: `type: "email"` adds an email pattern and the message "Please enter an email address."
+
+**FormControl fallback.** When the hook runs inside a MUI `FormControl`, it reads that control's state:
+
+- If you don't pass `required`, the control's `required` is used. It becomes a real validation rule, not just an asterisk.
+- If you don't pass `disabled`, the control's `disabled` is used. The field is then disabled in React Hook Form too, so it skips validation and is left out of the submitted values.
+
+A value you pass to the hook always wins, including `false`.
+
+The hook reads the control through React context, so it must run in a component rendered inside the `FormControl`, as `EmailInput` is in the demo. If the same component renders both the `FormControl` and the input, the hook can't see it.
+
+**Errors.** `FormControl` doesn't know about the field's validation error. Its `InputLabel` and `FormHelperText` stay in their normal colors unless you pass `error` to them, as the demo does, or use [`useMuiInputLabelAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-input-label-adapter) and [`useMuiFormHelperTextAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-form-helper-text-adapter), which read the error by field name.
+
+**Ref.** `Input` puts `ref` on its root `<div>`. Pass the returned `ref` to `inputRef` so React Hook Form can focus the input when validation fails. Also remove `helperText` from the result before spreading, because `Input` has no such prop.
+
+[useMuiFilledInputAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-filled-input-adapter) and [useMuiOutlinedInputAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-outlined-input-adapter) behave the same way for the other two variants.
 
 ## Props
 

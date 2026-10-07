@@ -34,7 +34,7 @@ The hook must run inside a `LocalizationProvider`, because it reads the date ada
 
 ## How it works
 
-**Value.** The field value is passed to the picker as-is, with `undefined` converted to `null` so the picker stays controlled. Pass `transform` if your form stores something other than a date object, such as an ISO string.
+**Value.** The field value is passed to the picker as-is, with `undefined` converted to `null` so the picker stays controlled. Store date objects from your date library (e.g. Dayjs), not strings: the built-in validation runs on the stored value, and a string stored through `transform` makes it throw. Convert to a string when you submit instead.
 
 **Validation.** The hook runs MUI X's own `validateDate` against `minDate`, `maxDate`, `disablePast`, `disableFuture`, `shouldDisableDate`, `shouldDisableMonth` and `shouldDisableYear`. Any failure becomes a React Hook Form error, so it blocks submission like any other rule. Empty values pass this check; add `required` to reject them.
 
@@ -52,7 +52,9 @@ Each failure has a default message, which you can replace through `messages`:
 | `shouldDisableMonth` | Month is not allowed |
 | `shouldDisableYear` | Year is not allowed |
 
-Messages other than `required` can also be functions that receive the date, e.g. `` minDate: (date) => `${date.format("D MMM")} is too early` ``.
+<Callout type="warn">
+  The types allow function messages such as `(date) => string`, but at runtime the function receives a single array (`[date]`, or `[date, minDate]` for `minDate`), not separate arguments. Calling `date.format()` inside one throws. Use plain strings.
+</Callout>
 
 <Callout type="warn">
   If you pass your own `rules.validate`, the built-in date validation above is not added. Validate dates yourself in that case.

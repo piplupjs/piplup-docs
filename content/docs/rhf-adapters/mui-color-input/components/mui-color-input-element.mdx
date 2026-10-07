@@ -1,8 +1,9 @@
 ---
 title: MuiColorInputElement
-description: A pre-integrated MuiColorInputElement component for connecting color values to React Hook Form.
-noindex: true
+description: A mui-color-input field connected to React Hook Form that stores the color as a string in the format you choose.
 ---
+
+`MuiColorInputElement` renders `MuiColorInput` from `mui-color-input` and stores the selected color in React Hook Form as a string. It accepts all `MuiColorInput` props, such as `format`, `isAlphaHidden` and `fallbackValue`. To build your own color field, use [`useMuiColorInputAdapter`](/docs/rhf-adapters/mui-color-input/hooks/use-mui-color-input-adapter).
 
 ## Import
 
@@ -19,11 +20,27 @@ import { MuiColorInputElement } from "@piplup/rhf-adapters/mui-color-input";
   ]}
 />
 
+## Handling invalid colors
+
+The element stores whatever is in the text box, valid or not. There are two ways to deal with that:
+
+- **Validate it.** Add `rules.validate` with `matchIsValidColor` from `mui-color-input`, as on the Background field below. Type `#12` and submit.
+- **Replace it.** Set `fallbackValue`. When the input loses focus with invalid text, the component swaps in the fallback and stores it, as on the Border field. Type `xyz` and tab away.
+
+<Demo tabs={[{ label: "Validation", path: "demo/adapters/mui-color-input/validation.tsx" }]} />
+
+## How it works
+
+**Stored format.** A valid color is stored in the component's `format`: `rgb` by default (`"rgb(25, 118, 210)"`), or `hex`, `hex8`, `hsl` or `hsv` if you set it. Picking a color in the popover stores it in the same format. `defaultValues` can be in any format `MuiColorInput` understands; it is stored unchanged until the user edits it.
+
+**Empty and invalid input.** Clearing the input stores `""`, which fails `required` ("Please fill out this field." by default). Invalid text is stored as typed, so `required` alone doesn't guarantee a usable color.
+
+**Rules.** `pattern`, `minLength` and `maxLength` check the stored string, e.g. `pattern={/^#[0-9a-f]{6}$/i}` together with `format="hex"`.
+
+**Errors and helper text.** While the field is invalid, its error message replaces `helperText`.
+
+**Refs.** `inputRef` is merged with React Hook Form's ref, so the text input gets focus when the field fails validation on submit. A `ref` on the element goes to the `MuiColorInput` root.
+
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="MuiColorInputElementProps" cwd />
-
-## Notes
-
-- Use this component when the form value should stay synchronized with a color input widget.
-- For custom color inputs, build on `useMuiColorInputAdapter`.

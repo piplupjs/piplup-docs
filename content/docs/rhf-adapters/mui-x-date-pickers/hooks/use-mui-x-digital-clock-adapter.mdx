@@ -1,8 +1,11 @@
 ---
 title: useMuiXDigitalClockAdapter
-description: Returns adapter props for building custom MUI X DigitalClock integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for building custom MUI X DigitalClock integrations with React Hook Form, such as a list of bookable time slots.
 ---
+
+`useMuiXDigitalClockAdapter` connects a field to React Hook Form and returns props you spread onto MUI X's `DigitalClock`, a single scrollable list of times. It's what [`MuiXDigitalClockElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-digital-clock-element) uses internally.
+
+The element shows the list only and drops the error message. Use the hook for slot-style pickers, where you disable taken slots and need to show a message when the form holds one anyway.
 
 ## Import
 
@@ -12,7 +15,34 @@ import { useMuiXDigitalClockAdapter } from "@piplup/rhf-adapters/mui-x-date-pick
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/digital-clock/element.tsx" }]} />
+This `SlotPicker` lists 30-minute slots from 09:00 to 16:30 and hides booked ones. Submit without picking a slot to see the error below the list.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/mui-x-date-pickers/digital-clock/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/digital-clock/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+Validation and default messages are the same as [`useMuiXTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-picker-adapter#how-it-works). The result is shaped like the [`useMuiXTimeClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-clock-adapter#how-it-works) one: take `error`, `helperText` and `required` out before spreading, render the message yourself, and expect the field to become touched when focus leaves the list.
+
+**`shouldDisableTime` uses the `"hours"` view.** `DigitalClock` has one option per `timeStep` (30 minutes by default), and checks each option with `shouldDisableTime(option, "hours")`, even for options like 13:30. Validation calls the same function with `"hours"` first. So a slot check written for `view === "hours"` both disables the option and produces the `shouldDisableTime-hours` error. Override that key; its default text is "Hour is disabled", which reads oddly for a 13:30 slot.
+
+<Callout type="warn">
+  A check that only returns `true` for `view === "minutes"` does not disable anything in `DigitalClock`, but validation still rejects the value with the `shouldDisableTime-minutes` message. Users can pick a slot that then fails on submit.
+</Callout>
+
+**`skipDisabled`.** With `skipDisabled`, disabled options are hidden instead of greyed out. This is a `DigitalClock` prop and does not change validation: a booked time set through `defaultValues` or `setValue` still fails.
+
+**`timeStep` and `minutesStep` are separate.** `timeStep` only controls which options are listed. `minutesStep` is a validation prop; it disables options and adds the `minutesStep` check.
 
 ## Props
 

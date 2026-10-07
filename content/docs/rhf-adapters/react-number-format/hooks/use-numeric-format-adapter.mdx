@@ -1,8 +1,11 @@
 ---
 title: useNumericFormatAdapter
-description: Returns adapter props for building custom NumericFormat integrations with React Hook Form.
-noindex: true
+description: Returns adapter props for wiring react-number-format's NumericFormat (prefixes, thousand separators, decimals) to React Hook Form.
 ---
+
+`useNumericFormatAdapter` connects a field to React Hook Form and returns props you spread onto `NumericFormat` from `react-number-format`. It's what [`NumericFormatElement`](/docs/rhf-adapters/react-number-format/components/numeric-format-element) uses internally. It calls [`useNumberFormatBaseAdapter`](/docs/rhf-adapters/react-number-format/hooks/use-number-format-base-adapter) with the same props, so the wiring is identical; this page covers what matters for amounts and quantities.
+
+Use the element for one-off fields. Reach for the hook when you want a reusable money or quantity field with the currency format, range and messages fixed in one place, or when your form should hold a `number` rather than a string.
 
 ## Import
 
@@ -12,7 +15,44 @@ import { useNumericFormatAdapter } from "@piplup/rhf-adapters/react-number-forma
 
 ## Usage
 
-<Demo tabs={[{ label: "Code", path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/numeric-format/element.tsx" }]} />
+This `BudgetField` shows `$12,500.00`-style input, stores a `number` (or `null` when empty), and limits the range with its own messages. Try `200` or `75000`, then submit.
+
+<Demo
+  tabs={[
+    {
+      label: "Custom field",
+      path: "demo/adapters/react-number-format/numeric-format/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/numeric-format/element.tsx",
+    },
+  ]}
+/>
+
+## How it works
+
+**Stored value is a string by default.** The form receives `values.value` from `onValueChange`: the number as a string, without prefix, suffix or thousand separators, and with `.` as the decimal point. Typing `$12,500.5` stores `"12500.5"`. An empty input stores `""`.
+
+**Storing a number.** Pass `transform.output: (values) => values.floatValue ?? null`, as in the demo. `floatValue` is `undefined` when the input is empty, hence the fallback. Pair it with `transform.input: (value) => value ?? ""`: `NumericFormat` treats a `null` value as "not controlled" and keeps showing its last text, so without it `reset()` to `null` would not clear the input.
+
+**Range checks.** `min` and `max` work with both storage styles. React Hook Form converts the stored string to a number before comparing, so `"12500.5"` is checked as `12500.5`. Formatting characters never reach the check.
+
+| Key | Default message |
+| --- | --- |
+| `required` | Please fill out this field. |
+| `min` | Value must be *min* or later. |
+| `max` | Value must be *max* or earlier. |
+
+The default `min`/`max` wording is shared with date inputs, so most money fields set their own `messages`. `minLength` and `maxLength` count characters of the stored string (`"12500.5"` is 7), not of the formatted text.
+
+<Callout type="warn">
+  `min={0}` is ignored, because the hook only adds `min`/`max` rules for truthy values. For a lower bound of zero, use `rules={{ min: { value: 0, message: "..." } }}`, or `allowNegative={false}` if you only need to block negative input.
+</Callout>
+
+Message functions get the limit wrapped in an array: `min: (min) => ...` receives `[500]`. Inside a template string that prints as `500`, but call number methods on `min[0]`.
+
+**Errors and helper text.** Set `composeHelperText: true` when rendering through `customInput={TextField}`. You then get `error` and a `helperText` that shows the error message, or your `helperText` when valid. Without it, neither prop is returned. Like the base hook, the field ref ends up on the `TextField` root, so focus-on-error does not reach the input.
 
 ## Props
 
@@ -21,8 +61,3 @@ import { useNumericFormatAdapter } from "@piplup/rhf-adapters/react-number-forma
 ## Return value
 
 <AutoTypeTable path="content/docs/props.ts" name="UseNumericFormatAdapterReturnType" cwd />
-
-## Notes
-
-- Use this hook for custom numeric formatting UIs that still need `react-hook-form` controlled state.
-- It builds on `useNumberFormatBaseAdapter`.

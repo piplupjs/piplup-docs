@@ -1,8 +1,9 @@
 ---
 title: MuiTelInputElement
-description: A pre-integrated MuiTelInputElement component for connecting telephone values to React Hook Form.
-noindex: true
+description: A mui-tel-input field connected to React Hook Form that stores the international phone number string and validates it with matchIsValidTel.
 ---
+
+`MuiTelInputElement` renders `MuiTelInput` from `mui-tel-input`, with its country selector, and stores the phone number in React Hook Form as a string. It accepts all `MuiTelInput` props, such as `defaultCountry`, `onlyCountries` and `forceCallingCode`. To build your own phone field, use [`useMuiTelInputAdapter`](/docs/rhf-adapters/mui-tel-input/hooks/use-mui-tel-input-adapter).
 
 ## Import
 
@@ -19,11 +20,30 @@ import { MuiTelInputElement } from "@piplup/rhf-adapters/mui-tel-input";
   ]}
 />
 
+## Validating phone numbers
+
+The element doesn't check whether a number is real. Use `matchIsValidTel` from `mui-tel-input` in `rules.validate`. It accepts the same `onlyCountries`, `excludedCountries` and `continents` options as the input, so the rule can match what the country menu offers. This demo starts on the UK, allows three countries, and rejects incomplete numbers.
+
+<Demo tabs={[{ label: "Validation", path: "demo/adapters/mui-tel-input/validation.tsx" }]} />
+
+With `onlyCountries`, `matchIsValidTel` checks the country it detects from the number, not the one picked in the menu. Numbers that share a calling code with other territories can be detected as one of those. For example, `+44 7911 123456` is a valid number but is not detected as `GB`, so the rule above rejects it while `+44 7400 123456` passes.
+
+## How it works
+
+**Stored value.** The form stores the text shown in the input: the full international number, formatted with spaces, e.g. `"+44 7400 123456"`. With `disableFormatting`, it stores the number without spaces (`"+447400123456"`). `defaultValues` can use either form.
+
+**Default country.** `defaultCountry` only changes what the input shows. With an empty value and `defaultCountry="GB"`, the input displays `+44`, but the form value stays `""` until the user types. Submitting at that point fails `required`.
+
+**Country menu.** Choosing a country from the menu stores its calling code right away, e.g. `"+33"`. That passes `required`, so pair `required` with a `matchIsValidTel` rule as in the demo.
+
+**Extra details.** `onChange` and `onBlur` on the element receive a second argument with `numberValue` (E.164, such as `"+447400123456"`), `countryCode`, `nationalNumber` and more. The form itself only stores the string.
+
+**Errors and helper text.** While the field is invalid, its error message replaces `helperText`. The default `required` message is "Please fill out this field."
+
+<Callout type="warn">
+  `ref` and `inputRef` passed to this element are not attached, and neither is React Hook Form's field ref. The field won't receive focus when validation fails, and `setFocus` has no effect on it. If you need either, build the field with [`useMuiTelInputAdapter`](/docs/rhf-adapters/mui-tel-input/hooks/use-mui-tel-input-adapter), which returns `inputRef` and `ref` for you to pass on.
+</Callout>
+
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="MuiTelInputElementProps" cwd />
-
-## Notes
-
-- Use this component for international phone-number input managed by RHF.
-- For custom telephone inputs, build on `useMuiTelInputAdapter`.

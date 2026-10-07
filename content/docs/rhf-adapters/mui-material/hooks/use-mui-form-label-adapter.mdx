@@ -1,8 +1,11 @@
 ---
 title: useMuiFormLabelAdapter
-description: Returns adapter props for building custom MUI form label integrations with React Hook Form field state.
-noindex: true
+description: Returns props for an MUI FormLabel that follows a React Hook Form field's error and disabled state without registering a value.
 ---
+
+`useMuiFormLabelAdapter` returns props for MUI's `FormLabel` that reflect the state of a field registered elsewhere. It's what [`MuiFormLabelElement`](/docs/rhf-adapters/mui-material/components/mui-form-label-element) uses internally.
+
+Use the hook when the label is part of a custom field component, so the label, input and helper text all live in one place, as in the example below. For a label placed directly in a form, the element is shorter.
 
 ## Import
 
@@ -12,14 +15,40 @@ import { useMuiFormLabelAdapter } from "@piplup/rhf-adapters/mui-material";
 
 ## Usage
 
+`BioField` is built from three hooks: [`useMuiInputBaseAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-input-base-adapter) for the input, this hook for the label, and [`useMuiFormHelperTextAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-form-helper-text-adapter) for the message below. Submit it empty and the label, border and helper text all switch to the error state.
+
 <Demo
   tabs={[
     {
-      label: "Code",
-      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/button/element.tsx",
+      label: "Custom field",
+      path: "demo/adapters/mui-material/form-label/custom-hook.tsx",
+    },
+    {
+      label: "Element source",
+      path: "https://raw.githubusercontent.com/sadik-malik/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/form-label/element.tsx",
     },
   ]}
 />
+
+## How it works
+
+**Read-only.** The hook doesn't call `useController`, so it registers nothing: no value, no rules, no `onChange`. It subscribes to the form state with `useFormState` and looks up the field by `name`. You can render several labels or helper texts for one field, and none of them changes what is submitted. The `name` must match a field that some input registers.
+
+It needs `control`, or a surrounding `FormProvider`/[`FormContainer`](/docs/rhf-core/components/form-container).
+
+**Returned props.** `error`, `disabled`, `className`, `style`, `classes` and `ref`, plus a `helperText` that `FormLabel` doesn't accept. Remove it before spreading, as the demo does.
+
+- `error` is `true` while the field has a validation error, or whatever you pass as `error`.
+- `disabled` is `true` when you pass `disabled` or the whole form is disabled (`useForm({ disabled: true })`). If you pass nothing and the label is inside a MUI `FormControl`, the control's `disabled` is used.
+
+Both are passed to `FormLabel` explicitly, even when `false`. That means they override the `error` and `disabled` of a surrounding `FormControl` for this label.
+
+<Callout type="warn">
+  - The label doesn't know when the input itself is disabled through its own `disabled` prop. Pass the same `disabled` to both hooks, or disable the whole form.
+  - `disableOnIsSubmitting` has no effect here: the label doesn't see the form as submitting. Use `disabled` with `formState.isSubmitting` if you need it.
+</Callout>
+
+[useMuiInputLabelAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-input-label-adapter) is the same hook for `InputLabel`, but it doesn't read `FormControl`'s `disabled`. The generic reading of field state is described in [useFieldStateAdapter](/docs/rhf-core/hooks/use-field-state-adapter).
 
 ## Props
 
