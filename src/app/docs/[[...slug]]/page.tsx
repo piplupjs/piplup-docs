@@ -62,5 +62,6 @@ export async function generateMetadata(props: PageProps<'/docs/[[...slug]]'>): P
     alternates: {
       canonical: page.url,
     },
+    robots: page.data.noindex ? { index: false, follow: true } : undefined,
   };
 }
