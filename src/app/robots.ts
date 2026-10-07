@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next'
+import { domain } from '@/lib/shared';
  
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -6,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://www.piplupjs.com/sitemap.xml',
+    sitemap: `${domain}/sitemap.xml`,
   }
 }

@@ -59,5 +59,8 @@ export async function generateMetadata(props: PageProps<'/docs/[[...slug]]'>): P
     openGraph: {
       images: getPageImage(page).url,
     },
+    alternates: {
+      canonical: page.url,
+    },
   };
 }
