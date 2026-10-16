@@ -2,3 +2,6 @@ allowBuilds:
   '@piplup/code-infra': true
   esbuild: true
   unrs-resolver: true
+# Our own packages are used as soon as they are published
+minimumReleaseAgeExclude:
+  - '@piplup/*'

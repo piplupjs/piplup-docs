@@ -43,3 +43,11 @@ function App() {
 ## Return value
 
 The `useReleaseStatus` hook returns one of the following statuses: `error`, `new-release`, `no-release` or `null`.
+
+- `null` while the check is in progress, during server rendering, and when `enabled` is `false`.
+- `new-release` when the release ID differs from the one saved under `storageKey`. On a first visit nothing is saved yet, so the result is `no-release`.
+- `error` when the request fails, returns a non-2xx status, or returns HTML instead of a release ID.
+
+Unlike [`CacheBuster`](/docs/cache-buster/components/cache-buster), the hook never reloads the page. The new ID is saved as soon as it is detected, so after a reload the status is `no-release`. The check runs once per page load for each `storageKey`, so several components can call the hook and see the same result.
+
+If the release file is not at `/RELEASE` on the site root, pass its location as `url`. See [Serving from a sub-path](/docs/cache-buster/components/cache-buster#serving-from-a-sub-path).

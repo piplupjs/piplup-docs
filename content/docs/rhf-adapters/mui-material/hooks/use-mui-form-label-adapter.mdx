@@ -44,8 +44,7 @@ It needs `control`, or a surrounding `FormProvider`/[`FormContainer`](/docs/rhf-
 Both are passed to `FormLabel` explicitly, even when `false`. That means they override the `error` and `disabled` of a surrounding `FormControl` for this label.
 
 <Callout type="warn">
-  - The label doesn't know when the input itself is disabled through its own `disabled` prop. Pass the same `disabled` to both hooks, or disable the whole form.
-  - `disableOnIsSubmitting` has no effect here: the label doesn't see the form as submitting. Use `disabled` with `formState.isSubmitting` if you need it.
+  The label doesn't know when the input itself is disabled through its own `disabled` prop. Pass the same `disabled` to both hooks, or disable the whole form.
 </Callout>
 
 [useMuiInputLabelAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-input-label-adapter) is the same hook for `InputLabel`, but it doesn't read `FormControl`'s `disabled`. The generic reading of field state is described in [useFieldStateAdapter](/docs/rhf-core/hooks/use-field-state-adapter).

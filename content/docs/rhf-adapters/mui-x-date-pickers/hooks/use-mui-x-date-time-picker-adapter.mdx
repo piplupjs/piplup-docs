@@ -40,8 +40,8 @@ Value handling, the text field wiring (`slotProps.textField`, `composeHelperText
 
 | Key | Fails when | Default message |
 | --- | --- | --- |
-| `minTime` | The time is before `minTime` | Time is later than the maximum allowed time |
-| `maxTime` | The time is after `maxTime` | Time is earlier than the minimum allowed time |
+| `minTime` | The time is before `minTime` | Time is earlier than the minimum allowed time |
+| `maxTime` | The time is after `maxTime` | Time is later than the maximum allowed time |
 | `disableFuture` | The value is after the current moment | Future date is not allowed |
 | `disablePast` | The value is before the current moment | Past date is not allowed |
 | `shouldDisableTime-hours` | `shouldDisableTime(value, "hours")` returns `true` | Hour is disabled |
@@ -50,10 +50,6 @@ Value handling, the text field wiring (`slotProps.textField`, `composeHelperText
 | `minutesStep` | The minutes are not a multiple of `minutesStep` | Minute step is not valid |
 
 Only the first failing check is reported. Override any message through `messages`, using the key from the table.
-
-<Callout type="warn">
-  The default `minTime` and `maxTime` messages describe the opposite limit: a time before `minTime` shows "Time is later than the maximum allowed time". Set your own `minTime` and `maxTime` messages whenever you use these props.
-</Callout>
 
 **`disablePast` and `disableFuture` work to the minute.** The date check compares by day, and the time check compares against the current time. So with `disablePast`, 08:00 today fails if it is already 10:00.
 
@@ -69,10 +65,6 @@ The hook does not read `minDateTime` or `maxDateTime`. If you pass them straight
 
 <Callout type="warn">
   In TypeScript, `minDate` and `maxDate` are required props of the date-time hooks, unlike the date-only hooks. Pass real limits, as the example does. If they are missing at runtime, the hook falls back to the `LocalizationProvider` defaults (1900-01-01 and 2099-12-31).
-</Callout>
-
-<Callout type="warn">
-  A function message is called with a single array argument, `[value, limit]`, rather than with separate arguments as its type suggests. Plain string messages, as in the example, avoid this.
 </Callout>
 
 ## Props

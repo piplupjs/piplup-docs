@@ -43,8 +43,8 @@ The hook must run inside a `LocalizationProvider`, because it reads the date ada
 | Order | Key | Fails when | Default message |
 | --- | --- | --- | --- |
 | 1 | `invalidDate` | the value is not a valid date, e.g. a half-typed time | Date is not a valid date |
-| 2 | `minTime` | the time is before `minTime` | Time is later than the maximum allowed time |
-| 3 | `maxTime` | the time is after `maxTime` | Time is earlier than the minimum allowed time |
+| 2 | `minTime` | the time is before `minTime` | Time is earlier than the minimum allowed time |
+| 3 | `maxTime` | the time is after `maxTime` | Time is later than the maximum allowed time |
 | 4 | `disableFuture` | the value is after now | Future date is not allowed |
 | 5 | `disablePast` | the value is before now | Past date is not allowed |
 | 6 | `shouldDisableTime-hours` | `shouldDisableTime(value, "hours")` returns `true` | Hour is disabled |
@@ -52,29 +52,19 @@ The hook must run inside a `LocalizationProvider`, because it reads the date ada
 | 8 | `shouldDisableTime-seconds` | `shouldDisableTime(value, "seconds")` returns `true` | Second is disabled |
 | 9 | `minutesStep` | the minutes are not a multiple of `minutesStep` | Minute step is not valid |
 
-`required` uses "Please fill out this field." The messages above are the exact default text. Note the wording of the `minTime` and `maxTime` defaults: the `minTime` message mentions the maximum, and the `maxTime` message mentions the minimum. Set your own messages for both when you use those props, as the example does.
+`required` uses "Please fill out this field." The messages above are the exact default text.
 
 **Time of day only.** `minTime` and `maxTime` compare only the time of day, so the date part of the values you pass is ignored. Set `disableIgnoringDatePartForTimeValidation` to compare full date-times instead. `disablePast` and `disableFuture` always compare against the current date and time.
 
 **Timezone.** Validation uses the `timezone` prop when given, otherwise the timezone of the value.
 
-**Custom messages.** Pass any key from the table in `messages`. Use strings. `invalidDate` is typed as a function only, so write it as `invalidDate: () => "Enter a valid time"`.
-
-<Callout type="warn">
-  A function message is called with a single array argument, `[value, limit]` (for example `[value, minTime]`), not with separate arguments as its type suggests. `(value) => value.format("HH:mm")` throws because `value` is that array. Prefer plain strings.
-</Callout>
-
-<Callout type="warn">
-  If you pass your own `rules.validate`, the built-in time validation above is not added. Validate times yourself in that case.
-</Callout>
+**Custom messages.** Pass any key from the table in `messages`, as a string or a function. A function receives the value, and for `minTime`, `maxTime` and `minutesStep` also the limit, for example `(value, minTime) => "Open from " + minTime.format("HH:mm")`. `invalidDate` is typed as a function only, so write it as `invalidDate: () => "Enter a valid time"`.
 
 **Errors and helper text.** The returned `slotProps.textField` sets `error` and `helperText` from the field state and merges your own `slotProps.textField` (an object or a function). The hook has no top-level `helperText` prop; put your hint in `slotProps.textField.helperText`. With `composeHelperText: true` an error message replaces that hint while the field is invalid. Without it, only the `error` state is applied.
 
-**Blur and touched.** The returned `onClose` calls React Hook Form's `onBlur` and then your own `onClose`, so closing the picker marks the field as touched.
+**Blur and touched.** The returned `slotProps.textField` calls React Hook Form's `onBlur`, so typing a time and tabbing away marks the field as touched. The returned `onClose` also calls `onBlur` and then your own `onClose`, so closing the picker counts as a blur too.
 
-<Callout type="warn">
-  Unlike [`useMuiXDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter), this hook does not attach `onBlur` to the text field. If a user types a time and tabs away without opening the picker, the field is not marked as touched, and `mode: "onBlur"` or `"onTouched"` validation waits until submit. Use `mode: "onChange"` or `"all"` if typed times should be checked before submit.
-</Callout>
+**Your own `rules.validate`.** A `validate` function or object in `rules` runs next to the built-in time validation, not instead of it.
 
 **Refs.** React Hook Form's ref, merged with your `inputRef`, is returned as `inputRef`, so `setFocus` and focus-on-error move focus to the input. The hook's second argument becomes `ref` on the picker root.
 
@@ -84,8 +74,8 @@ The other time hooks use the same validation and messages. They differ in where 
 
 | Hook | Text field | Errors shown by | Touched on |
 | --- | --- | --- | --- |
-| [`useMuiXDesktopTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-desktop-time-picker-adapter) | yes | `slotProps.textField` | picker close |
-| [`useMuiXMobileTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-mobile-time-picker-adapter) | yes | `slotProps.textField` | dialog close |
+| [`useMuiXDesktopTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-desktop-time-picker-adapter) | yes | `slotProps.textField` | input blur or picker close |
+| [`useMuiXMobileTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-mobile-time-picker-adapter) | yes | `slotProps.textField` | input blur or dialog close |
 | [`useMuiXStaticTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-static-time-picker-adapter) | no | you render them | never |
 | [`useMuiXTimeFieldAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-field-adapter) | yes, no popup | `error` / `helperText` props | input blur |
 | [`useMuiXTimeClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-clock-adapter) | no | you render them | blur inside the clock |

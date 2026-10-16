@@ -52,15 +52,9 @@ Each failure has a default message, which you can replace through `messages`:
 | `shouldDisableMonth` | Month is not allowed |
 | `shouldDisableYear` | Year is not allowed |
 
-<Callout type="warn">
-  The types allow function messages such as `(date) => string`, but at runtime the function receives a single array (`[date]`, or `[date, minDate]` for `minDate`), not separate arguments. Calling `date.format()` inside one throws. Use plain strings.
-</Callout>
-
-<Callout type="warn">
-  If you pass your own `rules.validate`, the built-in date validation above is not added. Validate dates yourself in that case.
-</Callout>
-
 **Errors and blur.** The returned `slotProps.textField` sets `error` and `helperText` from the field state, and calls React Hook Form's `onBlur` so the field is marked as touched. Your own `slotProps.textField` (an object or a function) is merged in: an error message takes priority over your `helperText`, which shows when the field is valid. Closing the picker also counts as a blur.
+
+**Custom messages and `rules.validate`.** Messages can be strings or functions. A function receives the value, and for `minDate` and `maxDate` also the limit, for example `(value, minDate) => "Pick a date after " + minDate.format("LL")`. A `validate` function or object in `rules` runs next to the built-in date validation, not instead of it.
 
 Set `composeHelperText: true` to show the error message as the helper text, as the element does. Without it, only the `error` state is applied.
 

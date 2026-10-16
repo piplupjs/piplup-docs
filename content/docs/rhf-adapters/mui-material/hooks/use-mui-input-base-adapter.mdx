@@ -70,10 +70,10 @@ A key in `rules` wins over the matching prop. For example, `rules.required` repl
 
 The rule props are not forwarded to the DOM. Only `required` is returned, and it sets the native `required` attribute, so add `noValidate` to your `<form>`. To limit the number spinner as well, set `slotProps.input` (`{ min: 1, max: 8 }` in the demo).
 
+Message functions receive the rule value, for example `(max) => "At most " + max`. A `pattern` message function receives the pattern and `title`, and the default pattern message ends with `title` when you pass one.
+
 <Callout type="warn">
-  - `min: 0` and `max: 0` add no rule, because zero is skipped. Use `rules: { min: { value: 0, message: "..." } }` instead.
-  - A string `pattern` is not anchored. `pattern: "[0-9]+"` accepts `abc1`. Write `^[0-9]+$`.
-  - Message functions receive their value wrapped in an array, e.g. `[8]`. Interpolating it into a string prints `8` as expected, but number methods such as `toFixed` will fail. A `pattern` message function never receives `title`, and the default pattern message does not include it either.
+  A string `pattern` is not anchored. `pattern: "[0-9]+"` accepts `abc1`. Write `^[0-9]+$`.
 </Callout>
 
 **Errors and helper text.** `error` is `true` when the field has a validation error, unless you pass `error` yourself. The returned `helperText` is your `helperText` as-is. With `composeHelperText: true`, it becomes the error message while the field is invalid.
@@ -84,7 +84,7 @@ The rule props are not forwarded to the DOM. Only `required` is returned, and it
 
 This hook does not read MUI's `FormControl`. Because it always returns `disabled` as a boolean, an `InputBase` inside `<FormControl disabled>` stays enabled unless you pass `disabled` to the hook. If you want `required` and `disabled` taken from a `FormControl`, use [`useMuiInputAdapterProps`](/docs/rhf-adapters/mui-material/hooks/use-mui-input-adapter-props) or its filled and outlined variants.
 
-**Ref.** The returned `ref` combines React Hook Form's field ref with the ref you pass as the hook's second argument. `InputBase` puts `ref` on its root `<div>`, so React Hook Form can't focus the field when validation fails. Pass the ref to `inputRef` instead, as the demo does.
+**Ref.** The returned `ref` combines React Hook Form's field ref with the ref you pass as the hook's second argument. `InputBase` puts `ref` on its root `<div>`, so React Hook Form can't focus the field when validation fails. Pass the ref to `inputRef` instead, as the demo does. `MuiInputBaseElement` and the `Input`, `FilledInput` and `OutlinedInput` elements already do this.
 
 ## Props
 
