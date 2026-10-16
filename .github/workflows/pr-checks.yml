@@ -1,0 +1,63 @@
+name: PR checks
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+# Both jobs use the pr-checks environment, which requires a maintainer to approve each run, so
+# no PR code runs and nothing is deployed automatically. One approval starts both jobs.
+# Vercel's own Git deployments are turned off for every branch except main in vercel.json.
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    environment: pr-checks
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Type-check
+        run: pnpm run types:check
+
+      - name: Build
+        run: pnpm run build
+
+  preview:
+    runs-on: ubuntu-latest
+    # Secrets are not available to pull requests from forks
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    environment:
+      name: pr-checks
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy a Vercel preview
+        id: deploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+        run: |
+          url=$(npx --yes vercel@62.1.0 deploy --yes --token "$VERCEL_TOKEN")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Preview: $url" >> "$GITHUB_STEP_SUMMARY"
