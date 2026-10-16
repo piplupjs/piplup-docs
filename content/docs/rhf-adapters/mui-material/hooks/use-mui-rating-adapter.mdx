@@ -51,10 +51,6 @@ The `max` rule can't fail, since `Rating` doesn't go past `max`. The `min` rule 
   `Rating` has no `error` or `helperText` props. Remove them from the returned object before spreading, as the demo and the element do.
 </Callout>
 
-<Callout type="warn">
-  If you pass a function as `messages.min` or `messages.max`, it's called with an array holding the limit (for example `[2]`), not the number itself. It works in a template string but not in arithmetic. Use a plain string message to be safe.
-</Callout>
-
 ## Props
 
 <AutoTypeTable

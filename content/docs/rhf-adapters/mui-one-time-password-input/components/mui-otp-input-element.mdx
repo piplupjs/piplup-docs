@@ -40,9 +40,7 @@ Three things make that work:
 
 **Blur.** The field is marked as touched only when focus leaves the whole group, not when it moves from one box to the next.
 
-<Callout type="warn">
-  The field's ref is not attached to any of the boxes. React Hook Form can't focus this field when validation fails, and `setFocus("code")` does nothing. A `ref` on the element goes to the `MuiOtpInput` root `Box`.
-</Callout>
+**Focus.** React Hook Form's ref is attached to the first box, so `setFocus("code")` and focus-on-error move focus there. A `ref` on the element goes to the `MuiOtpInput` root `Box`.
 
 ## Props
 

@@ -38,11 +38,9 @@ With `onlyCountries`, `matchIsValidTel` checks the country it detects from the n
 
 **Extra details.** `onChange` and `onBlur` on the element receive a second argument with `numberValue` (E.164, such as `"+447400123456"`), `countryCode`, `nationalNumber` and more. The form itself only stores the string.
 
-**Errors and helper text.** While the field is invalid, its error message replaces `helperText`. The default `required` message is "Please fill out this field."
+**Focus.** React Hook Form's ref is merged with your `inputRef` and attached to the `<input>`, so `setFocus` and focus-on-error work. A `ref` on the element goes to the root.
 
-<Callout type="warn">
-  `ref` and `inputRef` passed to this element are not attached, and neither is React Hook Form's field ref. The field won't receive focus when validation fails, and `setFocus` has no effect on it. If you need either, build the field with [`useMuiTelInputAdapter`](/docs/rhf-adapters/mui-tel-input/hooks/use-mui-tel-input-adapter), which returns `inputRef` and `ref` for you to pass on.
-</Callout>
+**Errors and helper text.** While the field is invalid, its error message replaces `helperText`. The default `required` message is "Please fill out this field."
 
 ## Props
 

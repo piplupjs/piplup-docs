@@ -46,10 +46,6 @@ This `BudgetField` shows `$12,500.00`-style input, stores a `number` (or `null` 
 
 The default `min`/`max` wording is shared with date inputs, so most money fields set their own `messages`. `minLength` and `maxLength` count characters of the stored string (`"12500.5"` is 7), not of the formatted text.
 
-<Callout type="warn">
-  `min={0}` is ignored, because the hook only adds `min`/`max` rules for truthy values. For a lower bound of zero, use `rules={{ min: { value: 0, message: "..." } }}`, or `allowNegative={false}` if you only need to block negative input.
-</Callout>
-
 Message functions get the limit wrapped in an array: `min: (min) => ...` receives `[500]`. Inside a template string that prints as `500`, but call number methods on `min[0]`.
 
 **Errors and helper text.** Set `composeHelperText: true` when rendering through `customInput={TextField}`. You then get `error` and a `helperText` that shows the error message, or your `helperText` when valid. Without it, neither prop is returned. Like the base hook, the field ref ends up on the `TextField` root, so focus-on-error does not reach the input.

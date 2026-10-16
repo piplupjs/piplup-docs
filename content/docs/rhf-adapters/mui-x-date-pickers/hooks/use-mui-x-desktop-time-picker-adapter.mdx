@@ -42,10 +42,6 @@ What differs is the component you spread it onto:
 
 **`shouldDisableTime` and its message.** Validation calls `shouldDisableTime(value, view)` with `"hours"`, then `"minutes"`, then `"seconds"`, and reports the first view that returns `true`. Return `true` only for the view you mean, and override the matching key. The example checks `view === "hours"`, so its error comes from `shouldDisableTime-hours`; the default for that key is "Hour is disabled".
 
-<Callout type="warn">
-  Typing in the field does not mark it as touched. Only closing the popover calls React Hook Form's `onBlur`. With `mode: "onBlur"` or `"onTouched"`, a typed time is first validated on submit, not when the user tabs away. Use `mode: "onChange"` or `"all"` if typed times should be checked before submit.
-</Callout>
-
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="UseMuiXDesktopTimePickerAdapterProps" cwd />
