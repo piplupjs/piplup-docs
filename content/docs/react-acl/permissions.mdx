@@ -1,0 +1,94 @@
+---
+title: Permissions
+description: How permission names are matched, how wildcard grants work, and how to narrow Permission and Role to your own names.
+---
+
+A permission is a string. A role is a string. The principal holds both as flat lists, and nothing in
+this library resolves roles into permissions — if a role should imply permissions, expand it on your
+server before handing the principal to the provider.
+
+```ts
+{ roles: ["admin"], permissions: ["invoice:read", "report:*"] }
+```
+
+## Wildcards
+
+Permission names are split into segments on `:`. A principal is granted a permission by the bare
+wildcard `*`, by an exact match, or by a wildcard on any **ancestor** segment of what was asked for.
+
+| Granted | Required | Result |
+| --- | --- | --- |
+| `*` | anything | ✅ |
+| `invoice:read` | `invoice:read` | ✅ |
+| `invoice:*` | `invoice:read` | ✅ |
+| `invoice:*` | `invoice:line:edit` | ✅ |
+| `invoice:line:*` | `invoice:line:edit` | ✅ |
+| `invoice:line:*` | `invoice:read` | ❌ |
+| `invoice:line:*` | `invoice:line` | ❌ |
+| `invoice:*` | `invoices:read` | ❌ |
+| `users:*` | `users.read` | ❌ |
+
+Two of those are worth dwelling on:
+
+- **`invoice:line:*` does not grant `invoice:line`.** A wildcard grants what sits *under* a name, not
+  the name itself. Grant both if you mean both.
+- **Matching is by segment, not by text.** `invoice:*` does not grant `invoices:read`, and a dot is
+  an ordinary character, so `users.read` is granted only by itself or by `*`. If you prefer dotted
+  names, they work — they just never match by wildcard.
+
+Roles never use wildcards. Role names are not hierarchical, so they are compared exactly: a principal
+with `roles: ["*"]` does not hold the `admin` role.
+
+## Typed permissions
+
+`Permission` and `Role` are `string` out of the box. Augment the package once and TypeScript narrows
+them everywhere, rejecting typos in `Can`, `useAccessControl().can` and the check functions:
+
+```ts title="src/types/react-acl.d.ts"
+declare module "@piplup/react-acl" {
+  interface PermissionsDef {
+    "*": never;
+    "invoice:read": never;
+    "invoice:write": never;
+    "report:*": never;
+  }
+
+  interface RolesDef {
+    admin: never;
+    member: never;
+  }
+}
+```
+
+The interface keys are the names; the values are never read, so `never` just keeps them from being
+used as values by mistake.
+
+List every name you intend to **grant**, wildcards included, since a principal's permission list is
+checked against the same type. `AssignablePermission` is then `Permission` minus the wildcards, which
+is the type you want for a screen that lets someone pick permissions to attach to a role:
+
+```ts
+import type { AssignablePermission } from "@piplup/react-acl";
+
+// "invoice:read" | "invoice:write" — not "*" or "report:*"
+const options: AssignablePermission[] = ["invoice:read", "invoice:write"];
+```
+
+<Callout>
+  Augmentation is global. Once you declare `PermissionsDef`, any string that is not in it becomes a
+  type error across your whole project — which is the point, but it does mean adding a permission
+  means adding it here too.
+</Callout>
+
+## Not loaded, versus no access
+
+The principal type allows `null` and `undefined`, and they mean different things:
+
+| Principal | Meaning | Checks | `Can` renders |
+| --- | --- | --- | --- |
+| `undefined` | not fetched yet | `false` | `loading` |
+| `null` | loaded, anonymous | `false` | `fallback` |
+| `{ … }` | loaded | evaluated | `children` or `fallback` |
+
+So an anonymous visitor is denied rather than left waiting. See
+[AccessControlProvider](/docs/react-acl/components/access-control-provider#loading).

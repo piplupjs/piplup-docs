@@ -33,8 +33,8 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5(@types/react@19.3.0)(react@19.3.0)
       '@piplup/react-acl':
-        specifier: ^3.2.5
-        version: 3.2.5(@types/react@19.3.0)(react@19.3.0)
+        specifier: ^4.0.0
+        version: 4.0.0(@types/react@19.3.0)(react@19.3.0)
       '@piplup/rhf-adapters':
         specifier: ^5.0.2
         version: 5.0.2(172cf679de8d235162e25210f80dd2fc)
@@ -1109,8 +1109,9 @@ packages:
       stylelint:
         optional: true
 
-  '@piplup/react-acl@3.2.5':
-    resolution: {integrity: sha512-T5cujLZFKm41OJ4mlE8xXbgQH1R+VX7FgDH0iz0AmSA8/1aRfEvLYRS2ug/a9oTnVQhfyxu6LP6qcjM7dLvttQ==}
+  '@piplup/react-acl@4.0.0':
+    resolution: {integrity: sha512-+XBwOfpX3BZcnEvyaA1uvEaz+qLrLSWNvZJEbsi1ENNHaPpaLY5lFX41h/ILqUcHzYV78EuYp3wyh5hjJX+Rcw==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
     peerDependencies:
       '@types/react': ^18.2.0 || ^19.0.0
       react: ^18.2.0 || ^19.0.0
@@ -5491,7 +5492,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@piplup/react-acl@3.2.5(@types/react@19.3.0)(react@19.3.0)':
+  '@piplup/react-acl@4.0.0(@types/react@19.3.0)(react@19.3.0)':
     dependencies:
       react: 19.3.0
     optionalDependencies:
@@ -6905,7 +6906,7 @@ snapshots:
       tinyglobby: 0.2.17
       unrs-resolver: 1.12.2
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.71.1(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.71.1(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -6920,7 +6921,7 @@ snapshots:
       tinyglobby: 0.2.17
       unrs-resolver: 1.12.2
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.71.1(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.71.1(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3))(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
 

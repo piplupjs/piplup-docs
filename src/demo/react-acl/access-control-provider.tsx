@@ -6,35 +6,31 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { AclProvider, HasAccess } from "@piplup/react-acl";
-
-type Acl = { roles: string[]; permissions: string[] };
+import { AccessControlProvider, Can, type AccessPrincipal } from "@piplup/react-acl";
 
 // Stands in for a request to your auth API.
-const users: Record<string, Acl> = {
+const users: Record<string, AccessPrincipal> = {
   guest: { roles: ["guest"], permissions: [] },
   viewer: { roles: ["viewer"], permissions: ["report:read"] },
-  admin: { roles: ["admin"], permissions: ["report:read", "report:delete"] },
+  admin: { roles: ["admin"], permissions: ["report:*"] },
 };
 
-function fetchAcl(user: string): Promise<Acl> {
+function fetchPrincipal(user: string): Promise<AccessPrincipal> {
   return new Promise((resolve) => setTimeout(() => resolve(users[user]), 1200));
 }
 
-const emptyAcl: Acl = { roles: [], permissions: [] };
+type Loaded = { user: string; principal: AccessPrincipal };
 
 export default function Page() {
   const [user, setUser] = React.useState("guest");
-  const [acl, setAcl] = React.useState<Acl>(emptyAcl);
-  const [loading, setLoading] = React.useState(true);
+  const [loaded, setLoaded] = React.useState<Loaded | null>(null);
 
   React.useEffect(() => {
     let ignore = false;
 
-    fetchAcl(user).then((result) => {
+    fetchPrincipal(user).then((principal) => {
       if (!ignore) {
-        setAcl(result);
-        setLoading(false);
+        setLoaded({ user, principal });
       }
     });
 
@@ -43,42 +39,43 @@ export default function Page() {
     };
   }, [user]);
 
+  // A principal loaded for a different user is stale, so it counts as not loaded
+  // yet. `undefined` is exactly what the provider reads as "still loading", so no
+  // separate loading flag is needed.
+  const principal = loaded?.user === user ? loaded.principal : undefined;
+
   return (
     <Stack spacing={2}>
-      <Stack direction="row" spacing={1}>
+      <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
         {Object.keys(users).map((name) => (
           <Button
             key={name}
             variant={user === name ? "contained" : "outlined"}
-            onClick={() => {
-              if (name !== user) {
-                setLoading(true);
-                setUser(name);
-              }
-            }}
+            onClick={() => setUser(name)}
           >
             Sign in as {name}
           </Button>
         ))}
       </Stack>
 
-      <AclProvider loading={loading} roles={acl.roles} permissions={acl.permissions}>
-        <HasAccess
-          permissions={["report:read"]}
+      <AccessControlProvider principal={principal}>
+        <Can
+          permission="report:read"
           loading={<CircularProgress size={24} />}
           fallback={<Alert severity="warning">You can&apos;t view reports.</Alert>}
         >
           <Typography>Quarterly report: 1,204 orders.</Typography>
-        </HasAccess>
+        </Can>
 
-        <HasAccess permissions={["report:delete"]} loading={null}>
+        {/* admin holds `report:*`, which grants every report permission. */}
+        <Can permission="report:delete">
           <div>
             <Button color="error" variant="outlined">
               Delete report
             </Button>
           </div>
-        </HasAccess>
-      </AclProvider>
+        </Can>
+      </AccessControlProvider>
     </Stack>
   );
 }

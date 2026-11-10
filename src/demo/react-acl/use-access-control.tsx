@@ -6,31 +6,31 @@ import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { AclProvider, useAcl } from "@piplup/react-acl";
+import { AccessControlProvider, useAccessControl, type AccessPrincipal } from "@piplup/react-acl";
 
-const roleOptions = {
+const principals: Record<string, AccessPrincipal> = {
   guest: { roles: ["guest"], permissions: [] },
   editor: { roles: ["editor"], permissions: ["post:create", "post:publish"] },
-  owner: { roles: ["owner"], permissions: ["post:create", "post:publish", "post:delete"] },
+  owner: { roles: ["owner"], permissions: ["post:*"] },
 };
 
-type Role = keyof typeof roleOptions;
+type User = keyof typeof principals;
 
 const actions = [
-  { label: "New post", permissions: "post:create" },
-  { label: "Publish", permissions: "post:publish" },
-  { label: "Delete", permissions: "post:delete" },
+  { label: "New post", permission: "post:create" },
+  { label: "Publish", permission: "post:publish" },
+  { label: "Delete", permission: "post:delete" },
 ];
 
 function PostToolbar() {
-  const { isAuthorized, loading } = useAcl();
+  const { can, hasRole, loading } = useAccessControl();
 
-  // A single value works as well as an array.
-  const visible = actions.filter((action) => isAuthorized({ permissions: action.permissions }));
+  // `can` is bound to the principal, so no need to pass it around.
+  const visible = actions.filter((action) => can(action.permission));
 
   // Check a role in an event handler, not only while rendering.
   const handleExport = () => {
-    alert(isAuthorized({ roles: ["editor", "owner"] }) ? "Exporting posts" : "Sign in to export");
+    alert(hasRole(["editor", "owner"]) ? "Exporting posts" : "Sign in to export");
   };
 
   if (loading) {
@@ -52,8 +52,7 @@ function PostToolbar() {
 }
 
 export default function Page() {
-  const [role, setRole] = React.useState<Role>("editor");
-  const { roles, permissions } = roleOptions[role];
+  const [user, setUser] = React.useState<User>("editor");
 
   return (
     <Stack spacing={2}>
@@ -61,20 +60,21 @@ export default function Page() {
         select
         size="small"
         label="Current user"
-        value={role}
-        onChange={(e) => setRole(e.target.value as Role)}
+        value={user}
+        onChange={(e) => setUser(e.target.value as User)}
         sx={{ maxWidth: 200 }}
       >
-        {Object.keys(roleOptions).map((name) => (
+        {Object.keys(principals).map((name) => (
           <MenuItem key={name} value={name}>
             {name}
           </MenuItem>
         ))}
       </TextField>
 
-      <AclProvider loading={false} roles={roles} permissions={permissions}>
+      {/* owner holds `post:*`, so every action shows without listing each one. */}
+      <AccessControlProvider principal={principals[user]}>
         <PostToolbar />
-      </AclProvider>
+      </AccessControlProvider>
     </Stack>
   );
 }

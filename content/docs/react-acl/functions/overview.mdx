@@ -1,0 +1,102 @@
+---
+title: Check functions
+description: hasPermission, hasRole, hasAllPermissions, hasAnyPermissions and createGetRolePermissionAccess — the same checks without React.
+---
+
+Every check in this package is a plain function over a principal. They need no context and no
+component, so the same rules apply in a navigation filter, a route loader, a server action or a
+test as in your markup.
+
+```tsx
+import { hasPermission } from "@piplup/react-acl";
+
+const visible = items.filter((item) => hasPermission(user, item.requiredPermissions));
+```
+
+Inside components prefer [`Can`](/docs/react-acl/components/can) and
+[`useAccessControl`](/docs/react-acl/hooks/use-access-control) — they read the principal for you and
+suspend checks while it loads, which these functions cannot do.
+
+## hasPermission
+
+```ts
+hasPermission(
+  principal: AccessPrincipal,
+  requiredPermissions: Permission | readonly Permission[],
+  matchMode?: "ALL" | "ANY",
+): boolean;
+```
+
+Defaults to `ALL`. Resolves [wildcards](/docs/react-acl/permissions#wildcards) held by the principal,
+so `report:*` satisfies `report:summary:monthly`. A `null` or `undefined` principal is denied, and an
+empty requirement passes.
+
+```ts
+hasPermission({ permissions: ["report:*"] }, "report:read"); // true
+hasPermission({ permissions: ["report:read"] }, ["report:read", "report:write"]); // false
+hasPermission({ permissions: ["report:read"] }, ["report:read", "report:write"], "ANY"); // true
+hasPermission(null, "report:read"); // false
+hasPermission(null, []); // true — nothing was required
+```
+
+## hasRole
+
+```ts
+hasRole(
+  principal: AccessPrincipal,
+  role: Role | readonly Role[],
+  matchMode?: "ALL" | "ANY",
+): boolean;
+```
+
+Defaults to `ANY`, the opposite of `hasPermission` — asking for one of several roles is the common
+case, while asking for several permissions at once usually means all of them. Roles are compared
+exactly and never resolve wildcards.
+
+```ts
+hasRole({ roles: ["editor"] }, ["admin", "editor"]); // true
+hasRole({ roles: ["editor"] }, ["admin", "editor"], "ALL"); // false
+hasRole({ roles: ["*"] }, "admin"); // false — roles are not hierarchical
+```
+
+## hasAllPermissions and hasAnyPermissions
+
+```ts
+hasAllPermissions(
+  grantedPermissions: readonly string[] | undefined,
+  requiredPermissions: Permission | readonly Permission[],
+): boolean;
+
+hasAnyPermissions(
+  grantedPermissions: readonly string[] | undefined,
+  requiredPermissions: Permission | readonly Permission[],
+): boolean;
+```
+
+The two halves of `hasPermission`, taking a permission list rather than a principal. Use them when
+you hold the permissions on their own — a token claim, a role record — and have no principal object
+to wrap them in. An empty requirement passes in both.
+
+## createGetRolePermissionAccess
+
+```ts
+createGetRolePermissionAccess(
+  assignablePermissions: AssignablePermission[],
+): (permissionSlugs: readonly string[]) => RolePermissionAccess;
+```
+
+Summarises how much of your permission set a role covers, for an admin screen that lists roles. Pass
+the full assignable set once; call the result with each role's permissions.
+
+```ts
+const getAccess = createGetRolePermissionAccess(["invoice:read", "invoice:write", "user:read"]);
+
+getAccess(["*"]); // { kind: "wildcard", label: "Wildcard access", … }
+getAccess(["invoice:read", "invoice:write", "user:read"]); // { kind: "all", label: "All permissions", … }
+getAccess(["invoice:read"]); // { kind: "partial", label: "1 of 3 permissions", … }
+getAccess([]); // { kind: "none", label: "No permissions", … }
+```
+
+Each result carries a `kind` to branch on, plus a `label` and `description` you can render directly.
+Slugs that are not in the assignable set are ignored, so a stale permission on a role does not
+inflate the count.

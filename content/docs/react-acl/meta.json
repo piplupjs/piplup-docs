@@ -4,7 +4,9 @@
   "collapsible": false,
   "pages": [
     "[Installation](/docs/react-acl/installation)",
+    "permissions",
     "components",
-    "hooks"
+    "hooks",
+    "functions"
   ]
 }
