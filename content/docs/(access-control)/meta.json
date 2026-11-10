@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../.source/json-schema/docs.meta.json",
+  "title": "Access control",
+  "description": "Roles, permissions and wildcard grants for React",
+  "icon": "ShieldCheck",
+  "root": true,
+  "pages": [
+    "access-control",
+    "react-acl"
+  ]
+}

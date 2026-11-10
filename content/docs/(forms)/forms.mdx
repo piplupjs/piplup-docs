@@ -1,0 +1,30 @@
+---
+title: Forms
+description: Bind react-hook-form to MUI, native inputs and anything else, without writing the same Controller boilerplate on every field.
+---
+
+`react-hook-form` handles state and validation well, but wiring each field to it means the same
+`Controller` boilerplate every time: map the field state onto the component's props, translate its
+change event back, and surface the error. These two packages do that mapping once.
+
+## Packages
+
+<Cards>
+  <Card title="@piplup/rhf-core" href="/docs/rhf-core/installation">
+    The primitives: hooks that adapt any component to a form field, plus a form container and error
+    provider. Start here if you are integrating a component library of your own.
+  </Card>
+  <Card title="@piplup/rhf-adapters" href="/docs/rhf-adapters/html/installation">
+    Ready-made adapters and elements for MUI Material, the MUI X date pickers, native HTML inputs,
+    and the common MUI community inputs. Start here if you use MUI.
+  </Card>
+</Cards>
+
+## Which one do I need?
+
+`@piplup/rhf-adapters` depends on `@piplup/rhf-core`, so installing the adapters gives you both. Use
+core on its own only when you are adapting components the adapters don't cover.
+
+Every adapter comes in two forms: a **hook** that returns the props to spread onto your own
+component, and an **element** that renders the component for you. The hook is the escape hatch when
+the element's defaults don't fit.

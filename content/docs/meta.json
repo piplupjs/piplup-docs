@@ -1,13 +1,10 @@
 {
-    "$schema": "../../.source/json-schema/docs.meta.json",
-    "collapsible": false,
-    "pages": [
-        "[Overview](/docs)",
-        "rhf-core",
-        "rhf-adapters",
-        "react-acl",
-        "utils",
-        "cache-buster",
-        "vite-plugin-cache-buster"
-    ]
+  "$schema": "../../.source/json-schema/docs.meta.json",
+  "pages": [
+    "[Overview](/docs)",
+    "(forms)",
+    "(access-control)",
+    "(cache-busting)",
+    "(utilities)"
+  ]
 }
