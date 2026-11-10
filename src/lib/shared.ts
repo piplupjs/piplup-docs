@@ -3,6 +3,10 @@ export const appTagline = 'Lightweight, modular React libraries';
 export const appDescription =
   'A collection of small, typed React libraries: react-hook-form adapters for MUI and native inputs, permission-based access control, cache busting for deployed apps, and the utility hooks underneath them.';
 export const domain = 'https://www.piplupjs.com';
+/** From the Piplup mark in public/logo.svg. */
+export const brandColor = '#30b952';
+export const logoPath = '/logo.svg';
+export const logoWithTextPath = '/logo-with-text.svg';
 export const docsRoute = '/docs';
 export const blogRoute = '/blog';
 export const docsImageRoute = '/og/docs';

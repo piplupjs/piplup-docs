@@ -1,4 +1,4 @@
-import { appDescription, appName, docsRoute, domain, gitConfig, npmOrg } from './shared';
+import { appDescription, appName, docsRoute, domain, gitConfig, logoPath, npmOrg } from './shared';
 
 /**
  * Structured data helpers. Every payload is built from our own constants and from page frontmatter
@@ -34,7 +34,7 @@ export function organizationJsonLd() {
     '@type': 'Organization',
     name: appName,
     url: domain,
-    logo: absolute('/icon.svg'),
+    logo: absolute(logoPath),
     sameAs: [`https://github.com/${gitConfig.user}`, npmOrg],
   };
 }
