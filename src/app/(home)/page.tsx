@@ -4,12 +4,27 @@ import { CodeSample } from './_components/code-sample';
 import { Concerns } from './_components/concerns';
 import { Hero } from './_components/hero';
 import { Why } from './_components/why';
-import { appDescription, appName, appTagline, blogRoute, docsRoute, npmOrg } from '@/lib/shared';
+import {
+  appDescription,
+  appName,
+  appTagline,
+  blogRoute,
+  docsRoute,
+  npmOrg,
+  socialCardPath,
+} from '@/lib/shared';
+import { openGraph } from '@/lib/open-graph';
 import { organizationJsonLd, webSiteJsonLd } from '@/lib/json-ld';
 
 export const metadata: Metadata = {
   title: appTagline,
   description: appDescription,
+  openGraph: openGraph({
+    title: `${appName} — ${appTagline}`,
+    description: appDescription,
+    url: '/',
+    images: socialCardPath,
+  }),
   alternates: { canonical: '/' },
 };
 

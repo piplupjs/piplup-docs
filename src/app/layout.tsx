@@ -6,7 +6,7 @@ import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { appDescription, appName, appTagline, domain } from '@/lib/shared';
+import { appDescription, appName, appTagline, domain, socialCardPath } from '@/lib/shared';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -43,11 +43,13 @@ export const metadata: Metadata = {
     url: domain,
     title: `${appName} — ${appTagline}`,
     description: appDescription,
+    images: socialCardPath,
   },
   twitter: {
     card: 'summary_large_image',
     title: `${appName} — ${appTagline}`,
     description: appDescription,
+    images: socialCardPath,
   },
   robots: {
     index: true,

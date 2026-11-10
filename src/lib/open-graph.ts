@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { appName } from './shared';
+import { appName, socialCardPath } from './shared';
 
 type OpenGraph = NonNullable<Metadata['openGraph']>;
 
@@ -21,6 +21,9 @@ export function openGraph(
     type: 'website',
     siteName: appName,
     locale: 'en_US',
+    // Pages with a generated card pass their own; the rest fall back to the branded one rather
+    // than ending up with no image, which is what happened before this default existed.
+    images: socialCardPath,
     ...overrides,
   } as OpenGraph;
 }

@@ -7,6 +7,8 @@ export const domain = 'https://www.piplupjs.com';
 export const brandColor = '#30b952';
 export const logoPath = '/logo.svg';
 export const logoWithTextPath = '/logo-with-text.svg';
+/** 1210x630 branded card, used as the default Open Graph image. */
+export const socialCardPath = '/piplup-social-card.png';
 export const docsRoute = '/docs';
 export const blogRoute = '/blog';
 export const docsImageRoute = '/og/docs';
