@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../.source/json-schema/docs.meta.json",
+  "title": "Forms",
+  "description": "react-hook-form integration: core hooks and adapters for MUI and native elements",
+  "icon": "ClipboardList",
+  "root": true,
+  "pages": [
+    "forms",
+    "rhf-core",
+    "rhf-adapters"
+  ]
+}

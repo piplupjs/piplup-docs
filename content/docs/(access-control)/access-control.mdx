@@ -1,0 +1,33 @@
+---
+title: Access control
+description: Gate React UI on the signed-in user's roles and permissions, with hierarchical wildcard grants and permission names TypeScript can check.
+---
+
+Showing a user only what they may act on usually ends up as scattered `user.permissions.includes(...)`
+checks that drift apart. This package puts the current user — the _principal_ — in one context and
+gives you a component, a hook and plain functions that all answer the same question the same way.
+
+## Package
+
+<Cards>
+  <Card title="@piplup/react-acl" href="/docs/react-acl/installation">
+    `AccessControlProvider`, the `Can` gate, `useAccessControl`, and the same checks as standalone
+    functions for navigation filters and server code.
+  </Card>
+</Cards>
+
+## What it adds over a hand-rolled check
+
+**Wildcards.** Permission names are split on `:`, so granting `invoice:*` covers `invoice:read` and
+`invoice:line:edit` without listing them. See [Permissions](/docs/react-acl/permissions).
+
+**Typed names.** Augment the package once and `Permission` narrows from `string` to your own names,
+so a typo is a type error rather than a silent denial.
+
+**A loading state.** A principal you haven't fetched yet is distinct from one with no access, so
+nobody sees an "access denied" flash before their permissions arrive.
+
+<Callout type="warn">
+  This hides UI. It does not protect data. Anything a user must not reach needs a check on your
+  server as well.
+</Callout>

@@ -1,13 +1,47 @@
 import type { MetadataRoute } from 'next';
-import { source } from '@/lib/source';
-import { domain } from '@/lib/shared';
+import { blog, source } from '@/lib/source';
+import { blogRoute, domain } from '@/lib/shared';
 
-// `/` renders the same page as `/docs` and canonicalizes to it, so only
-// the docs URLs are listed. `noindex` pages are left out too.
+/**
+ * `/` is now a landing page of its own rather than a copy of `/docs`, so it is listed first and
+ * ranks highest. `noindex` pages are left out.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  return source.getPages().filter((page) => !page.data.noindex).map((page) => ({
+  const home: MetadataRoute.Sitemap = [
+    {
+      url: domain,
+      changeFrequency: 'monthly',
+      priority: 1,
+    },
+  ];
+
+  const docs = source
+    .getPages()
+    .filter((page) => !page.data.noindex)
+    .map((page) => ({
+      url: `${domain}${page.url}`,
+      // `lastModified` comes from git via the collection's `lastModified` option.
+      lastModified: page.data.lastModified,
+      changeFrequency: 'weekly' as const,
+      priority: page.url === '/docs' ? 0.9 : 0.7,
+    }));
+
+  const posts = blog.getPages().map((page) => ({
     url: `${domain}${page.url}`,
-    changeFrequency: 'weekly' as const,
-    priority: page.url === '/docs' ? 1 : 0.7,
+    lastModified: new Date(page.data.date),
+    changeFrequency: 'yearly' as const,
+    priority: 0.6,
   }));
+
+  const blogIndex: MetadataRoute.Sitemap = posts.length
+    ? [
+        {
+          url: `${domain}${blogRoute}`,
+          changeFrequency: 'weekly',
+          priority: 0.8,
+        },
+      ]
+    : [];
+
+  return [...home, ...docs, ...blogIndex, ...posts];
 }

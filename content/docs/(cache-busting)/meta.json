@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../.source/json-schema/docs.meta.json",
+  "title": "Cache busting",
+  "description": "Detect a new release and reload stale clients",
+  "icon": "RefreshCw",
+  "root": true,
+  "pages": [
+    "cache-busting",
+    "cache-buster",
+    "vite-plugin-cache-buster"
+  ]
+}

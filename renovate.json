@@ -5,7 +5,7 @@
   ],
   "packageRules": [
     {
-      "description": "eslint-config-next and its bundled plugins do not support ESLint 10 yet",
+      "description": "@piplup/code-infra peers on eslint ^9.39.1 (eslint-config-next 16.4.6 allows >=9, so it no longer blocks)",
       "matchPackageNames": ["eslint"],
       "allowedVersions": "<10"
     },

@@ -1,0 +1,29 @@
+---
+title: Utilities
+description: The small helpers and React hooks the other Piplup packages are built on, published on their own so you can use them directly.
+---
+
+Nothing here is novel — these are the few functions that kept getting rewritten across the other
+packages: merging refs, a callback that stays stable without going stale, an effect that doesn't
+warn during server rendering. They are published separately so you can use them without pulling in
+anything else.
+
+## Package
+
+<Cards>
+  <Card title="@piplup/utils" href="/docs/utils/installation">
+    Ref helpers, `useEventCallback`, `useEventListener`, `useIsomorphicEffect`, a reactive
+    `useLocalStorage`, and a handful of plain functions.
+  </Card>
+</Cards>
+
+## Worth knowing
+
+`useEventCallback` keeps a stable function identity while always seeing the latest props and state,
+which is what you want for a handler passed into a memoised child or a dependency array.
+
+`useLocalStorage` is reactive: writing through its helpers updates every hook reading the same key,
+including in other tabs, rather than only the component that wrote it.
+
+Two older packages, `@piplup/use-event-listener` and `@piplup/use-local-storage`, are deprecated —
+both hooks live here now.

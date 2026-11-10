@@ -64,6 +64,11 @@ jobs:
           -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 
       - uses: actions/checkout@v4
+        with:
+          # The sitemap's lastmod comes from git history via the docs collection's
+          # `lastModified` option. A shallow clone would date every page to the
+          # single fetched commit.
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
         with:
@@ -115,6 +120,6 @@ jobs:
           VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
         run: |
-          url=$(npx --yes vercel@62.0.0 deploy --yes --token "$VERCEL_TOKEN")
+          url=$(npx --yes vercel@65.14.0 deploy --yes --token "$VERCEL_TOKEN")
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "Preview: $url" >> "$GITHUB_STEP_SUMMARY"

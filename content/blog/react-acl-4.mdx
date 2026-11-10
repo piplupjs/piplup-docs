@@ -1,0 +1,107 @@
+---
+title: "@piplup/react-acl 4.0: wildcards, typed permissions, one principal"
+description: Version 4 replaces the whole access-control API. Here is what changed, why the defaults moved, and how to migrate an existing app.
+author: Sadik Malik
+date: 2026-11-10
+tags: [release, react-acl, access-control]
+---
+
+`@piplup/react-acl@4.0.0` is out, and it replaces the entire API. That is a lot to ask of a patch
+release, so this post covers what moved, what the new behaviour is, and what an upgrade actually
+involves.
+
+## Why a rewrite
+
+The 3.x API compared permission strings with `===` against two flat arrays. That works until the
+first time you want `invoice:*` to cover `invoice:read`, or you want the compiler to catch
+`invocie:read` before a user does. Neither fits into equality matching, so the model had to change.
+
+At the same time, a second implementation of the same idea had grown inside a private application —
+principal-based, with wildcards and typed names — and could not be versioned or fixed centrally
+because it was copy-pasted source. 4.0 is that implementation, published.
+
+## What changed
+
+| 3.x | 4.0 |
+| --- | --- |
+| `<AclProvider roles permissions loading>` | `<AccessControlProvider principal loading>` |
+| `<HasAccess roles permissions validationMode>` | `<Can role permission mode>` |
+| `useAcl().isAuthorized({ roles, permissions })` | `useAccessControl().can()` / `.hasRole()` |
+| — | `hasPermission`, `hasRole` and friends as plain functions |
+
+Roles and permissions now travel together as one **principal** object, which is also what the
+standalone check functions take:
+
+```tsx
+<AccessControlProvider principal={{ roles: ['admin'], permissions: ['invoice:*'] }}>
+  <Can permission="invoice:line:edit">
+    <EditLine />
+  </Can>
+</AccessControlProvider>
+```
+
+## Wildcards
+
+Permission names split on `:`, and a wildcard on any ancestor segment grants its descendants. So
+`invoice:*` covers both `invoice:read` and `invoice:line:edit`, and `*` covers everything.
+
+Two cases are worth committing to memory, because they are the ones people expect to go the other
+way:
+
+- `invoice:line:*` does **not** grant `invoice:line`. A wildcard grants what sits *under* a name,
+  not the name itself.
+- Matching is by segment, not by text, so `invoice:*` does not grant `invoices:read`. A dot is an
+  ordinary character — `users.read` is granted only by itself or by `*`.
+
+## Typed permissions
+
+`Permission` and `Role` are `string` until you augment the package, after which a typo is a build
+error rather than a silent denial:
+
+```ts
+declare module '@piplup/react-acl' {
+  interface PermissionsDef {
+    'invoice:read': never;
+    'invoice:write': never;
+  }
+}
+```
+
+This only works because those interfaces are declared in the package's entry module. TypeScript
+merges a `declare module` augmentation into an interface that module declares itself — augmenting a
+module that merely re-exports one does nothing at all, silently. The package has a compile-time test
+guarding exactly that, so the contract cannot regress unnoticed.
+
+## The defaults moved
+
+The change most likely to bite on upgrade is not a rename:
+
+**Permission lists now default to `ALL`.** In 3.x, `<HasAccess permissions={['a', 'b']}>` passed if
+the user held *either*. In 4.0, `<Can permission={['a', 'b']}>` requires *both*. Add `mode="ANY"` to
+keep the old behaviour. Roles still default to `ANY`, since asking for one of several roles is the
+common case.
+
+Also: `validationMode`'s two keys collapse into a single `mode`, and `number` is no longer accepted
+as a permission or role — wildcards are string surgery, so names are strings.
+
+## Loading, properly
+
+A principal of `undefined` means "not fetched yet" and is distinct from `null`, which is a loaded
+principal with no access. While loading, every check returns `false` and `Can` renders its `loading`
+slot rather than its `fallback`, so nobody sees an access-denied flash before their permissions
+arrive.
+
+That distinction means the common case needs no extra prop at all:
+
+```tsx
+<AccessControlProvider principal={user}>
+```
+
+## Migrating
+
+The [installation page](/docs/react-acl/installation) links the full migration table. In short:
+rename three exports, wrap roles and permissions in one object, add `mode="ANY"` wherever you relied
+on the old permission default, and stringify any numeric ids.
+
+If you were using the copy-pasted version instead, the swap is an import change — the names are
+deliberately the same.

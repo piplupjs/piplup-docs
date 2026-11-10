@@ -1,17 +1,6 @@
-import { type Metadata } from 'next';
-import { source } from '@/lib/source';
-import { DocsLayout } from 'fumadocs-ui/layouts/docs';
+import { HomeLayout } from 'fumadocs-ui/layouts/home';
 import { baseOptions } from '@/lib/layout.shared';
-import { domain } from '@/lib/shared';
-
-export const metadata: Metadata = {
-  metadataBase: new URL(domain)
-}
 
 export default function Layout({ children }: LayoutProps<'/'>) {
-  return (
-    <DocsLayout tree={source.getPageTree()} {...baseOptions()}>
-      {children}
-    </DocsLayout>
-  );
+  return <HomeLayout {...baseOptions()}>{children}</HomeLayout>;
 }

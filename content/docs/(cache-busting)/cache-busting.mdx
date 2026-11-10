@@ -1,0 +1,31 @@
+---
+title: Cache busting
+description: Detect that a new build has shipped and reload clients still running the old one, instead of leaving users on a stale bundle.
+---
+
+A deployed single-page app keeps running whatever bundle the browser already has. Users sit on the
+previous release until they happen to hard-refresh — which is how a fixed bug reappears in a support
+ticket. These packages stamp each build with a release id and let the running app notice when it
+falls behind.
+
+## Packages
+
+<Cards>
+  <Card title="@piplup/cache-buster" href="/docs/cache-buster/installation">
+    The React side: a `CacheBuster` component and a `useReleaseStatus` hook, plus the
+    `piplup-cache-buster` CLI that writes the release id at build time.
+  </Card>
+  <Card title="@piplup/vite-plugin-cache-buster" href="/docs/vite-plugin-cache-buster/installation">
+    Runs that CLI as part of a Vite build, so the release id is generated without touching your npm
+    scripts.
+  </Card>
+</Cards>
+
+## How it works
+
+The CLI writes a `RELEASE` file containing a fresh id into your public directory at build time. At
+runtime the app fetches that file and compares it with the id it was built from; when they differ, a
+newer release is live and the page can reload itself.
+
+If you build with Vite, install both and let the plugin invoke the CLI. Otherwise call
+`piplup-cache-buster` from your build script directly.
