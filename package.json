@@ -23,6 +23,8 @@
     "@piplup/rhf-adapters": "^5.0.2",
     "@piplup/rhf-core": "^5.0.2",
     "@piplup/utils": "^3.2.5",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.1.0",
     "dayjs": "^1.11.23",
     "fumadocs-core": "16.18.4",
     "fumadocs-mdx": "15.5.3",
