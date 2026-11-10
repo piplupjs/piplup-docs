@@ -2,6 +2,6 @@
   "$schema": "../../../../.source/json-schema/docs.meta.json",
   "title": "Hooks",
   "pages": [
-    "use-acl"
+    "use-access-control"
   ]
 }

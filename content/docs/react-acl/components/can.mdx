@@ -1,0 +1,109 @@
+---
+title: Can
+description: Render content only when the principal holds the required permissions or roles, with ALL/ANY matching, a fallback and a loading placeholder.
+---
+
+`Can` renders its children only when the current principal passes a permission and role check. It
+reads the principal from the nearest
+[`AccessControlProvider`](/docs/react-acl/components/access-control-provider) and throws if there is
+none.
+
+Use it for markup: buttons, menu items, page sections. When you need the result as a boolean — to
+filter a list, disable instead of hide, or check access in an event handler — use
+[`useAccessControl`](/docs/react-acl/hooks/use-access-control) instead.
+
+## Import
+
+```tsx
+import { Can } from "@piplup/react-acl";
+```
+
+## Usage
+
+Toggle permissions and the role to see `ALL`, `ANY`, a wildcard grant and a combined role-and-permission
+check respond. Tick `invoice:*` on its own to watch one wildcard satisfy `invoice:line:edit`.
+
+<Demo
+  tabs={[
+    {
+      label: "Matching modes",
+      path: "demo/react-acl/can.tsx",
+    },
+  ]}
+/>
+
+## What it renders
+
+`Can` renders exactly one of its three slots, checked in this order:
+
+| Provider state | Renders | Default |
+| --- | --- | --- |
+| `loading` is `true` | `loading` | nothing |
+| Check fails | `fallback` | nothing |
+| Check passes | `children` | — |
+
+No wrapper element is added around any of them.
+
+## How access is decided
+
+`permission` and `role` are checked separately, and **both** must pass.
+
+| Requirement | `ALL` | `ANY` |
+| --- | --- | --- |
+| Prop omitted or `[]` | Passes | Passes |
+| `"a"` | Principal holds `a` | Principal holds `a` |
+| `["a", "b"]` | Holds `a` and `b` | Holds `a` or `b` |
+
+`permission` defaults to `ALL`. `role` defaults to `ANY`. `mode` overrides both:
+
+```tsx
+<Can mode="ANY" permission={["post:publish", "post:schedule"]} role={["editor", "owner"]}>
+  {/* editor OR owner, AND post:publish OR post:schedule */}
+  <PublishMenu />
+</Can>
+```
+
+A few consequences:
+
+- `<Can>` with no `permission` and no `role` renders its children for every loaded principal.
+- `role="admin"` with no `permission` checks only the role.
+- `permission="invoice:write"` with `role="admin"` requires **both**. To allow either one, use two
+  `Can` blocks or `useAccessControl`.
+- Permissions resolve wildcards; roles are compared exactly. See
+  [Permissions](/docs/react-acl/permissions).
+
+<Callout type="warn">
+  `Can` hides UI. It does not protect data. Anything the principal must not access also needs a
+  check on your server.
+</Callout>
+
+## withCan
+
+`withCan` wraps a whole component instead of a piece of markup. It takes the same options as `Can`,
+typed as `Omit<CanProps, "children">`:
+
+```tsx
+import { withCan } from "@piplup/react-acl";
+
+const BillingPanel = withCan(Panel, {
+  permission: ["billing:read", "billing:write"],
+  mode: "ANY",
+  role: "admin",
+  loading: <Skeleton />,
+  fallback: <NoAccess />,
+});
+```
+
+A single permission can be passed directly, with an optional fallback as the third argument:
+
+```tsx
+const AdminPanel = withCan(Panel, "admin:manage");
+const Guarded = withCan(Panel, "admin:manage", <NoAccess />);
+```
+
+The returned component forwards its own props through to the wrapped one and is named
+`withCan(Panel)` in React DevTools.
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="CanProps" cwd />

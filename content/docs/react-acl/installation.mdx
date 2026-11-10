@@ -1,9 +1,11 @@
 ---
 title: Installation — @piplup/react-acl
-description: Install and configure @piplup/react-acl to manage roles and permissions in your React app.
+description: Install @piplup/react-acl and gate React UI on the current user's roles and permissions.
 ---
 
-`@piplup/react-acl` provides a small ACL context, a `HasAccess` conditional component, and a `useAcl` hook for programmatic checks.
+`@piplup/react-acl` holds the current user — the _principal_ — in a context and gates UI on their
+roles and permissions. It gives you a `Can` component for markup, a `useAccessControl` hook for
+checks in code, and the same checks as plain functions for everything outside React.
 
 ```package-install
 @piplup/react-acl
@@ -11,25 +13,49 @@ description: Install and configure @piplup/react-acl to manage roles and permiss
 
 ## Quickstart
 
-Wrap your app with `AclProvider` and pass roles/permissions (can be loaded asynchronously):
+Wrap your app in `AccessControlProvider` and pass the principal. The provider fetches nothing — load
+it however you like and pass the result in.
 
 ```tsx
-import { AclProvider } from "@piplup/react-acl";
+import { AccessControlProvider, Can } from "@piplup/react-acl";
 
-export default function App({ children }) {
-  // load roles/permissions from API
+export default function App({ user }) {
   return (
-    <AclProvider loading={false} roles={["user"]} permissions={["read"]}>
-      {children}
-    </AclProvider>
+    <AccessControlProvider principal={user}>
+      <Can permission="invoice:write" fallback={<ReadOnlyNotice />}>
+        <EditInvoice />
+      </Can>
+    </AccessControlProvider>
   );
 }
 ```
 
-See the `AclProvider`, `HasAccess`, and `useAcl` pages for API details and examples.
+A principal is just roles and permissions:
+
+```ts
+{ roles: ["admin"], permissions: ["invoice:read", "invoice:write"] }
+```
+
+Pass `undefined` while you are still fetching it. Every check then returns `false` and `Can` renders
+its `loading` slot instead of its `fallback`, so nobody sees an access-denied state flash before the
+data arrives. See [AccessControlProvider](/docs/react-acl/components/access-control-provider#loading).
+
+<Callout type="warn">
+  This hides UI. It does not protect data. Anything a user must not reach needs a check on your
+  server as well.
+</Callout>
+
+## Upgrading from 3.x
+
+Version 4 replaced the whole API: `AclProvider`, `HasAccess` and `useAcl` are gone, roles and
+permissions moved into a single `principal`, permission lists now default to requiring **all** of
+them rather than any, and permissions gained wildcards. The mapping is in the
+[package's migration guide](https://github.com/piplupjs/piplup-react-acl#migrating-from-3x).
 
 ## See also
 
-- [AclProvider](/docs/react-acl/components/acl-provider)
-- [HasAccess](/docs/react-acl/components/has-access)
-- [useAcl](/docs/react-acl/hooks/use-acl)
+- [Permissions](/docs/react-acl/permissions) — the permission model, wildcards and typed names
+- [AccessControlProvider](/docs/react-acl/components/access-control-provider)
+- [Can](/docs/react-acl/components/can)
+- [useAccessControl](/docs/react-acl/hooks/use-access-control)
+- [Check functions](/docs/react-acl/functions/overview)

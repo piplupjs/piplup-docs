@@ -132,7 +132,7 @@ import {
   useFormStateAdapter,
 } from "@piplup/rhf-core";
 import { type ReleaseStatusOptions, CacheBuster } from '@piplup/cache-buster'
-import { AclProvider, HasAccess, useAcl } from '@piplup/react-acl'
+import { AccessControlProvider, Can, useAccessControl } from '@piplup/react-acl'
 import { useEventCallback, useEventListener, useForkRef, useIsomorphicEffect, useLocalStorage } from '@piplup/utils'
 
 export type FormContainerProps = React.ComponentPropsWithoutRef<
@@ -800,11 +800,13 @@ export type UseMuiAutocompleteAdapterProps = Parameters<
   typeof useMuiAutocompleteAdapter
 >[0];
 
-export type AclProviderProps = React.ComponentProps<typeof AclProvider>;
+export type AccessControlProviderProps = React.ComponentProps<
+  typeof AccessControlProvider
+>;
 
-export type HasAccessProps = React.ComponentProps<typeof HasAccess>;
+export type CanProps = React.ComponentProps<typeof Can>;
 
-export type UseAclReturnType = ReturnType<typeof useAcl>;
+export type UseAccessControlReturnType = ReturnType<typeof useAccessControl>;
 
 export type UseMuiAutocompleteAdapterReturnType = ReturnType<
   typeof useMuiAutocompleteAdapter

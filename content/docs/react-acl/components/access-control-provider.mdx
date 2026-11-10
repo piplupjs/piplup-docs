@@ -1,0 +1,88 @@
+---
+title: AccessControlProvider
+description: Provide the current principal — roles and permissions — and its loading state to Can, useAccessControl and everything below it.
+---
+
+`AccessControlProvider` holds the current principal and exposes it, plus checks bound to it, to
+everything below. [`Can`](/docs/react-acl/components/can) and
+[`useAccessControl`](/docs/react-acl/hooks/use-access-control) both read from it, and both throw if
+no provider is rendered above them.
+
+The provider does not fetch anything. You load the principal however you like — an API call, a
+session token, a server prop — and pass the result in.
+
+## Import
+
+```tsx
+import { AccessControlProvider } from "@piplup/react-acl";
+```
+
+## Usage
+
+This example loads the principal from a fake API. Switch users to see the loading state, then what
+each one can reach. The admin holds `report:*`, so the delete button appears without
+`report:delete` being granted explicitly.
+
+<Demo
+  tabs={[
+    {
+      label: "Remote principal",
+      path: "demo/react-acl/access-control-provider.tsx",
+    },
+  ]}
+/>
+
+## Loading
+
+A principal of `undefined` means "not fetched yet", so `loading` defaults to
+`principal === undefined` and you can usually leave the prop out. While loading:
+
+- every check returns `false`, whatever the principal contains;
+- `Can` renders its `loading` prop. It does **not** render `fallback`, so users don't see an
+  "access denied" message flash before the data arrives;
+- `useAccessControl().loading` is `true`, so your own components can show a placeholder.
+
+```tsx
+function AclRoot({ children }: { children: React.ReactNode }) {
+  const [principal, setPrincipal] = React.useState<AccessPrincipal>(undefined);
+
+  React.useEffect(() => {
+    fetch("/api/me/acl")
+      .then((res) => res.json())
+      .then(setPrincipal);
+  }, []);
+
+  return <AccessControlProvider principal={principal}>{children}</AccessControlProvider>;
+}
+```
+
+Pass `loading` explicitly in the two cases the default cannot read:
+
+- you already hold a principal and are **refreshing** it, so it is not `undefined` but the checks
+  should still be suspended;
+- `undefined` is a legitimate loaded value in your code, and you track loading separately.
+
+`null` is a loaded principal with no access — an anonymous visitor. It is denied, not loading.
+
+## How it works
+
+**Matching.** Permissions are matched by segment with wildcard support; roles are matched exactly.
+See [Permissions](/docs/react-acl/permissions).
+
+**Updates.** When `principal` or `loading` changes, the context value changes and every `Can` and
+`useAccessControl` consumer re-renders with the new result. You don't need to remount anything after
+a login, logout or role change.
+
+<Callout type="warn">
+  The context value is rebuilt whenever the `principal` object is a new reference. An inline literal
+  such as `principal={{ roles: ["admin"] }}` creates a new object on every render, which re-renders
+  every consumer each time the provider renders. Keep the principal in state, or wrap it in
+  `useMemo`.
+</Callout>
+
+**Nesting.** A nested provider replaces the outer one for its subtree. Principals are not merged, so
+the inner provider must receive the full set of roles and permissions that should apply there.
+
+## Props
+
+<AutoTypeTable path="content/docs/props.ts" name="AccessControlProviderProps" cwd />

@@ -1,0 +1,79 @@
+---
+title: useAccessControl
+description: Read the principal and its loading state, and run permission and role checks in code with can and hasRole.
+---
+
+`useAccessControl` returns the current principal, its loading state, and two checks bound to it,
+from the nearest [`AccessControlProvider`](/docs/react-acl/components/access-control-provider).
+[`Can`](/docs/react-acl/components/can) is built on it.
+
+Use `Can` when you show or hide a piece of markup. Use this hook when you need the answer as a
+value: filtering a list of actions, disabling instead of hiding, choosing a redirect, or checking
+access inside an event handler.
+
+## Import
+
+```tsx
+import { useAccessControl } from "@piplup/react-acl";
+```
+
+## Usage
+
+The toolbar keeps only the actions the current user may run, and the Export button checks their role
+when it is clicked. The owner holds `post:*`, so every action shows without each one being granted.
+
+<Demo
+  tabs={[
+    {
+      label: "Toolbar",
+      path: "demo/react-acl/use-access-control.tsx",
+    },
+  ]}
+/>
+
+## What it returns
+
+```ts
+type UseAccessControl = () => {
+  can: (
+    permission: Permission | readonly Permission[],
+    matchMode?: "ALL" | "ANY",
+  ) => boolean;
+  hasRole: (role: Role | readonly Role[], matchMode?: "ALL" | "ANY") => boolean;
+  loading: boolean;
+  principal: AccessPrincipal;
+};
+```
+
+`can` and `hasRole` are the principal already applied, so you don't pass it in. They follow the same
+rules as `Can`: an omitted or empty requirement passes, `can` defaults to `ALL` and `hasRole`
+defaults to `ANY`. See [how access is decided](/docs/react-acl/components/can#how-access-is-decided).
+
+Both return `false` while `loading` is `true`, so guard on `loading` before treating a `false` as a
+denial:
+
+```tsx
+const { can, loading } = useAccessControl();
+
+if (loading) return <Skeleton />;
+
+return can("invoice:write") ? <EditInvoice /> : <ReadOnlyNotice />;
+```
+
+Without that guard the read-only notice shows for a moment on first render, before the principal
+arrives.
+
+`principal` is the object as given to the provider. Reach for it when you need to hand the principal
+to something that is not a React component — a navigation filter, a loader, a server action — using
+the [check functions](/docs/react-acl/functions/overview):
+
+```tsx
+const { principal } = useAccessControl();
+const visible = items.filter((item) => hasPermission(principal, item.requiredPermissions));
+```
+
+## Stability
+
+`can` and `hasRole` are memoised on the principal and the loading state, so they are stable between
+renders and safe in a `useEffect` or `useCallback` dependency list. They change identity when the
+principal changes — which is what you want, since the answer changes too.
