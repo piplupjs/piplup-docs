@@ -1,7 +1,8 @@
 export const appName = 'Piplup';
 export const appTagline = 'Lightweight, modular React libraries';
+/** The meta description for the home page and the default for others: keep it under 160 characters. */
 export const appDescription =
-  'A collection of small, typed React libraries: react-hook-form adapters for MUI and native inputs, permission-based access control, cache busting for deployed apps, and the utility hooks underneath them.';
+  'Small, typed React libraries: react-hook-form adapters for MUI and native inputs, role-based access control, cache busting and utility hooks.';
 export const domain = 'https://www.piplupjs.com';
 /** From the Piplup mark in public/logo.svg. */
 export const brandColor = '#30b952';
