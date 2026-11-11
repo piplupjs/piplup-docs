@@ -37,6 +37,19 @@ const config = {
         destination: '/docs/react-acl/hooks/use-access-control',
         permanent: true,
       },
+      // URLs from the previous site that Google still crawls and reports as 404s.
+      // rhf-adapters no longer has a single installation page, one per subpath instead, so
+      // send it to the hub that lists them all.
+      {
+        source: '/docs/rhf-adapters/installation',
+        destination: '/docs/forms',
+        permanent: true,
+      },
+      {
+        source: '/react-number-format',
+        destination: '/docs/rhf-adapters/react-number-format/installation',
+        permanent: true,
+      },
     ];
   },
 };

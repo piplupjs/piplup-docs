@@ -6,6 +6,7 @@
   "root": true,
   "pages": [
     "forms",
+    "react-hook-form-mui",
     "rhf-core",
     "rhf-adapters"
   ]

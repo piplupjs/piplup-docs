@@ -2,7 +2,24 @@
 title: MuiTextFieldElement
 seoTitle: "MUI TextField with React Hook Form"
 description: "Use MUI TextField with react-hook-form without writing a Controller. MuiTextFieldElement wires value, validation and error helper text in one component."
+faq:
+  - question: "How do I use MUI TextField with React Hook Form?"
+    answer: "Render `MuiTextFieldElement` with your form's `control` and a field `name`. It takes every MUI TextField prop, connects the value and change handler to react-hook-form, and shows the field's validation error as helper text. Inside a `FormContainer` or `FormProvider` you can leave out `control`."
+  - question: "Why do I get a warning about an uncontrolled input becoming controlled?"
+    answer: "That warning comes from a TextField whose value starts as `undefined`. `MuiTextFieldElement` passes an empty string to MUI in that case, but you should still set `defaultValues` for every field so the form's initial state and reset behave predictably."
+  - question: "How do I get a number instead of a string from a number field?"
+    answer: "Set `type=\"number\"`. The element stores the input as a number, and an empty input as `null`, so you don't need `valueAsNumber` or a manual conversion."
+  - question: "How do I show my own message for a required field?"
+    answer: "Pass `required` together with `messages={{ required: \"Enter your email\" }}`. The same `messages` prop overrides the defaults for `minLength`, `maxLength`, `min`, `max` and `pattern`."
+  - question: "Can the field still show a hint when there is no error?"
+    answer: "Yes. Pass `helperText` and it shows while the field is valid. When validation fails, the error message replaces it, and the hint comes back once the error is fixed."
 ---
+
+`MuiTextFieldElement` is MUI's `TextField` connected to React Hook Form. It replaces the
+`Controller` you would otherwise write around each field: it maps the value and `onChange`, routes
+the ref to the inner `<input>` so React Hook Form can focus it on error, and shows the field's error
+message as helper text. New to the adapters? Start with
+[Using MUI with React Hook Form](/docs/react-hook-form-mui).
 
 ## Import
 
@@ -25,6 +42,79 @@ import { MuiTextFieldElement } from "@piplup/rhf-adapters/mui-material";
   ]}
 />
 
+## Validation and error messages
+
+Pass validation as props instead of a `rules` object. Each one becomes a React Hook Form rule, and
+its message replaces the helper text while the field is invalid:
+
+```tsx
+<MuiTextFieldElement
+  control={control}
+  name="bio"
+  label="Bio"
+  multiline
+  minRows={3}
+  maxLength={280}
+  helperText="Up to 280 characters"
+  rules={{
+    validate: (value) => !/https?:\/\//.test(value) || "Links aren't allowed in your bio",
+  }}
+/>
+```
+
+`required`, `minLength`, `maxLength`, `min`, `max` and `pattern` all work this way, and `messages`
+overrides their default text. Anything they can't express goes in `rules`, which accepts every
+React Hook Form rule; a rule set in `rules` wins over the matching prop. While the field is valid,
+`helperText` shows as a normal hint.
+
+Remember `noValidate` on your `<form>`. `required` is also passed to the `<input>`, and without
+`noValidate` the browser's own validation popup appears before React Hook Form runs.
+[`FormContainer`](/docs/rhf-core/components/form-container) adds it for you.
+
+## Input types
+
+`type` changes what the element stores, not just what the browser renders:
+
+```tsx
+<MuiTextFieldElement
+  control={control}
+  name="age"
+  type="number"
+  label="Age"
+  required
+  min={18}
+  messages={{ min: "You must be 18 or older" }}
+/>
+```
+
+- **`type="number"`** stores a number, and `null` when the input is empty, so you don't need
+  `valueAsNumber`. The default `min` and `max` messages are worded for dates ("Value must be 18 or
+  later."), so give number fields their own.
+- **`type="email"`** adds an email `pattern` with the message "Please enter an email address."
+  Pass your own `pattern` to replace it.
+- **Every other type** stores the input's string value. An `undefined` value is shown as an empty
+  string, so the input never switches from uncontrolled to controlled.
+
+## Changing the stored value
+
+`transform.output` receives the change event and returns what to store. This field lowercases the
+email as the user types:
+
+```tsx
+<MuiTextFieldElement
+  control={control}
+  name="email"
+  type="email"
+  label="Email"
+  transform={{
+    output: (event) => event.target.value.toLowerCase(),
+  }}
+/>
+```
+
+`transform.input` does the reverse, turning the stored value into what the field displays.
+Together they let a field store a different shape from what it shows.
+
 ## Props
 
 <AutoTypeTable
@@ -39,9 +129,17 @@ import { MuiTextFieldElement } from "@piplup/rhf-adapters/mui-material";
 
 ## Notes
 
-- For custom text field UIs, build on `useMuiTextFieldAdapter`.
+- For custom text field UIs, build on `useMuiTextFieldAdapter`. Its demo builds a username field
+  with its own messages and a lowercase transform.
+- Set `defaultValues` for every field, usually `""` for text and `null` for numbers.
+
+## FAQ
+
+<Faq />
 
 ## See also
 
+- [Using MUI with React Hook Form](/docs/react-hook-form-mui)
 - [useMuiTextFieldAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-text-field-adapter)
+- [FormContainer](/docs/rhf-core/components/form-container)
 - [TextField](https://mui.com/material-ui/api/text-field/)

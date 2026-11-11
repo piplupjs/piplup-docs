@@ -12,6 +12,9 @@ export const docs = defineDocs({
       // ("MUI TextField with React Hook Form"). `title` stays the export name, for the H1,
       // sidebar and breadcrumbs. Keep it under ~52 characters so " | Piplup" still fits.
       seoTitle: z.string().optional(),
+      // Rendered as a visible "FAQ" section after the body and as FAQPage structured data, from
+      // this one list so the two can't drift. Answers are plain text; `backticks` render as code.
+      faq: z.array(z.object({ question: z.string(), answer: z.string() })).optional(),
     }),
     postprocess: {
       includeProcessedMarkdown: true,
