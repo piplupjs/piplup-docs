@@ -35,6 +35,7 @@ export default async function Page(props: PageProps<'/blog/[slug]'>) {
               description: page.data.description,
               author: page.data.author,
               date,
+              lastModified: page.data.lastModified,
               url: page.url,
               image: getBlogImage(page).url,
             }),

@@ -12,7 +12,7 @@ import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { gitConfig } from '@/lib/shared';
-import { breadcrumbJsonLd, softwareSourceCodeJsonLd } from '@/lib/json-ld';
+import { breadcrumbJsonLd, softwareSourceCodeJsonLd, techArticleJsonLd } from '@/lib/json-ld';
 import { openGraph } from '@/lib/open-graph';
 import { packageTitleSuffix, packageForSlugs } from '@/lib/package-meta';
 
@@ -34,6 +34,21 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
         // Built from our own frontmatter and slugs, not from user input.
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(breadcrumbJsonLd(slugs, page.data.title)),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            techArticleJsonLd({
+              title: page.data.title,
+              description: page.data.description,
+              url: page.url,
+              image: getPageImage(page).url,
+              lastModified: page.data.lastModified,
+              about: pkg ?? undefined,
+            }),
+          ),
         }}
       />
       {pkg && slugs[slugs.length - 1] === 'installation' ? (

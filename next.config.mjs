@@ -5,11 +5,16 @@ const withMDX = createMDX();
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
-  async rewrites() {
+  // `/docs/<page>.mdx` is rewritten to the page's markdown in `src/proxy.ts`.
+  async headers() {
     return [
       {
-        source: '/docs/:path*.mdx',
-        destination: '/llms.mdx/docs/:path*',
+        // Docs URLs answer with HTML or markdown depending on `Accept` (see `src/proxy.ts`), so the
+        // markdown answer must tell caches to key on it, or one could hand it to a browser. Next
+        // replaces this on prerendered HTML with its own `Vary`, which is harmless: a cached HTML
+        // copy served to an agent is still a valid answer.
+        source: '/docs/:path*',
+        headers: [{ key: 'Vary', value: 'Accept' }],
       },
     ];
   },
