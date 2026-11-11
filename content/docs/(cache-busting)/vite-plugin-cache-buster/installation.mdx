@@ -24,13 +24,15 @@ export default {
 
 ## How it works
 
-During build, the plugin:
+At the start of a production build, and when the dev server starts, the plugin:
 
 - Generates a unique release ID
-- Writes it to a static file (e.g. `/release.txt`)
-- Makes it accessible to the browser at runtime
+- Writes it to `public/RELEASE` (set `publicDir` to use another folder)
+- Leaves Vite to copy it to the output, so the deployed site serves it at `/RELEASE`
 
-This file is later fetched by `@piplup/cache-buster` to detect updates.
+`@piplup/cache-buster` fetches this file to detect updates. The file changes on every build, so add
+`public/RELEASE` to `.gitignore`. For the whole setup, see
+[Reload users after a deploy](/docs/reload-after-deploy).
 
 ## Why this is required
 
@@ -55,6 +57,7 @@ Integrate the runtime check — use `useReleaseStatus` or `<CacheBuster />` in y
 
 ## See also
 
+- [Reload users after a deploy](/docs/reload-after-deploy)
 - [Cache Buster - Installation](/docs/cache-buster/installation)
-- [useReleaseStats](/docs/cache-buster/hooks/use-release-status)
+- [useReleaseStatus](/docs/cache-buster/hooks/use-release-status)
 - [CacheBuster](/docs/cache-buster/components/cache-buster)

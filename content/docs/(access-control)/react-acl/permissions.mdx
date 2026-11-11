@@ -65,8 +65,19 @@ The interface keys are the names; the values are never read, so `never` just kee
 used as values by mistake.
 
 List every name you intend to **grant**, wildcards included, since a principal's permission list is
-checked against the same type. `AssignablePermission` is then `Permission` minus the wildcards, which
-is the type you want for a screen that lets someone pick permissions to attach to a role:
+checked against the same type.
+
+`AssignablePermission` is `Permission` minus the wildcards, which is the type you want for a screen
+that lets someone pick permissions to attach to a role. Only `*` counts as a wildcard out of the box,
+so declare your own wildcards in `WildcardPermissionsDef` as well:
+
+```ts title="src/types/react-acl.d.ts"
+declare module "@piplup/react-acl" {
+  interface WildcardPermissionsDef {
+    "report:*": never;
+  }
+}
+```
 
 ```ts
 import type { AssignablePermission } from "@piplup/react-acl";
@@ -74,6 +85,8 @@ import type { AssignablePermission } from "@piplup/react-acl";
 // "invoice:read" | "invoice:write" — not "*" or "report:*"
 const options: AssignablePermission[] = ["invoice:read", "invoice:write"];
 ```
+
+Without that declaration, `AssignablePermission` still includes `report:*`.
 
 <Callout>
   Augmentation is global. Once you declare `PermissionsDef`, any string that is not in it becomes a

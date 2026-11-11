@@ -6,6 +6,7 @@
   "root": true,
   "pages": [
     "cache-busting",
+    "reload-after-deploy",
     "cache-buster",
     "vite-plugin-cache-buster"
   ]

@@ -1,0 +1,266 @@
+---
+title: Role-based access control in React
+seoTitle: "Role-based access control (RBAC) in React"
+description: "Add role-based access control to a React app: load the user's roles and permissions, hide buttons and routes they can't use, and keep checks typed."
+faq:
+  - question: "How do I implement role-based access control in React?"
+    answer: "Load the signed-in user's roles and permissions from your API, keep them in one context, and check them wherever UI depends on access: a component that renders its children only when the check passes, a hook for checks in code, and a route guard that redirects. `@piplup/react-acl` provides the context, the `Can` component, the `useAccessControl` hook and plain check functions."
+  - question: "Should I check roles or permissions in React?"
+    answer: "Check permissions in most places. Which permissions a role grants changes over time, so `can(\"invoice:write\")` stays correct when an admin edits a role, while `role === \"admin\"` checks scattered through the UI all need changing. Resolve roles into permissions on your server and send both."
+  - question: "Is hiding a button in React enough to secure an action?"
+    answer: "No. Anything in the browser can be changed by the user, so hiding UI only keeps the interface tidy. Your server must check the same permission before it reads or changes data."
+  - question: "How do I avoid an \"access denied\" flash while permissions load?"
+    answer: "Treat \"not loaded yet\" as its own state. With `@piplup/react-acl`, pass `undefined` as the principal while fetching: every check returns `false`, but `Can` renders its `loading` slot rather than its `fallback`, so a denial message never shows before the data arrives."
+  - question: "How do I protect a route by permission in React Router?"
+    answer: "Wrap the route's element in a small guard component that calls `useAccessControl()`, renders a placeholder while `loading` is true, and returns `<Navigate to=\"/\" replace />` when `can(...)` is false. Hide the link to that route with `Can` as well, so users don't see links they can't follow."
+---
+
+Role-based access control (RBAC) decides what each user may do from the roles they hold, such as
+`admin` or `editor`, and the permissions those roles grant. In a React app it decides what to
+**show**: which buttons, menu items, pages and routes a user sees. This guide builds that with
+[`@piplup/react-acl`](/docs/react-acl/installation), from loading the user's access to guarding
+routes and keeping permission names typed.
+
+<Callout type="warn">
+  Hiding UI is not security. The browser is under the user's control, so every action you hide in
+  React still needs the same check on your server.
+</Callout>
+
+## Roles or permissions?
+
+A **role** is a name for a kind of user. A **permission** is one thing a user may do, such as
+`invoice:write`. Checking roles in components is tempting, but the mapping from roles to what they
+allow changes: when editors gain the right to publish, every `role === "admin"` check that meant
+"may publish" has to be found and changed.
+
+Check permissions in components, and work out which permissions each role grants on your server.
+Send the browser both lists:
+
+```json title="GET /api/me/access"
+{
+  "roles": ["editor"],
+  "permissions": ["post:read", "post:write", "post:publish"]
+}
+```
+
+`@piplup/react-acl` calls this object the **principal**. It never turns roles into permissions
+itself, so the server's answer is the only source of truth. Roles are still useful for things that
+really are about the kind of user, such as which dashboard to show.
+
+## 1. Install and provide the principal
+
+```package-install
+@piplup/react-acl
+```
+
+Fetch the principal once and pass it to `AccessControlProvider` near the top of your app. Keep it in
+state: `undefined` means "still loading" and `null` means "loaded, signed out":
+
+```tsx title="src/access.tsx"
+import { AccessControlProvider, type AccessPrincipal } from "@piplup/react-acl";
+import * as React from "react";
+
+export function AccessRoot({ children }: { children: React.ReactNode }) {
+  const [principal, setPrincipal] = React.useState<AccessPrincipal>(undefined);
+
+  React.useEffect(() => {
+    fetch("/api/me/access")
+      .then((res) => (res.ok ? res.json() : null))
+      .then(setPrincipal, () => setPrincipal(null));
+  }, []);
+
+  return <AccessControlProvider principal={principal}>{children}</AccessControlProvider>;
+}
+```
+
+The provider fetches nothing itself, so the principal can equally come from a session token, a
+server-rendered prop or a data-fetching library. When it changes, after a sign-in or a role change,
+every check below re-renders with the new answer.
+
+## 2. Hide UI the user can't use
+
+[`Can`](/docs/react-acl/components/can) renders its children only when the check passes:
+
+```tsx
+import { Can } from "@piplup/react-acl";
+
+<Can permission="post:publish" loading={<ButtonSkeleton />} fallback={<RequestReviewButton />}>
+  <PublishButton />
+</Can>;
+```
+
+It renders exactly one of three things: `loading` while the principal is `undefined`, `fallback`
+when the check fails, and `children` when it passes. Because loading is its own state, a user who
+may publish never sees the "request review" button flash first.
+
+A list of permissions requires **all** of them by default. Pass `mode="ANY"` to require any one,
+and `role` to check roles as well; when you pass both `permission` and `role`, both must pass.
+
+## 3. Check access in code
+
+Sometimes you need a boolean rather than markup: to disable a button instead of hiding it, filter a
+list, or decide inside an event handler.
+[`useAccessControl`](/docs/react-acl/hooks/use-access-control) returns `can` and `hasRole` bound to
+the current principal:
+
+```tsx
+import { useAccessControl } from "@piplup/react-acl";
+
+function PostActions({ post }: { post: Post }) {
+  const { can, loading } = useAccessControl();
+
+  if (loading) return <ActionsSkeleton />;
+
+  return (
+    <>
+      <Button disabled={!can("post:write")}>Edit</Button>
+      <Button disabled={!can("post:delete")} color="error">
+        Delete
+      </Button>
+    </>
+  );
+}
+```
+
+Both checks return `false` while loading, which is why the example renders a placeholder first
+rather than a row of disabled buttons.
+
+## 4. Guard routes
+
+Hiding a link doesn't stop someone typing the URL. Wrap protected routes in a guard that redirects
+when the check fails. This one uses React Router's `Navigate`; any router with a redirect component
+works the same way:
+
+```tsx title="src/require-permission.tsx"
+import { useAccessControl, type Permission } from "@piplup/react-acl";
+import { Navigate } from "react-router";
+
+export function RequirePermission({
+  permission,
+  children,
+}: {
+  permission: Permission | Permission[];
+  children: React.ReactNode;
+}) {
+  const { can, loading } = useAccessControl();
+
+  if (loading) return <PageSkeleton />;
+  if (!can(permission)) return <Navigate to="/" replace />;
+
+  return children;
+}
+```
+
+```tsx
+<Route
+  path="/billing"
+  element={
+    <RequirePermission permission="billing:read">
+      <BillingPage />
+    </RequirePermission>
+  }
+/>
+```
+
+Without the `loading` check the guard would redirect every user on the first render, before their
+permissions arrive.
+
+## 5. Filter navigation
+
+Menus are usually data, so filter the data with
+[`hasPermission`](/docs/react-acl/functions/overview#haspermission), the same check as a plain
+function:
+
+```tsx
+import { hasPermission, useAccessControl, type Permission } from "@piplup/react-acl";
+
+const NAV: { label: string; href: string; permission: Permission }[] = [
+  { label: "Posts", href: "/posts", permission: "post:read" },
+  { label: "Billing", href: "/billing", permission: "billing:read" },
+  { label: "Users", href: "/users", permission: "user:manage" },
+];
+
+function Sidebar() {
+  const { principal, loading } = useAccessControl();
+  if (loading) return <NavSkeleton />;
+
+  const items = NAV.filter((item) => hasPermission(principal, item.permission));
+  return <Nav items={items} />;
+}
+```
+
+The functions take the principal as an argument and need no React context, so you can also call
+them in a route loader or a test.
+
+## 6. Grant whole areas with wildcards
+
+Listing every permission an admin holds gets long. Permission names are split on `:`, and a
+wildcard grants everything under its prefix:
+
+| Granted | Grants `post:read` | Grants `post:comment:delete` | Grants `billing:read` |
+| --- | --- | --- | --- |
+| `post:*` | ✅ | ✅ | ❌ |
+| `post:comment:*` | ❌ | ✅ | ❌ |
+| `*` | ✅ | ✅ | ✅ |
+
+So an admin's principal can be `{ roles: ["admin"], permissions: ["*"] }`. Roles never match by
+wildcard. [Permissions](/docs/react-acl/permissions) has the full matching rules.
+
+## 7. Type your permission names
+
+A misspelt permission string fails silently: the check returns `false` and the button disappears.
+Declare your names once and TypeScript rejects typos in `Can`, `can` and the check functions:
+
+```ts title="src/types/react-acl.d.ts"
+declare module "@piplup/react-acl" {
+  interface PermissionsDef {
+    "*": never;
+    "post:*": never;
+    "post:read": never;
+    "post:write": never;
+    "post:publish": never;
+    "post:delete": never;
+    "billing:read": never;
+    "user:manage": never;
+  }
+
+  interface RolesDef {
+    admin: never;
+    editor: never;
+    viewer: never;
+  }
+}
+```
+
+List every name you grant, wildcards included. See
+[Typed permissions](/docs/react-acl/permissions#typed-permissions).
+
+## 8. Enforce the same rules on the server
+
+Every permission the UI checks needs a matching check where the action runs. Your server holds the
+user's real permissions, so it doesn't trust anything the browser sends about them. The check
+functions are plain JavaScript, so a Node server such as Express can reuse the same wildcard rules.
+From 4.1.0 they also run in Next.js App Router server components, server actions and route
+handlers; see [Check functions](/docs/react-acl/functions/overview#in-react-server-components).
+
+```ts title="server/routes/posts.ts"
+import { hasPermission } from "@piplup/react-acl";
+
+app.delete("/api/posts/:id", async (req, res) => {
+  const principal = await loadAccess(req.user.id);
+  if (!hasPermission(principal, "post:delete")) return res.sendStatus(403);
+  // ...delete the post
+});
+```
+
+## FAQ
+
+<Faq />
+
+## See also
+
+- [@piplup/react-acl installation](/docs/react-acl/installation)
+- [Permissions and wildcards](/docs/react-acl/permissions)
+- [Can](/docs/react-acl/components/can)
+- [useAccessControl](/docs/react-acl/hooks/use-access-control)
+- [Check functions](/docs/react-acl/functions/overview)

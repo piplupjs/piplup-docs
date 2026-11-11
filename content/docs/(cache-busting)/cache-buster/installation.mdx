@@ -59,3 +59,10 @@ The library works by comparing:
 
 Without generating this file at build time, cache busting cannot work.
 
+## Next steps
+
+- Wrap your app in [`CacheBuster`](/docs/cache-buster/components/cache-buster), or build your own
+  prompt with [`useReleaseStatus`](/docs/cache-buster/hooks/use-release-status).
+- [Reload users after a deploy](/docs/reload-after-deploy) covers the rest of the fix: cache
+  headers for `index.html` and recovering from lazy chunks a deploy removed.
+
