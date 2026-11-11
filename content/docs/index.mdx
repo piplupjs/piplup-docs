@@ -1,37 +1,45 @@
 ---
-title: Piplup - Collection of Lightweight modular libraries
-description: Explore the Piplup ecosystem of libraries for React development.
+title: React Hook Form adapters, access control and cache busting
+description: Piplup docs for small, typed React libraries — React Hook Form adapters for MUI and HTML inputs, role-based access control, and cache busting.
 ---
 
 ## Introduction
 
-**Piplup** is a collection of lightweight, modular libraries designed to simplify the development of fast, interactive, and reusable user interfaces.
+**Piplup** is a collection of small, typed React libraries. Each one solves a single problem, so you
+install what you need and nothing else:
 
-It focuses on improving developer experience (DX) by providing clean abstractions and production-ready utilities that help you build scalable applications more efficiently.
+- **[React Hook Form adapters for MUI and native inputs](/docs/forms)**: connect MUI TextField,
+  Select, Autocomplete, the MUI X date pickers and plain HTML inputs to `react-hook-form` without
+  writing a `Controller` for every field.
+- **[Role and permission-based access control for React](/docs/access-control)**: show or hide UI by
+  the signed-in user's roles and permissions, with wildcard grants and typed permission names.
+- **[Cache busting for deployed React and Vite apps](/docs/cache-busting)**: detect that a new build
+  has shipped and reload clients that are still running the old bundle.
+- **[React utility hooks](/docs/utilities)**: `useLocalStorage`, `useEventCallback`, `useForkRef`
+  and the other helpers the packages above are built on.
 
-Piplup currently includes the following packages:
+## Packages
 
 <Cards>
   <Card title="@piplup/rhf-core" href="/docs/rhf-core/installation">
-    Core utilities and primitives for building form-connected components with
-    React Hook Form.
+    Hooks that adapt any component to a React Hook Form field, plus a form container and error
+    provider.
   </Card>
   <Card title="@piplup/rhf-adapters" href="/docs/rhf-adapters/html/installation">
-    Pre-built adapters for integrating custom and third-party UI components with
-    React Hook Form.
-  </Card>
-  <Card title="@piplup/cache-buster" href="/docs/cache-buster/installation">
-    Utilities for managing and invalidating application cache effectively.
-  </Card>
-  <Card title="@piplup/vite-plugin-cache-buster" href='/docs/vite-plugin-cache-buster/installation'>
-    A Vite plugin for automated cache busting, powered by @piplup/cache-buster.
+    Ready-made React Hook Form adapters for MUI Material, MUI X date pickers, native HTML inputs and
+    popular MUI community inputs.
   </Card>
   <Card title="@piplup/react-acl" href="/docs/react-acl/installation">
-    A flexible access control layer for managing roles and permissions in React
-    applications.
+    Role-based and permission-based access control for React, with wildcard permissions and
+    TypeScript-checked names.
+  </Card>
+  <Card title="@piplup/cache-buster" href="/docs/cache-buster/installation">
+    Detects new deployments and reloads clients running a stale bundle.
+  </Card>
+  <Card title="@piplup/vite-plugin-cache-buster" href='/docs/vite-plugin-cache-buster/installation'>
+    A Vite plugin that generates a release ID at build time for @piplup/cache-buster.
   </Card>
   <Card title="@piplup/utils" href="/docs/utils/installation">
-    Shared helper functions, hooks, and common utilities used across Piplup
-    packages.
+    Small helpers and React hooks shared across the Piplup packages.
   </Card>
 </Cards>

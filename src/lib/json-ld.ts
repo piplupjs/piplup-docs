@@ -83,11 +83,47 @@ export function softwareSourceCodeJsonLd(packageName: string, description: strin
   };
 }
 
+/**
+ * Every docs page. `dateModified` comes from git, which is the freshness signal Google reads for
+ * reference docs; it is left out rather than guessed when git history is unavailable.
+ */
+export function techArticleJsonLd(page: {
+  title: string;
+  description?: string;
+  url: string;
+  image: string;
+  lastModified?: Date;
+  /** The npm package the page documents, if any. */
+  about?: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: page.title,
+    description: page.description,
+    url: absolute(page.url),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': absolute(page.url) },
+    image: absolute(page.image),
+    inLanguage: 'en',
+    ...(page.lastModified ? { dateModified: page.lastModified.toISOString() } : {}),
+    ...(page.about ? { about: { '@type': 'SoftwareSourceCode', name: page.about } } : {}),
+    author: { '@type': 'Organization', name: appName, url: domain },
+    publisher: {
+      '@type': 'Organization',
+      name: appName,
+      url: domain,
+      logo: { '@type': 'ImageObject', url: absolute(logoPath) },
+    },
+  };
+}
+
 export function blogPostingJsonLd(post: {
   title: string;
   description?: string;
   author: string;
   date: Date;
+  /** Last git change to the post; falls back to `date`. */
+  lastModified?: Date;
   url: string;
   image: string;
 }) {
@@ -97,7 +133,12 @@ export function blogPostingJsonLd(post: {
     headline: post.title,
     description: post.description,
     datePublished: post.date.toISOString(),
-    dateModified: post.date.toISOString(),
+    // A post first committed before its `date` would otherwise claim to be modified before it
+    // was published.
+    dateModified: (post.lastModified && post.lastModified > post.date
+      ? post.lastModified
+      : post.date
+    ).toISOString(),
     author: { '@type': 'Person', name: post.author },
     publisher: { '@type': 'Organization', name: appName, url: domain },
     image: absolute(post.image),

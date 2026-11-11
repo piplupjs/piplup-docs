@@ -28,6 +28,8 @@ export const blog = defineCollections({
     date: z.string().date().or(z.date()),
     tags: z.array(z.string()).default([]),
   }),
+  // From git, for `dateModified` in the post's structured data.
+  lastModified: true,
 });
 
 export default defineConfig({
