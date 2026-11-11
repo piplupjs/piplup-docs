@@ -1,0 +1,259 @@
+---
+title: Date pickers with React Hook Form
+seoTitle: "React Hook Form date picker with MUI X and Zod"
+description: "Use MUI X date pickers in react-hook-form: set up the picker, load dates from an API, submit them in the right format, validate a date range and use Zod."
+faq:
+  - question: "How do I use a date picker with React Hook Form?"
+    answer: "Date pickers are controlled components, so connect them with a `Controller` or an element that wraps one. With MUI X, wrap the form in `LocalizationProvider` with a date adapter such as `AdapterDayjs`, and render `MuiXDatePickerElement` from `@piplup/rhf-adapters/mui-x-date-pickers` with `control` and `name`."
+  - question: "Should I store dates as strings or date objects in the form?"
+    answer: "Store the date object your picker adapter uses, such as a Dayjs object, and use `null` for an empty picker. Convert strings from your API into date objects when you build `defaultValues`, and format dates back into strings when you submit. The picker can then compare and validate dates without parsing."
+  - question: "Why is my date one day off after I submit?"
+    answer: "`toISOString()` converts the picked local midnight to UTC, which falls on the previous day for users east of UTC, such as in Europe or Asia. For a date without a time, send `format(\"YYYY-MM-DD\")` instead. Use `toISOString()` for a date and time that marks an exact moment."
+  - question: "How do I make the end date come after the start date?"
+    answer: "Watch the start date with `useWatch` and pass it, plus one day, as the end picker's `minDate`. Add `rules={{ deps: \"checkOut\" }}` to the start picker so that, once the form has been submitted, the end date revalidates when the start date changes."
+  - question: "How do I validate dates with Zod?"
+    answer: "Use `z.custom` with `dayjs.isDayjs(value) && value.isValid()` for each date, then a `.refine` on the object for rules across dates, with `path` set to the field that should show the error. With a resolver, react-hook-form skips field-level rules, so the picker's `minDate` and `disablePast` no longer validate; put those limits in the schema."
+---
+
+React Hook Form has no date input of its own, and a date picker is a controlled component, so it
+needs the same wiring as any MUI input plus a few date-specific decisions: what type to store, how
+to load and submit dates, and how to validate ranges. This guide covers each with the MUI X pickers
+and [`@piplup/rhf-adapters`](/docs/rhf-adapters/mui-x-date-pickers/installation), using Dayjs.
+
+## 1. Set up the picker
+
+Install React Hook Form, MUI X and a date library:
+
+```package-install
+react-hook-form @piplup/rhf-core @piplup/rhf-adapters @mui/material @emotion/react @emotion/styled @mui/x-date-pickers dayjs
+```
+
+Every MUI X picker needs a `LocalizationProvider` above it, with the adapter for your date
+library. Put it at the root of your app, or around the form:
+
+```tsx title="src/appointment-form.tsx"
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { MuiXDatePickerElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import type { Dayjs } from "dayjs";
+import { useForm } from "react-hook-form";
+
+type Appointment = { date: Dayjs | null };
+
+export function AppointmentForm() {
+  const { control, handleSubmit } = useForm<Appointment>({
+    defaultValues: { date: null },
+  });
+
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <form noValidate onSubmit={handleSubmit((values) => console.log(values))}>
+        <MuiXDatePickerElement control={control} name="date" label="Date" required />
+      </form>
+    </LocalizationProvider>
+  );
+}
+```
+
+[`MuiXDatePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-picker-element)
+replaces a `Controller` with a `render` function. It stores the picked date, shows validation
+errors as the picker's helper text, and moves focus to the picker when it fails validation.
+`noValidate` stops the browser's own popup for `required`, so React Hook Form's message shows.
+
+Times work the same way with
+[`MuiXTimePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-time-picker-element)
+and [`MuiXDateTimePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-time-picker-element).
+
+## 2. Store date objects, convert at the edges
+
+The field holds whatever your adapter uses: a Dayjs object with `AdapterDayjs`, a `Date` with
+`AdapterDateFns`. An empty picker is `null`, so start with `null` in `defaultValues` rather than
+`""` or `undefined`.
+
+Keep date objects in the form and convert only when data comes in or goes out. The picker can
+then compare dates for `minDate` and similar limits without parsing strings.
+
+### Load dates from an API
+
+APIs send dates as strings. Parse them while building `defaultValues`:
+
+```tsx
+import dayjs from "dayjs";
+
+type ApiBooking = { checkIn: string | null; checkOut: string | null };
+
+function toFormValues(booking: ApiBooking) {
+  return {
+    checkIn: booking.checkIn ? dayjs(booking.checkIn) : null,
+    checkOut: booking.checkOut ? dayjs(booking.checkOut) : null,
+  };
+}
+
+const { control } = useForm({ defaultValues: toFormValues(booking) });
+```
+
+If the data arrives after the form mounts, call `reset(toFormValues(booking))` when it loads, or
+pass the result as `useForm`'s `values` option so the form follows the data.
+
+### Submit in the format your API expects
+
+Format the dates in the submit handler:
+
+```tsx
+const onSubmit = handleSubmit((values) =>
+  api.saveBooking({
+    checkIn: values.checkIn?.format("YYYY-MM-DD") ?? null,
+    checkOut: values.checkOut?.format("YYYY-MM-DD") ?? null,
+  }),
+);
+```
+
+Choose the format by what the value means:
+
+| The value is | Send | Example |
+| --- | --- | --- |
+| A calendar date, such as a birthday or a check-in day | `format("YYYY-MM-DD")` | `2026-11-20` |
+| An exact moment, such as a meeting start | `toISOString()` | `2026-11-20T09:30:00.000Z` |
+
+A date picker returns local midnight of the picked day. `toISOString()` converts that to UTC,
+which is the previous day for users east of UTC, so a calendar date sent that way can arrive a day
+off. Pickers also take a `timezone` prop, which the element uses for validation as well.
+
+## 3. Require a date and set limits
+
+`required` makes the picker mandatory. The picker's own limits, such as `minDate`, `maxDate`,
+`disablePast`, `disableFuture` and `shouldDisableDate`, grey out days in the calendar and also
+validate the form, so a date typed by hand outside the range fails on submit with its own message:
+
+```tsx
+<MuiXDatePickerElement
+  control={control}
+  name="birthday"
+  label="Date of birth"
+  required
+  disableFuture
+  messages={{
+    required: "Enter your date of birth",
+    disableFuture: "Date of birth can't be in the future",
+    invalidDate: "Enter a date such as 05/31/1990",
+  }}
+/>
+```
+
+A date typed in a format the picker can't read fails as `invalidDate`. The
+[element page](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-picker-element#date-limits-are-validation-too)
+lists every limit and its default message.
+
+## 4. Validate a date range
+
+For a start and end date, pass the start date as the end picker's `minDate`. Pick both dates and
+book, then move the check-in past the check-out:
+
+<Demo
+  tabs={[
+    {
+      label: "Booking",
+      path: "demo/guides/date-range-booking.tsx",
+    },
+  ]}
+/>
+
+Two details make the range behave:
+
+- **`useWatch` for the start date.** It re-renders the form when check-in changes, so the
+  check-out picker's `minDate` follows it. `checkIn.add(1, "day")` requires at least one night;
+  pass `checkIn` itself to allow the same day.
+- **`rules={{ deps: "checkOut" }}` on the start picker.** After the first submit, React Hook Form
+  revalidates a field when it changes, but only that field. `deps` revalidates check-out whenever
+  check-in changes too, so moving check-in past check-out shows the error straight away instead of
+  on the next submit.
+
+MUI X also has a `DateRangePicker`, but it's part of the paid MUI X Pro. Two pickers like these
+work with the free package.
+
+## 5. Validate with Zod
+
+With a schema, the date rules live next to the rest of your validation. `z.custom` checks for a
+valid Dayjs object, and a `.refine` on the object compares the two dates:
+
+```tsx title="src/booking-schema.ts"
+import dayjs, { type Dayjs } from "dayjs";
+import { z } from "zod";
+
+const date = (message: string) =>
+  z
+    .custom<Dayjs | null>((value) => dayjs.isDayjs(value) && value.isValid(), message)
+    .transform((value) => value as Dayjs);
+
+export const bookingSchema = z
+  .object({
+    checkIn: date("Pick a check-in date").refine(
+      (value) => !value.isBefore(dayjs(), "day"),
+      "Check-in can't be in the past",
+    ),
+    checkOut: date("Pick a check-out date"),
+  })
+  .refine((values) => values.checkOut.isAfter(values.checkIn, "day"), {
+    path: ["checkOut"],
+    message: "Check-out must be after check-in",
+  });
+```
+
+The `transform` makes the parsed type `Dayjs` while the form's type still allows `null`. Pass both
+types to `useForm`, and the submit handler gets dates that are never `null`:
+
+```tsx
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const { control, handleSubmit } = useForm<
+  z.input<typeof bookingSchema>,
+  unknown,
+  z.output<typeof bookingSchema>
+>({
+  resolver: zodResolver(bookingSchema),
+  defaultValues: { checkIn: null, checkOut: null },
+});
+```
+
+<Callout type="warn">
+  With a resolver, React Hook Form skips field-level rules. `minDate`, `disablePast` and the other
+  limits still grey out days in the calendar, but they no longer validate, and neither does
+  `required`. Put every rule in the schema, as above.
+</Callout>
+
+Keep `rules={{ deps: "checkOut" }}` on the check-in picker, so the range error updates when
+check-in changes. The refine sets `path: ["checkOut"]`, which puts its message under the check-out
+picker.
+
+## 6. Other date inputs
+
+Every MUI X component that holds a value has an element in
+`@piplup/rhf-adapters/mui-x-date-pickers`, except `DateTimeField`:
+
+- **Pickers:** [DatePicker](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-picker-element),
+  [TimePicker](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-time-picker-element),
+  [DateTimePicker](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-time-picker-element),
+  and their desktop, mobile and static versions
+- **Fields without a popup:** [DateField](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-field-element),
+  [TimeField](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-time-field-element)
+- **Calendars:** [DateCalendar](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-calendar-element),
+  [MonthCalendar](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-month-calendar-element),
+  [YearCalendar](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-year-calendar-element)
+- **Clocks:** [TimeClock](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-time-clock-element),
+  [DigitalClock](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-digital-clock-element),
+  [MultiSectionDigitalClock](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-multi-section-digital-clock-element)
+
+Each has a matching hook, such as
+[`useMuiXDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter),
+for a custom picker component.
+
+## FAQ
+
+<Faq />
+
+## See also
+
+- [Using MUI with React Hook Form](/docs/react-hook-form-mui)
+- [MuiXDatePickerElement](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-picker-element)
+- [MUI X date pickers installation](/docs/rhf-adapters/mui-x-date-pickers/installation)
+- [rhf-adapters vs react-hook-form-mui](/docs/rhf-adapters-vs-react-hook-form-mui)

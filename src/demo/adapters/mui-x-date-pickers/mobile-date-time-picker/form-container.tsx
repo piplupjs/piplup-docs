@@ -22,7 +22,7 @@ export default function Page() {
           />
           <div>
             <MuiButtonElement variant="contained" type="submit">
-              Submt
+              Submit
             </MuiButtonElement>
           </div>
         </Stack>

@@ -1,0 +1,234 @@
+---
+title: rhf-adapters vs react-hook-form-mui
+seoTitle: "react-hook-form-mui alternative: rhf-adapters compared"
+description: "Compare @piplup/rhf-adapters with react-hook-form-mui for connecting MUI to React Hook Form: components, date pickers, validation, hooks and version support."
+faq:
+  - question: "What is the difference between react-hook-form-mui and @piplup/rhf-adapters?"
+    answer: "Both wrap react-hook-form's `useController` so MUI inputs work without a `Controller`. react-hook-form-mui ships a set of opinionated elements in one package. `@piplup/rhf-adapters` ships an element and a matching hook for every supported component, covers 20 MUI X components, from every picker to the calendars and clocks, and adds adapters for the common MUI community inputs and native HTML elements."
+  - question: "Does @piplup/rhf-adapters work with React 18?"
+    answer: "No. Version 5 requires React 19. react-hook-form-mui 9 supports React 18 and 19, so on React 18 it is the one to pick."
+  - question: "Which MUI versions do they support?"
+    answer: "react-hook-form-mui releases one major version per MUI major: version 9 requires MUI 9. `@piplup/rhf-adapters` 5 supports `@mui/material` 6 to 9 and `@mui/x-date-pickers` 8 to 9 in the same release, so you can upgrade MUI without changing adapter versions."
+  - question: "Can I store dates as strings in the form?"
+    answer: "react-hook-form-mui's date pickers parse a string form value through the picker adapter, so ISO strings from an API can go straight into `defaultValues`. `@piplup/rhf-adapters` expects a date object from your `LocalizationProvider` adapter, so convert strings when you set `defaultValues` and format the date when you submit."
+  - question: "Is there a password field with a show/hide button?"
+    answer: "react-hook-form-mui has `PasswordElement` and `PasswordRepeatElement`. `@piplup/rhf-adapters` has no dedicated password element: use `MuiTextFieldElement` with `type=\"password\"` and add the visibility toggle as an input adornment."
+---
+
+[react-hook-form-mui](https://github.com/dohomi/react-hook-form-mui) and `@piplup/rhf-adapters`
+solve the same problem. MUI inputs are controlled components, so React Hook Form's `register`
+doesn't fit them, and both packages wrap `useController` in ready-made elements so you don't write a
+`Controller` for every field. They differ in what they cover, how far you can customise a field, and
+which React and MUI versions they support.
+
+This page compares react-hook-form-mui 9.0 with `@piplup/rhf-adapters` 5.0, as of November 2026.
+
+## At a glance
+
+| | react-hook-form-mui | @piplup/rhf-adapters |
+| --- | --- | --- |
+| React | 18 and 19 | 19 |
+| MUI | One MUI major per release (9.x needs MUI 9) | `@mui/material` 6 to 9, `@mui/x-date-pickers` 8 to 9 |
+| API | Elements | An element and a hook for every component |
+| MUI Material inputs | TextField, Select, MultiSelect, Autocomplete, Checkbox, CheckboxButtonGroup, RadioButtonGroup, Switch, Slider, ToggleButtonGroup, TextareaAutosize | TextField, Input, OutlinedInput, FilledInput, InputBase, Select, Autocomplete, Checkbox, Radio, RadioGroup, Switch, Slider, Rating |
+| Password field | `PasswordElement`, `PasswordRepeatElement` | `MuiTextFieldElement` with `type="password"` |
+| Labels, helper text, buttons | Label and helper text built into each element | Also separate elements: FormLabel, InputLabel, FormHelperText, Button, IconButton, Fab |
+| MUI X | DatePicker, MobileDatePicker, DateTimePicker, TimePicker | 20 components: every picker, plus DateField, TimeField, the calendars and the clocks |
+| Picker limits such as `minDate` validate the form | Yes | Yes |
+| Shorthand validation props | `required`; `type="email"` adds a pattern | `required`, `min`, `max`, `minLength`, `maxLength`, `pattern`; `type="email"` adds a pattern |
+| Per-field messages | `parseError`, `overwriteErrorMessages` on pickers | `messages`, `errorParser` |
+| Form-wide error formatting | `FormErrorProvider` with `onError` | `FormErrorProvider` with `errorParser` |
+| Community inputs | None | mui-chips-input, mui-color-input, mui-file-input, mui-one-time-password-input, mui-tel-input, react-number-format |
+| Native HTML elements | None | input, textarea, label, button, helper text |
+| String dates in form values | Parsed by the picker adapter | Date objects only |
+
+## The same field in both
+
+A required email field in react-hook-form-mui:
+
+```tsx
+import { TextFieldElement } from "react-hook-form-mui";
+
+<TextFieldElement
+  control={control}
+  name="email"
+  type="email"
+  label="Email"
+  required
+  rules={{ required: "Enter your email" }}
+/>;
+```
+
+And in `@piplup/rhf-adapters`:
+
+```tsx
+import { MuiTextFieldElement } from "@piplup/rhf-adapters/mui-material";
+
+<MuiTextFieldElement
+  control={control}
+  name="email"
+  type="email"
+  label="Email"
+  required
+  messages={{ required: "Enter your email" }}
+/>;
+```
+
+For simple fields the two read almost the same. The differences show up at the edges.
+
+## Where they differ
+
+### Hooks for custom fields
+
+react-hook-form-mui gives you elements and a `useTransform` helper. When an element's layout
+doesn't fit, you go back to `useController` and do the mapping yourself.
+
+Every `@piplup/rhf-adapters` element has a hook, such as
+[`useMuiTextFieldAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-text-field-adapter), that
+returns the props the element would pass. You spread them onto your own component and keep the
+value mapping, the error state and the validation rules:
+
+```tsx
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import { useMuiTextFieldAdapter } from "@piplup/rhf-adapters/mui-material";
+import type { Control } from "react-hook-form";
+
+type Product = { price: number | null };
+
+function PriceField({ control }: { control: Control<Product> }) {
+  const adapter = useMuiTextFieldAdapter<number | null, Product, "price", HTMLDivElement>({
+    control,
+    name: "price",
+    type: "number",
+    required: true,
+    min: 0,
+    composeHelperText: true,
+    messages: { required: "Enter a price", min: "Price can't be negative" },
+  });
+
+  return (
+    <TextField
+      {...adapter}
+      label="Price"
+      slotProps={{
+        input: { startAdornment: <InputAdornment position="start">$</InputAdornment> },
+      }}
+    />
+  );
+}
+```
+
+For components neither package covers, `@piplup/rhf-core` exports
+[`useControllerAdapter`](/docs/rhf-core/hooks/use-controller-adapter), the primitive every adapter
+is built on.
+
+### Select
+
+react-hook-form-mui's `SelectElement` is a `TextField` in select mode that takes an `options`
+array, with `valueKey` and `labelKey` for object options. It renders its own helper text.
+
+`MuiSelectElement` wraps MUI's `Select` and takes `MenuItem` children, the same as MUI's own
+examples. MUI's `Select` has no helper text, so the error is shown by a
+[`MuiFormHelperTextElement`](/docs/rhf-adapters/mui-material/components/mui-form-helper-text-element)
+that reads the same field. It's more markup, but anything MUI's `Select` accepts works unchanged.
+
+### Date pickers
+
+Both turn picker limits such as `minDate`, `disablePast` and `shouldDisableDate` into React Hook
+Form validation, with a default message per limit that you can override.
+
+react-hook-form-mui covers four pickers. `@piplup/rhf-adapters/mui-x-date-pickers` covers 20 MUI X
+components: the responsive, desktop, mobile and static date, time and date-time pickers,
+`DateField` and `TimeField`, the date, month and year calendars, and the clocks. `DateTimeField` is
+the one value component without an adapter yet.
+
+react-hook-form-mui also accepts a string form value and parses it with the picker's adapter.
+`@piplup/rhf-adapters` stores and expects the date object from your `LocalizationProvider`
+adapter, so convert API strings when you build `defaultValues`. The
+[date picker guide](/docs/react-hook-form-date-picker#load-dates-from-an-api) shows how.
+
+### Validation props
+
+react-hook-form-mui adds a `required` rule from the `required` prop and an email pattern for
+`type="email"`; everything else goes in `rules`. `@piplup/rhf-adapters` also reads `min`, `max`,
+`minLength`, `maxLength` and `pattern` from the element's props, so the attribute you would set on
+the input becomes the validation rule too. In both, `rules` still works for anything else.
+
+### Inputs beyond MUI Material
+
+react-hook-form-mui covers MUI Material and four MUI X pickers. `@piplup/rhf-adapters` also has
+subpaths for [mui-tel-input](/docs/rhf-adapters/mui-tel-input/installation),
+[mui-file-input](/docs/rhf-adapters/mui-file-input/installation),
+[mui-chips-input](/docs/rhf-adapters/mui-chips-input/installation),
+[mui-color-input](/docs/rhf-adapters/mui-color-input/installation),
+[mui-one-time-password-input](/docs/rhf-adapters/mui-one-time-password-input/installation),
+[react-number-format](/docs/rhf-adapters/react-number-format/installation) and
+[native HTML elements](/docs/rhf-adapters/html/installation). Each subpath only needs its own peer
+dependency installed.
+
+### Version support
+
+react-hook-form-mui follows MUI's major versions: upgrading MUI means upgrading it too, and version
+9 needs MUI 9. It supports React 18.
+
+`@piplup/rhf-adapters` 5 accepts MUI 6 through 9 in one release, so the adapters don't block a
+MUI upgrade. It requires React 19.
+
+## Which should you choose?
+
+Choose **react-hook-form-mui** if:
+
+- You're on React 18.
+- You want `PasswordElement`, `PasswordRepeatElement`, `ToggleButtonGroupElement` or a `Select`
+  driven by an `options` array.
+- Your form values hold dates as strings and you'd rather not convert them.
+
+Choose **@piplup/rhf-adapters** if:
+
+- You build custom fields and want the adapter logic as a hook rather than only an element.
+- You use MUI X beyond the four main pickers, or the MUI community inputs.
+- You want `min`, `max`, `minLength`, `maxLength` and `pattern` props to validate.
+- You want to upgrade MUI without waiting for a matching adapter release.
+
+## Switching from react-hook-form-mui
+
+Most elements map one to one. Import MUI Material elements from `@piplup/rhf-adapters/mui-material`
+and pickers from `@piplup/rhf-adapters/mui-x-date-pickers`:
+
+| react-hook-form-mui | @piplup/rhf-adapters |
+| --- | --- |
+| `FormContainer` with `onSuccess` | [`FormContainer`](/docs/rhf-core/components/form-container) from `@piplup/rhf-core`, with `onSubmit` |
+| `FormErrorProvider` with `onError` | [`FormErrorProvider`](/docs/rhf-core/components/form-error-provider) with `errorParser` |
+| `TextFieldElement` | [`MuiTextFieldElement`](/docs/rhf-adapters/mui-material/components/mui-text-field-element) |
+| `SelectElement`, `MultiSelectElement` | [`MuiSelectElement`](/docs/rhf-adapters/mui-material/components/mui-select-element) with `MenuItem` children, `multiple` for several |
+| `AutocompleteElement` | [`MuiAutocompleteElement`](/docs/rhf-adapters/mui-material/components/mui-autocomplete-element) |
+| `CheckboxElement`, `CheckboxButtonGroup` | [`MuiCheckboxElement`](/docs/rhf-adapters/mui-material/components/mui-checkbox-element) |
+| `RadioButtonGroup` | [`MuiRadioGroupElement`](/docs/rhf-adapters/mui-material/components/mui-radio-group-element) |
+| `SwitchElement` | [`MuiSwitchElement`](/docs/rhf-adapters/mui-material/components/mui-switch-element) |
+| `SliderElement` | [`MuiSliderElement`](/docs/rhf-adapters/mui-material/components/mui-slider-element) |
+| `DatePickerElement` | [`MuiXDatePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-picker-element) |
+| `MobileDatePickerElement` | [`MuiXMobileDatePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-mobile-date-picker-element) |
+| `DateTimePickerElement` | [`MuiXDateTimePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-time-picker-element) |
+| `TimePickerElement` | [`MuiXTimePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-time-picker-element) |
+| `parseError` | `messages` for fixed text, `errorParser` for a function |
+| `rules={{ required: "…" }}` | `required` with `messages={{ required: "…" }}`, or keep `rules` |
+
+Two behaviours to check as you switch:
+
+- **Checkbox values.** `MuiCheckboxElement` stores an array of the checked boxes' `value`s, so
+  several checkboxes with the same `name` form a group. For a single yes/no box, use a `transform`,
+  as shown on the [MuiCheckboxElement page](/docs/rhf-adapters/mui-material/components/mui-checkbox-element#a-single-boolean-checkbox).
+- **Imports from react-hook-form.** react-hook-form-mui re-exports all of `react-hook-form`, so
+  some code imports `useForm` from it. Import those from `react-hook-form` instead.
+
+## FAQ
+
+<Faq />
+
+## See also
+
+- [Using MUI with React Hook Form](/docs/react-hook-form-mui)
+- [Date pickers with React Hook Form](/docs/react-hook-form-date-picker)
+- [@piplup/rhf-adapters installation](/docs/rhf-adapters/mui-material/installation)
+- [react-hook-form-mui on GitHub](https://github.com/dohomi/react-hook-form-mui)

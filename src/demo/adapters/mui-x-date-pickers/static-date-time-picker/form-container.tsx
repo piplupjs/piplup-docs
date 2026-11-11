@@ -19,7 +19,7 @@ export default function Page() {
           <MuiXStaticDateTimePickerElement name="appointment" />
           <div>
             <MuiButtonElement variant="contained" type="submit">
-              Submt
+              Submit
             </MuiButtonElement>
           </div>
         </Stack>
