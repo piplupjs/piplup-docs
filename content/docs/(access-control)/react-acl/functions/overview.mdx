@@ -5,8 +5,8 @@ description: hasPermission, hasRole, hasAllPermissions, hasAnyPermissions and cr
 ---
 
 Every check in this package is a plain function over a principal. They need no context and no
-component, so the same rules apply in a navigation filter, a route loader, a server action or a
-test as in your markup.
+component, so the same rules apply in a navigation filter, a route loader, a server action, a Node
+server or a test as in your markup.
 
 ```tsx
 import { hasPermission } from "@piplup/react-acl";
@@ -17,6 +17,30 @@ const visible = items.filter((item) => hasPermission(user, item.requiredPermissi
 Inside components prefer [`Can`](/docs/react-acl/components/can) and
 [`useAccessControl`](/docs/react-acl/hooks/use-access-control) — they read the principal for you and
 suspend checks while it loads, which these functions cannot do.
+
+## In React Server Components
+
+From 4.1.0 the check functions also run in React Server Components code: Next.js App Router server
+components, server actions and route handlers. Only `AccessControlProvider`, `useAccessControl`,
+`Can` and `withCan` are marked `"use client"`, and everything still comes from `@piplup/react-acl`.
+
+```ts title="app/api/reports/route.ts"
+import { hasPermission } from "@piplup/react-acl";
+
+export async function GET() {
+  const principal = await loadAccess();
+  if (!hasPermission(principal, "report:read")) {
+    return new Response(null, { status: 403 });
+  }
+  // ...return the reports
+}
+```
+
+<Callout type="warn">
+  In 4.0.0 the whole package was marked `"use client"`, so these calls throw "Attempted to call
+  hasPermission() from the server but hasPermission is on the client". Upgrade to 4.1.0 or later.
+  Servers that don't use React Server Components, such as Express, work with either version.
+</Callout>
 
 ## hasPermission
 

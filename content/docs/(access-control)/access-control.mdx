@@ -28,6 +28,12 @@ so a typo is a type error rather than a silent denial.
 **A loading state.** A principal you haven't fetched yet is distinct from one with no access, so
 nobody sees an "access denied" flash before their permissions arrive.
 
+## Start here
+
+[Role-based access control in React](/docs/react-role-based-access-control) builds it end to end:
+loading the user's access, hiding UI, guarding routes, filtering navigation and typing permission
+names.
+
 <Callout type="warn">
   This hides UI. It does not protect data. Anything a user must not reach needs a check on your
   server as well.

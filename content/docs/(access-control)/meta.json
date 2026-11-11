@@ -6,6 +6,7 @@
   "root": true,
   "pages": [
     "access-control",
+    "react-role-based-access-control",
     "react-acl"
   ]
 }

@@ -1,0 +1,194 @@
+---
+title: Reload users after a deploy
+seoTitle: "Force users to reload after deploy (React, Vite)"
+description: "Stop users running a stale React bundle after you deploy: cache index.html correctly, detect the new release, reload or prompt, and recover from failed chunk loads."
+faq:
+  - question: "Why do users still see the old version of my React app after I deploy?"
+    answer: "A single-page app keeps running the JavaScript the browser already loaded, so an open tab stays on the old release until the page is reloaded. If `index.html` is cached, even a reload can load the old bundle. Serve `index.html` with `Cache-Control: no-cache` and detect new releases in the app."
+  - question: "How do I force a React app to refresh after a new deployment?"
+    answer: "Write a unique release ID into a file at build time, fetch it when the app loads and compare it with the ID saved from the last visit. When they differ, call `window.location.reload()`. `@piplup/cache-buster` does the comparison and the reload, and its CLI or Vite plugin writes the release file."
+  - question: "How do I fix \"Failed to fetch dynamically imported module\" after a deploy?"
+    answer: "The tab is running the old release and asked for a lazy-loaded chunk that the new deploy removed. Vite fires a `vite:preloadError` event on `window` when this happens; listen for it and reload the page once, with a `sessionStorage` guard so a chunk that is genuinely missing doesn't cause a reload loop."
+  - question: "Should I reload automatically or ask the user?"
+    answer: "Reload automatically when the check runs at startup, before the user has done anything. Ask with a banner when the app is already in use, since a reload throws away unsaved form input. `CacheBuster` does the first; `useReleaseStatus` reports the status so you can build the second."
+  - question: "Does the check catch a deploy while a tab stays open?"
+    answer: "The `@piplup/cache-buster` check runs once per page load, so a tab that stays open for days only notices on its next load. Handle failed chunk loads so those tabs recover on navigation, and add your own check on `visibilitychange` if users keep the app open for long periods."
+---
+
+A single-page app runs whatever JavaScript the browser loaded. After you deploy, users with the app
+open keep running the previous release, and if `index.html` is cached, reloading can bring the old
+release straight back. They see bugs you already fixed, call APIs you've changed, and hit errors
+when the app tries to lazy-load a file that no longer exists.
+
+This guide fixes that in four steps for a React app, with extra detail for Vite.
+
+## 1. Cache index.html correctly
+
+Build tools give every JavaScript and CSS file a content hash in its name, such as
+`index-3f2a1c.js`. Those files never change, so they can be cached forever. `index.html` is the one
+file that points at the current hashes, so the browser must check it on every load:
+
+| File | Cache-Control |
+| --- | --- |
+| `index.html` | `no-cache` |
+| Hashed assets, such as `/assets/*` in Vite | `public, max-age=31536000, immutable` |
+
+`no-cache` doesn't stop caching: the browser keeps a copy but checks with the server before using
+it, so an unchanged file still costs only a small request. Most static hosts let you set headers per
+path. Check yours, because some hosts and CDNs cache HTML by default.
+
+With this in place, a reload always gets the current release. The remaining problem is getting
+users to reload.
+
+## 2. Stamp each build with a release ID
+
+To notice a new release, the app needs something to compare. Write a random ID into a file on every
+build, and serve it next to the app. With Vite, add the plugin:
+
+```package-install
+@piplup/cache-buster @piplup/vite-plugin-cache-buster
+```
+
+```ts title="vite.config.ts"
+import { vitePluginCacheBuster } from "@piplup/vite-plugin-cache-buster";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+
+export default defineConfig({
+  plugins: [react(), vitePluginCacheBuster()],
+});
+```
+
+It writes a new UUID to `public/RELEASE` at the start of each production build, and when the dev
+server starts. Vite copies the file to the output, so the deployed site serves it at `/RELEASE`. Without Vite, run the CLI before your build:
+
+```json title="package.json"
+{
+  "scripts": {
+    "build": "piplup-cache-buster --publicDir=public && react-scripts build"
+  }
+}
+```
+
+The file changes on every build, so add `public/RELEASE` to `.gitignore`.
+
+## 3. Detect the new release when the app loads
+
+Wrap the app in [`CacheBuster`](/docs/cache-buster/components/cache-buster):
+
+```tsx title="src/main.tsx"
+import { CacheBuster } from "@piplup/cache-buster";
+
+createRoot(document.getElementById("root")!).render(
+  <CacheBuster enabled={import.meta.env.PROD} loading={<Splash />} error={<App />}>
+    <App />
+  </CacheBuster>,
+);
+```
+
+When the app mounts, `CacheBuster` fetches `/RELEASE` with a cache-busting query string and compares
+it with the ID saved in `localStorage` from the last visit:
+
+- **Same ID**, or a first visit: it renders the app.
+- **New ID**: it saves the ID and reloads the page, showing `loading` until the reload so the old
+  release never appears. It reloads at most once per release in each tab, so a misconfigured server
+  can't cause a loop.
+- **Request failed**, for example offline: it renders `error`. That slot has no default, so pass
+  your app there too, as above.
+
+This catches the user who left a tab in the background, or whose browser restored the page from
+its own cache: the app loads, notices it's out of date, and reloads into the new release.
+
+### Or ask first
+
+An automatic reload is fine at startup, before the user has typed anything. If you'd rather prompt,
+[`useReleaseStatus`](/docs/cache-buster/hooks/use-release-status) reports the result and never
+reloads:
+
+```tsx
+import { useReleaseStatus } from "@piplup/cache-buster";
+
+function UpdateBanner() {
+  const status = useReleaseStatus({ storageKey: "RELEASE", enabled: import.meta.env.PROD });
+
+  if (status !== "new-release") return null;
+
+  return (
+    <Banner>
+      A new version is available.
+      <button onClick={() => window.location.reload()}>Reload</button>
+    </Banner>
+  );
+}
+```
+
+The new ID is saved as soon as it's detected, so after the reload the status is `no-release`.
+
+## 4. Recover when a lazy chunk is gone
+
+Code-split apps load route chunks on demand with `import()`. If a deploy replaced those files while
+a tab was open, the old release asks for a chunk that no longer exists, and the navigation fails
+with an error such as "Failed to fetch dynamically imported module".
+
+Vite fires a `vite:preloadError` event on `window` when a dynamic import fails. Reload once when it
+does:
+
+```ts title="src/main.tsx"
+window.addEventListener("vite:preloadError", (event) => {
+  const key = "chunk-reload-at";
+  const last = Number(sessionStorage.getItem(key));
+  if (Date.now() - last < 10_000) return;
+
+  sessionStorage.setItem(key, String(Date.now()));
+  event.preventDefault();
+  window.location.reload();
+});
+```
+
+`event.preventDefault()` stops Vite rethrowing the error while the page reloads. The
+`sessionStorage` timestamp skips a second reload within ten seconds, so a chunk that is genuinely
+missing reaches your error boundary instead of reloading forever. After the reload, `CacheBuster` sees the new release
+ID and the user is on the current build.
+
+Webpack-based setups throw a `ChunkLoadError` instead; catch it in the error boundary around your
+lazy routes and reload the same way.
+
+## Tabs that stay open
+
+`CacheBuster` checks once per page load. A dashboard that stays open all week won't notice a deploy
+until it reloads or a chunk fails. If that matters for your app, check again when the user comes
+back to the tab:
+
+```ts
+document.addEventListener("visibilitychange", async () => {
+  if (document.visibilityState !== "visible") return;
+
+  const res = await fetch(`/RELEASE?v=${Date.now()}`);
+  if (!res.ok) return;
+
+  const latest = (await res.text()).trim();
+  const known = localStorage.getItem("RELEASE");
+  if (known && latest !== known) showUpdateBanner();
+});
+```
+
+It reads the ID `CacheBuster` saved under its default `storageKey`, `"RELEASE"`. Show a banner here
+rather than reloading, since the user may be halfway through something.
+
+## Checklist
+
+- `index.html` is served with `Cache-Control: no-cache`, hashed assets with a long `max-age`.
+- The build writes a new `RELEASE` file, and it's reachable at `/RELEASE` on the deployed site.
+- `CacheBuster` wraps the app, with `error` set and `enabled` only in production.
+- A `vite:preloadError` handler reloads once when a chunk is missing.
+
+## FAQ
+
+<Faq />
+
+## See also
+
+- [CacheBuster](/docs/cache-buster/components/cache-buster)
+- [useReleaseStatus](/docs/cache-buster/hooks/use-release-status)
+- [@piplup/cache-buster installation](/docs/cache-buster/installation)
+- [Vite plugin](/docs/vite-plugin-cache-buster/installation)
