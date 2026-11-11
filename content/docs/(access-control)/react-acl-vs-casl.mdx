@@ -1,0 +1,195 @@
+---
+title: react-acl vs CASL
+seoTitle: "CASL vs @piplup/react-acl for React permissions"
+description: "Compare CASL and @piplup/react-acl for React permissions: permission strings versus conditional rules, loading states, typing, server checks and when to use each."
+faq:
+  - question: "What is the difference between CASL and @piplup/react-acl?"
+    answer: "CASL checks actions on subjects and can attach conditions to a rule, such as \"update a Post whose authorId is the user's id\", so it answers questions about specific records. `@piplup/react-acl` checks flat permission strings such as `post:update`, with `:` wildcards and roles, and answers what a user may do in general. It's smaller and has a built-in loading state, but it has no conditions."
+  - question: "Can @piplup/react-acl check permissions on a specific record?"
+    answer: "Not by itself. It checks permission names, not record fields. For \"only their own posts\" you combine a permission check with your own comparison, such as `can(\"post:update:own\") && post.authorId === userId`, or let your server send a per-record flag. If many rules depend on record fields, CASL fits better."
+  - question: "Does CASL have a loading state in React?"
+    answer: "No. An ability with no rules yet denies everything, so `Can` renders nothing until rules arrive. Track loading yourself if you need a placeholder. `@piplup/react-acl` treats an `undefined` principal as loading, and its `Can` renders a `loading` slot for it."
+  - question: "Can I use both together?"
+    answer: "Yes, but each needs its own provider and checks, so most apps pick one. Use `@piplup/react-acl` when permission names describe your access model, and CASL when rules depend on the record being acted on."
+  - question: "Which one works on the server?"
+    answer: "Both. CASL's `@casl/ability` runs anywhere and has `@casl/prisma` and `@casl/mongoose` to turn rules into database queries. `@piplup/react-acl`'s check functions are plain functions that work in Node servers, and from 4.1.0 in React Server Components, server actions and route handlers."
+---
+
+[CASL](https://casl.js.org) and `@piplup/react-acl` both decide what a React app shows each user,
+with a `Can` component and a hook. They model access differently, and that difference decides which
+one fits.
+
+- **CASL** checks an **action on a subject**, and a rule can carry **conditions** on the subject's
+  fields: "may update a `Post` whose `authorId` is mine".
+- **`@piplup/react-acl`** checks **permission names** such as `post:update`, with `:` wildcards and
+  roles. It doesn't look inside records.
+
+This page compares `@casl/ability` 7.1 and `@casl/react` 7.1 with `@piplup/react-acl` 4.1, as of
+November 2026.
+
+## At a glance
+
+| | CASL | @piplup/react-acl |
+| --- | --- | --- |
+| Model | Actions on subjects, with optional conditions and fields | Permission strings and roles |
+| Record-level rules ("only their own posts") | Yes, MongoDB-style conditions | No; combine a check with your own comparison |
+| Field-level rules | Yes | No |
+| Deny rules | Yes, `cannot`, with a reason | No; access is only granted |
+| Wildcards | `manage` for any action, `all` for any subject | `*`, and `post:*` for everything under `post` |
+| Roles | Your code turns roles into rules | Checked directly with `hasRole` and `Can role` |
+| Loading state in `Can` | None; no rules means denied | `undefined` principal renders the `loading` slot |
+| Typing | Generics on the ability type | Module augmentation of permission and role names |
+| What the server sends | Rules as JSON | `{ roles, permissions }` as JSON |
+| Database query helpers | `@casl/prisma`, `@casl/mongoose` | None |
+| React Server Components | Use `@casl/ability` in server code | Check functions work from 4.1.0 |
+| Dependencies | `@casl/ability` uses the `@ucast` packages | None |
+| Other frameworks | Vue, Angular, Aurelia packages | React only |
+
+## The same check in both
+
+Hide a Delete button from users who can't delete posts. With `@piplup/react-acl`:
+
+```tsx
+import { AccessControlProvider, Can } from "@piplup/react-acl";
+
+const principal = { roles: ["editor"], permissions: ["post:read", "post:delete"] };
+
+<AccessControlProvider principal={principal}>
+  <Can permission="post:delete">
+    <DeleteButton />
+  </Can>
+</AccessControlProvider>;
+```
+
+With CASL:
+
+```tsx
+import { createMongoAbility } from "@casl/ability";
+import { AbilityProvider, Can } from "@casl/react";
+
+const ability = createMongoAbility([
+  { action: "read", subject: "Post" },
+  { action: "delete", subject: "Post" },
+]);
+
+<AbilityProvider value={ability}>
+  <Can I="delete" a="Post">
+    <DeleteButton />
+  </Can>
+</AbilityProvider>;
+```
+
+For a yes-or-no check like this one, the two are about equally short.
+
+## When the rule depends on the record
+
+Now editors may delete only their own posts. CASL puts the condition in the rule and checks the
+post itself:
+
+```tsx
+import { AbilityBuilder, createMongoAbility, subject } from "@casl/ability";
+import { Can } from "@casl/react";
+
+const { can, build } = new AbilityBuilder(createMongoAbility);
+can("delete", "Post", { authorId: user.id });
+const ability = build();
+
+<Can I="delete" this={subject("Post", post)}>
+  <DeleteButton />
+</Can>;
+```
+
+`@piplup/react-acl` has no conditions, so the record comparison is your code. A separate
+permission name describes the narrower grant:
+
+```tsx
+import { useAccessControl } from "@piplup/react-acl";
+
+function PostActions({ post, userId }: { post: Post; userId: string }) {
+  const { can } = useAccessControl();
+  const mayDelete = can("post:delete") || (can("post:delete:own") && post.authorId === userId);
+
+  return mayDelete ? <DeleteButton /> : null;
+}
+```
+
+That's fine for a few rules like this. When many rules depend on fields of the record, CASL keeps
+them in one place, and your server can apply the same rules to database queries with
+`@casl/prisma` or `@casl/mongoose`.
+
+## While access is loading
+
+Permissions usually arrive from an API after the first render.
+
+CASL's `Can` has no loading state. An ability with no rules denies everything, so content wrapped
+in `Can` stays hidden and any `not` fallback shows until the rules arrive. Keep your own loading
+flag if users shouldn't see a denial first.
+
+`@piplup/react-acl` treats an `undefined` principal as "not loaded yet". Its `Can` renders a
+separate `loading` slot instead of `fallback`, and `useAccessControl` returns `loading: true`:
+
+```tsx
+<Can permission="post:publish" loading={<ButtonSkeleton />} fallback={<RequestReviewButton />}>
+  <PublishButton />
+</Can>
+```
+
+See [Not loaded, versus no access](/docs/react-acl/permissions#not-loaded-versus-no-access).
+
+## Typing
+
+CASL is typed through the ability's generics, which list the actions and subjects:
+
+```ts
+import type { MongoAbility } from "@casl/ability";
+
+type AppAbility = MongoAbility<["read" | "update" | "delete", "Post" | "Comment"]>;
+```
+
+You pass `AppAbility` wherever you create or read the ability, such as `useAbility<AppAbility>()`.
+
+`@piplup/react-acl` is typed by augmenting the package once. After that, `Can`, `can()` and the
+check functions accept only your names, with no type argument at each call:
+
+```ts title="src/types/react-acl.d.ts"
+declare module "@piplup/react-acl" {
+  interface PermissionsDef {
+    "post:read": never;
+    "post:delete": never;
+    "post:delete:own": never;
+  }
+}
+```
+
+See [Typed permissions](/docs/react-acl/permissions#typed-permissions).
+
+## Which should you choose?
+
+Choose **CASL** if:
+
+- Rules depend on the record: owners, teams, statuses, dates.
+- You need field-level rules, or explicit deny rules with reasons.
+- You want the same rules to filter database queries.
+- You also use Vue or Angular.
+
+Choose **@piplup/react-acl** if:
+
+- Your backend already speaks in permission names, such as OAuth scopes or a roles table that
+  expands to permissions.
+- You want `post:*` style wildcards without listing every action.
+- You want a loading state in `Can` and `useAccessControl` without extra code.
+- You want a small package with no dependencies.
+
+Whichever you choose, the UI check only hides things. The server still has to enforce the same
+rules on every request.
+
+## FAQ
+
+<Faq />
+
+## See also
+
+- [Role-based access control in React](/docs/react-role-based-access-control)
+- [Permissions and wildcards](/docs/react-acl/permissions)
+- [Can](/docs/react-acl/components/can)
+- [CASL documentation](https://casl.js.org)

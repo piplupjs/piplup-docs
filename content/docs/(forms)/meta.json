@@ -7,6 +7,8 @@
   "pages": [
     "forms",
     "react-hook-form-mui",
+    "react-hook-form-date-picker",
+    "rhf-adapters-vs-react-hook-form-mui",
     "rhf-core",
     "rhf-adapters"
   ]

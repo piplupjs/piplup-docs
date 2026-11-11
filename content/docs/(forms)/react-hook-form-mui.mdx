@@ -12,7 +12,7 @@ faq:
   - question: "How do I change the default error messages for every field?"
     answer: "Each field takes a `messages` prop for its own rules. To format every error in one place, wrap the form in `FormErrorProvider` with an `errorParser`, or pass `errorParser` to `FormContainer`. A parser from context takes precedence over one passed to a single field."
   - question: "Does it work with MUI X date pickers?"
-    answer: "Yes. `@piplup/rhf-adapters/mui-x-date-pickers` has an element for every MUI X picker, field, calendar and clock. Picker limits such as `minDate` and `disablePast` also become react-hook-form validation, each with its own message."
+    answer: "Yes. `@piplup/rhf-adapters/mui-x-date-pickers` has an element for every MUI X picker, plus the date and time fields, calendars and clocks. Picker limits such as `minDate` and `disablePast` also become react-hook-form validation, each with its own message."
 ---
 
 MUI's inputs are controlled components, so React Hook Form's `register` doesn't work with
@@ -227,6 +227,13 @@ element doesn't offer. For a component library that has no adapter yet, build on
   [file](/docs/rhf-adapters/mui-file-input/components/mui-file-input-element),
   [OTP](/docs/rhf-adapters/mui-one-time-password-input/components/mui-otp-input-element),
   [phone number](/docs/rhf-adapters/mui-tel-input/components/mui-tel-input-element)
+
+## Next steps
+
+- [Date pickers with React Hook Form](/docs/react-hook-form-date-picker): loading, submitting and
+  validating dates and date ranges.
+- [rhf-adapters vs react-hook-form-mui](/docs/rhf-adapters-vs-react-hook-form-mui): how this
+  compares with the other popular MUI integration.
 
 ## FAQ
 
