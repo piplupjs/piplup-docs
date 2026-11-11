@@ -7,7 +7,6 @@ import { Why } from './_components/why';
 import {
   appDescription,
   appName,
-  appTagline,
   blogRoute,
   docsRoute,
   npmOrg,
@@ -16,11 +15,17 @@ import {
 import { openGraph } from '@/lib/open-graph';
 import { organizationJsonLd, webSiteJsonLd } from '@/lib/json-ld';
 
+/**
+ * The tagline stays the H1, but nobody searches for "lightweight, modular React libraries", so the
+ * <title> names what the packages do. Brand first: this is the page that ranks for "piplup".
+ */
+const homeTitle = `${appName}: React Hook Form for MUI, RBAC, cache busting`;
+
 export const metadata: Metadata = {
-  title: appTagline,
+  title: { absolute: homeTitle },
   description: appDescription,
   openGraph: openGraph({
-    title: `${appName} — ${appTagline}`,
+    title: homeTitle,
     description: appDescription,
     url: '/',
     images: socialCardPath,

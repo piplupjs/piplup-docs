@@ -8,6 +8,10 @@ export const docs = defineDocs({
     schema: pageSchema.extend({
       // Keeps thin or duplicated pages out of search indexes.
       noindex: z.boolean().default(false),
+      // The <title> and social-card title, written for the query the page should rank for
+      // ("MUI TextField with React Hook Form"). `title` stays the export name, for the H1,
+      // sidebar and breadcrumbs. Keep it under ~52 characters so " | Piplup" still fits.
+      seoTitle: z.string().optional(),
     }),
     postprocess: {
       includeProcessedMarkdown: true,

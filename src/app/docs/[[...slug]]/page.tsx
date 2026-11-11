@@ -93,11 +93,15 @@ export async function generateMetadata(props: PageProps<'/docs/[[...slug]]'>): P
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
+  // A hand-written search title wins; otherwise the export name, disambiguated by its package.
+  const { seoTitle } = page.data;
+  const title = seoTitle ?? `${page.data.title}${packageTitleSuffix(params.slug ?? [])}`;
+
   return {
-    title: `${page.data.title}${packageTitleSuffix(params.slug ?? [])}`,
+    title,
     description: page.data.description,
     openGraph: openGraph({
-      title: page.data.title,
+      title: seoTitle ?? page.data.title,
       description: page.data.description,
       url: page.url,
       images: getPageImage(page).url,
