@@ -117,6 +117,20 @@ export function techArticleJsonLd(page: {
   };
 }
 
+/** From a page's `faq` frontmatter, which is also rendered visibly, as Google requires. */
+export function faqPageJsonLd(faq: ReadonlyArray<{ question: string; answer: string }>) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      // Structured data is plain text, so drop the code markers the visible copy renders.
+      acceptedAnswer: { '@type': 'Answer', text: answer.replaceAll('`', '') },
+    })),
+  };
+}
+
 export function blogPostingJsonLd(post: {
   title: string;
   description?: string;

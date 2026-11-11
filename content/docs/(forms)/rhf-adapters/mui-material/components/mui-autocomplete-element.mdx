@@ -2,7 +2,23 @@
 title: MuiAutocompleteElement
 seoTitle: "MUI Autocomplete with React Hook Form"
 description: "Use MUI Autocomplete with react-hook-form without writing a Controller. MuiAutocompleteElement binds the selected option, validation and error state."
+faq:
+  - question: "How do I use MUI Autocomplete with React Hook Form?"
+    answer: "Render `MuiAutocompleteElement` with `control`, a field `name`, your `options` and a `renderInput` that returns a `TextField`. Spread the `params` onto the TextField: they carry the field's error state, error message and `required` flag along with MUI's usual input props."
+  - question: "What does MuiAutocompleteElement store in the form?"
+    answer: "The selected option itself, so with object options the form holds the whole object. With `multiple` it stores an array of options. When nothing is selected it stores `null`, or an empty array with `multiple`."
+  - question: "How do I store only an option's id?"
+    answer: "Use `transform`: `input` turns the stored id back into its option for the Autocomplete, and `output` receives the selected option and returns its id. The `useMuiAutocompleteAdapter` demo stores a country code this way."
+  - question: "Why does MUI warn that the value isn't one of the options?"
+    answer: "Autocomplete compares options to the value by reference. If your default value is an object built separately from `options`, pass `isOptionEqualToValue` to compare by id, or store ids with `transform` so the default is a plain value."
+  - question: "How do I require at least one choice in a multiple Autocomplete?"
+    answer: "Pass `required`. An empty array fails it, so submitting with no choices shows the `required` message under the input."
 ---
+
+`MuiAutocompleteElement` is MUI's `Autocomplete` connected to React Hook Form. It stores the
+selected option, or an array of options with `multiple`, and passes the field's error state and
+message to the input you render. New to the adapters? Start with
+[Using MUI with React Hook Form](/docs/react-hook-form-mui).
 
 ## Import
 
@@ -25,6 +41,60 @@ import { MuiAutocompleteElement } from "@piplup/rhf-adapters/mui-material";
   ]}
 />
 
+## Errors reach the input through renderInput
+
+Autocomplete renders its input through `renderInput`, so that is where the error goes. The
+`params` the element passes in include `error`, `helperText` and `required` on top of MUI's usual
+input props. Spread them onto your `TextField` and validation messages appear under it:
+
+```tsx
+<MuiAutocompleteElement
+  control={control}
+  name="framework"
+  options={["React", "Vue", "Svelte"]}
+  required
+  messages={{ required: "Choose a framework" }}
+  renderInput={(params) => <TextField {...params} label="Framework" />}
+/>
+```
+
+If you set props on the TextField after the spread, such as your own `helperText`, they replace
+the ones from `params`.
+
+## What gets stored
+
+| Setup | Nothing selected | After a selection |
+| --- | --- | --- |
+| Single | `null` | The option |
+| `multiple` | `[]` | An array of options |
+
+With object options the form holds the whole object, which is often more than an API wants. Use
+`transform` to store just an id: `input` maps the stored id back to its option, and `output`
+receives MUI's change arguments, `(event, option)`, and returns what to store. The
+[`useMuiAutocompleteAdapter` demo](/docs/rhf-adapters/mui-material/hooks/use-mui-autocomplete-adapter)
+stores a country code this way.
+
+If you store objects and your default value isn't the same object instance as the matching entry
+in `options`, pass `isOptionEqualToValue` so MUI can match them, for example by id.
+
+## Multiple selection
+
+```tsx
+<MuiAutocompleteElement
+  control={control}
+  name="tags"
+  multiple
+  options={TAGS}
+  required
+  messages={{ required: "Add at least one tag" }}
+  renderInput={(params) => <TextField {...params} label="Tags" />}
+/>
+```
+
+The default value is `[]` when you don't set one, and a value that isn't an array is treated as
+empty. `required` fails on an empty array, so the message above appears when the user submits
+without picking a tag.
+
 ## Props
 
 <AutoTypeTable
@@ -42,8 +112,13 @@ import { MuiAutocompleteElement } from "@piplup/rhf-adapters/mui-material";
 - Use this component when MUI Autocomplete should behave like an `react-hook-form` controlled field.
 - For custom autocomplete UIs, build on `useMuiAutocompleteAdapter`.
 
+## FAQ
+
+<Faq />
+
 ## See also
 
+- [Using MUI with React Hook Form](/docs/react-hook-form-mui)
 - [useMuiAutocompleteAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-autocomplete-adapter)
 - [useControllerAdapter](/docs/rhf-core/hooks/use-controller-adapter)
 - [Autocomplete](https://mui.com/material-ui/api/autocomplete/)

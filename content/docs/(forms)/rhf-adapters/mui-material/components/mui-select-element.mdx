@@ -2,7 +2,21 @@
 title: MuiSelectElement
 seoTitle: "MUI Select with React Hook Form — MuiSelectElement"
 description: "Use MUI Select with react-hook-form without writing a Controller. MuiSelectElement binds the selected value, validation and error state to the form."
+faq:
+  - question: "How do I use MUI Select with React Hook Form?"
+    answer: "Render `MuiSelectElement` with `control`, a field `name` and your `MenuItem`s as children. It stores the selected item's `value` in the form and marks the Select as invalid when validation fails. Put it in a `FormControl` with an `InputLabel` for the usual MUI label."
+  - question: "Why doesn't MuiSelectElement show an error message?"
+    answer: "MUI's Select has no `helperText` prop, so the element sets the error state but can't render the message. Add `MuiFormHelperTextElement` with the same `name` inside the `FormControl`; it shows the field's error, and with `renderOnError` it renders nothing until there is one."
+  - question: "What default value should a Select field have?"
+    answer: "Use an empty string for a single Select and an empty array for `multiple`. An empty string also fails `required`, so an untouched Select is reported as missing."
+  - question: "How do I validate a multiple Select?"
+    answer: "`required` fails on an empty array. `maxLength` doesn't apply to arrays, so limit the number of choices with a `validate` function in `rules`, as the `useMuiSelectAdapter` demo does."
 ---
+
+`MuiSelectElement` is MUI's `Select` connected to React Hook Form. It stores the selected
+`MenuItem`'s `value`, or an array of values with `multiple`, and sets the Select's error state when
+validation fails. New to the adapters? Start with
+[Using MUI with React Hook Form](/docs/react-hook-form-mui).
 
 ## Import
 
@@ -25,6 +39,70 @@ import { MuiSelectElement } from "@piplup/rhf-adapters/mui-material";
   ]}
 />
 
+## Labels and error messages
+
+MUI's `Select` has no label or helper text of its own; both come from the surrounding
+`FormControl`. The element sets the error state, and
+[`MuiFormHelperTextElement`](/docs/rhf-adapters/mui-material/components/mui-form-helper-text-element)
+renders the message for the same field:
+
+```tsx
+<FormControl fullWidth>
+  <InputLabel id="role-label">Role</InputLabel>
+  <MuiSelectElement
+    control={control}
+    name="role"
+    labelId="role-label"
+    label="Role"
+    required
+    messages={{ required: "Pick a role" }}
+  >
+    <MenuItem value="viewer">Viewer</MenuItem>
+    <MenuItem value="editor">Editor</MenuItem>
+  </MuiSelectElement>
+  <MuiFormHelperTextElement control={control} name="role" renderOnError />
+</FormControl>
+```
+
+With `renderOnError`, the helper text renders nothing until the field has an error. Without it,
+its children show as a hint while the field is valid and the error replaces them, which is how
+`helperText` behaves on a TextField.
+
+Give a single Select a default value of `""`. It counts as empty, so `required` reports an
+untouched Select, and MUI renders it as "nothing selected" instead of warning about an
+out-of-range value.
+
+## Multiple selection
+
+With `multiple`, the field stores an array of the selected values:
+
+```tsx
+<FormControl fullWidth>
+  <InputLabel id="languages-label">Languages</InputLabel>
+  <MuiSelectElement
+    control={control}
+    name="languages"
+    labelId="languages-label"
+    label="Languages"
+    multiple
+    required
+    messages={{ required: "Pick at least one language" }}
+  >
+    <MenuItem value="en">English</MenuItem>
+    <MenuItem value="fr">French</MenuItem>
+  </MuiSelectElement>
+  <MuiFormHelperTextElement control={control} name="languages">
+    Pick every language you speak
+  </MuiFormHelperTextElement>
+</FormControl>
+```
+
+A value that isn't an array, such as a missing default, is shown as no selection. `required`
+fails on an empty array. `maxLength` doesn't apply to arrays, so cap the number of choices with a
+`validate` function in `rules`; the
+[`useMuiSelectAdapter` demo](/docs/rhf-adapters/mui-material/hooks/use-mui-select-adapter) does
+exactly that.
+
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="MuiSelectElementProps" cwd />
@@ -35,9 +113,17 @@ import { MuiSelectElement } from "@piplup/rhf-adapters/mui-material";
 
 ## Notes
 
-- For custom select UIs, build on `useMuiSelectAdapter`.
+- For custom select UIs, build on `useMuiSelectAdapter`. Unlike the element, the hook returns
+  `helperText`, which holds the error message when you pass `composeHelperText`.
+- To store something other than the selected `value`, use `transform`.
+
+## FAQ
+
+<Faq />
 
 ## See also
 
+- [Using MUI with React Hook Form](/docs/react-hook-form-mui)
 - [useMuiSelectAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-select-adapter)
+- [MuiFormHelperTextElement](/docs/rhf-adapters/mui-material/components/mui-form-helper-text-element)
 - [Select](https://mui.com/material-ui/api/select/)

@@ -2,7 +2,23 @@
 title: MuiCheckboxElement
 seoTitle: "MUI Checkbox with React Hook Form"
 description: "Use MUI Checkbox with react-hook-form without writing a Controller. MuiCheckboxElement binds the checked state and validation to a form field."
+faq:
+  - question: "How do I use a MUI Checkbox with React Hook Form?"
+    answer: "Render `MuiCheckboxElement` with `control`, a field `name` and a `value`, usually as the `control` of a `FormControlLabel`. Checking the box adds its `value` to an array in the form; unchecking removes it."
+  - question: "Why does MuiCheckboxElement store an array instead of true or false?"
+    answer: "Several checkboxes can share one field, so each box adds or removes its own `value` in an array. For a single yes/no checkbox, pass `transform={{ output: (_event, checked) => checked }}` and `checked={(value) => value === true}` and the field stores a boolean."
+  - question: "Why does it throw \"value prop is required\"?"
+    answer: "Each checkbox needs a `value` so it knows what to add to the field's array. When the checkbox is the `control` of a `FormControlLabel`, the label's `value` prop is passed down and counts."
+  - question: "How do I make an \"accept the terms\" checkbox required?"
+    answer: "Store a boolean as shown on this page and pass `required`. react-hook-form treats `false` as missing, so submitting with the box unchecked shows the `required` message."
+  - question: "Where does the checkbox's error message go?"
+    answer: "MUI's Checkbox has no helper text, so the element doesn't render one. Put a `MuiFormHelperTextElement` with the same `name` below the checkbox, or the group of checkboxes, to show it."
 ---
+
+`MuiCheckboxElement` is MUI's `Checkbox` connected to React Hook Form. Several checkboxes can share
+one field: each one adds or removes its `value` in an array. With a one-line `transform`, a single
+checkbox stores a boolean instead. New to the adapters? Start with
+[Using MUI with React Hook Form](/docs/react-hook-form-mui).
 
 ## Import
 
@@ -25,6 +41,64 @@ import { MuiCheckboxElement } from "@piplup/rhf-adapters/mui-material";
   ]}
 />
 
+## A group of checkboxes
+
+By default the field holds an array. Give every checkbox the same `name` and its own `value`:
+
+```tsx
+{["cheese", "olives", "basil"].map((topping) => (
+  <FormControlLabel
+    key={topping}
+    label={topping}
+    control={<MuiCheckboxElement control={control} name="toppings" value={topping} />}
+  />
+))}
+```
+
+Checking "cheese" stores `["cheese"]`. Unchecking the last checked box stores `undefined` rather
+than an empty array, which `required` still treats as missing. A box is shown as checked when the
+field's array contains its `value`.
+
+`value` is required. Without one the element throws, because it wouldn't know what to add to the
+array. As the `control` of a `FormControlLabel`, the label's `value` prop is passed down and is
+enough.
+
+## A single boolean checkbox
+
+For a yes/no field, such as accepting terms, store `true` or `false`. `transform.output` receives
+MUI's `(event, checked)` and stores `checked`, and the `checked` prop decides when the box is
+ticked:
+
+```tsx
+<FormControlLabel
+  label="I accept the terms"
+  control={
+    <MuiCheckboxElement
+      control={control}
+      name="terms"
+      value
+      checked={(value) => value === true}
+      transform={{ output: (_event, checked) => checked }}
+      required
+      messages={{ required: "You must accept the terms" }}
+    />
+  }
+/>
+<MuiFormHelperTextElement control={control} name="terms" renderOnError />
+```
+
+React Hook Form treats `false` as missing for `required`, so submitting with the box unchecked
+shows "You must accept the terms". Set `defaultValues` to `{ terms: false }`.
+
+## Showing the error
+
+MUI's `Checkbox` has no helper text, so the element doesn't render an error message.
+[`MuiFormHelperTextElement`](/docs/rhf-adapters/mui-material/components/mui-form-helper-text-element)
+with the same `name` shows it, as in the example above. For a group, put it once after the last
+checkbox; for a labelled group with a legend, wrap them in a `FormControl` with `component="fieldset"`
+as the [`useMuiCheckboxAdapter` demo](/docs/rhf-adapters/mui-material/hooks/use-mui-checkbox-adapter)
+does. That demo also adds a "select all" checkbox with an indeterminate state.
+
 ## Props
 
 <AutoTypeTable
@@ -37,13 +111,19 @@ import { MuiCheckboxElement } from "@piplup/rhf-adapters/mui-material";
 
 > The `ref` is forwarded to the underlying `<Checkbox />` component.
 
-
 ## Notes
 
 - For custom checkbox UIs, build on `useMuiCheckboxAdapter`.
-- `MuiCheckboxElement` always expects the input value to be an array. Use transform.input and transform.output when working with values that are not arrays.
+- `checked` and `indeterminate` take a function of the field's value, so one checkbox can reflect
+  the whole field.
+
+## FAQ
+
+<Faq />
 
 ## See also
 
+- [Using MUI with React Hook Form](/docs/react-hook-form-mui)
 - [useMuiCheckboxAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-checkbox-adapter)
+- [MuiSwitchElement](/docs/rhf-adapters/mui-material/components/mui-switch-element)
 - [Checkbox](https://mui.com/material-ui/api/checkbox/)

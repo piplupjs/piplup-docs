@@ -1,0 +1,233 @@
+---
+title: Using MUI with React Hook Form
+seoTitle: "How to use MUI with React Hook Form"
+description: "Connect MUI TextField, Select, Autocomplete, Checkbox and DatePicker to react-hook-form without a Controller on every field, with validation and error text."
+faq:
+  - question: "Do I need a Controller to use MUI with React Hook Form?"
+    answer: "MUI inputs are controlled components, so react-hook-form's `register` doesn't fit them well and the usual answer is a `Controller` per field. The `Mui*Element` components wrap `useController` for you, so you pass `control` and `name` and skip the `Controller` and its `render` function."
+  - question: "Why does the browser show its own validation popup instead of my error message?"
+    answer: "Elements pass `required` through to the input, which turns on the browser's built-in validation. Add `noValidate` to your `<form>`, or use `FormContainer`, which adds it for you, and react-hook-form's messages show instead."
+  - question: "Can I use zod or yup instead of the validation props?"
+    answer: "Yes. Pass a resolver to `useForm` as usual. Resolver errors land in the same field state the elements read, so the message still shows as the field's helper text. With a resolver, react-hook-form ignores field-level rules, so put all validation in the schema; `required` on an element then only adds the asterisk."
+  - question: "How do I change the default error messages for every field?"
+    answer: "Each field takes a `messages` prop for its own rules. To format every error in one place, wrap the form in `FormErrorProvider` with an `errorParser`, or pass `errorParser` to `FormContainer`. A parser from context takes precedence over one passed to a single field."
+  - question: "Does it work with MUI X date pickers?"
+    answer: "Yes. `@piplup/rhf-adapters/mui-x-date-pickers` has an element for every MUI X picker, field, calendar and clock. Picker limits such as `minDate` and `disablePast` also become react-hook-form validation, each with its own message."
+---
+
+MUI's inputs are controlled components, so React Hook Form's `register` doesn't work with
+them directly. The standard fix is a `Controller` around every field, which works but repeats the
+same mapping each time. This guide shows that pattern, then the same form built with
+`@piplup/rhf-adapters`, which does the mapping once per component type.
+
+## The Controller way
+
+Here is one MUI `TextField` connected to React Hook Form with a `Controller`:
+
+```tsx
+<Controller
+  name="email"
+  control={control}
+  rules={{ required: "Enter your email" }}
+  render={({ field, fieldState }) => (
+    <TextField
+      {...field}
+      inputRef={field.ref}
+      label="Email"
+      error={!!fieldState.error}
+      helperText={fieldState.error?.message}
+    />
+  )}
+/>
+```
+
+Every field needs the same four decisions: spread the `field` props, route `ref` to the inner
+input so React Hook Form can focus it on error, turn the error into the `error` flag, and show
+its message as helper text. Select, Autocomplete, Checkbox and the date pickers each need a
+slightly different version of that mapping, because their `onChange` signatures and empty values
+differ.
+
+## The adapter way
+
+The same field with [`MuiTextFieldElement`](/docs/rhf-adapters/mui-material/components/mui-text-field-element):
+
+```tsx
+<MuiTextFieldElement
+  control={control}
+  name="email"
+  label="Email"
+  required
+  messages={{ required: "Enter your email" }}
+/>
+```
+
+The element calls `useController` for you and handles the mapping above. It also accepts
+`required`, `min`, `max`, `minLength`, `maxLength` and `pattern` as props, and turns them into
+React Hook Form rules with readable default messages.
+
+Install the core package and the adapters alongside MUI:
+
+```package-install
+@piplup/rhf-core @piplup/rhf-adapters react-hook-form @mui/material @emotion/react @emotion/styled
+```
+
+The [installation page](/docs/rhf-adapters/mui-material/installation) lists the supported
+versions. The date pickers live in a separate subpath with
+[their own installation page](/docs/rhf-adapters/mui-x-date-pickers/installation).
+
+## A complete form
+
+```tsx
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import {
+  MuiButtonElement,
+  MuiFormHelperTextElement,
+  MuiSelectElement,
+  MuiTextFieldElement,
+} from "@piplup/rhf-adapters/mui-material";
+import { useForm } from "react-hook-form";
+
+type SignUp = { name: string; email: string; role: string };
+
+export function SignUpForm() {
+  const { control, handleSubmit } = useForm<SignUp>({
+    defaultValues: { name: "", email: "", role: "" },
+  });
+
+  return (
+    <form noValidate onSubmit={handleSubmit((values) => console.log(values))}>
+      <MuiTextFieldElement control={control} name="name" label="Name" required />
+      <MuiTextFieldElement control={control} name="email" type="email" label="Email" required />
+      <FormControl fullWidth>
+        <InputLabel id="role-label">Role</InputLabel>
+        <MuiSelectElement control={control} name="role" labelId="role-label" label="Role" required>
+          <MenuItem value="viewer">Viewer</MenuItem>
+          <MenuItem value="editor">Editor</MenuItem>
+        </MuiSelectElement>
+        <MuiFormHelperTextElement control={control} name="role" renderOnError />
+      </FormControl>
+      <MuiButtonElement control={control} type="submit" variant="contained">
+        Sign up
+      </MuiButtonElement>
+    </form>
+  );
+}
+```
+
+Three details in this form are easy to miss:
+
+- **`noValidate` on the form.** `required` is passed through to the input, which turns on the
+  browser's own validation popup. `noValidate` lets React Hook Form's messages show instead.
+- **`type="email"`** adds an email pattern with the message "Please enter an email address." You
+  don't need to write the regular expression yourself.
+- **`MuiFormHelperTextElement` under the Select.** MUI's `Select` has no `helperText` prop, so the
+  Select's error message is rendered by a separate element that reads the same field. With
+  `renderOnError` it renders nothing until there is an error.
+
+### Without useForm: FormContainer
+
+[`FormContainer`](/docs/rhf-core/components/form-container) creates the form, provides it through
+context and adds `noValidate`, so the elements don't need a `control` prop:
+
+```tsx
+import { MuiButtonElement, MuiTextFieldElement } from "@piplup/rhf-adapters/mui-material";
+import { FormContainer } from "@piplup/rhf-core";
+
+export function EmailForm() {
+  return (
+    <FormContainer defaultValues={{ email: "" }} onSubmit={(values) => console.log(values)}>
+      <MuiTextFieldElement name="email" type="email" label="Email" required />
+      <MuiButtonElement type="submit" variant="contained">
+        Save
+      </MuiButtonElement>
+    </FormContainer>
+  );
+}
+```
+
+## Validation
+
+Every element accepts these props and turns them into React Hook Form rules:
+
+| Prop | Rule | Default message |
+| --- | --- | --- |
+| `required` | `required` | Please fill out this field. |
+| `minLength` | `minLength` | Please lengthen this text to *n* characters or more |
+| `maxLength` | `maxLength` | Please shorten this text to *n* characters or less. |
+| `min` | `min` | Value must be *n* or later. |
+| `max` | `max` | Value must be *n* or earlier. |
+| `pattern` | `pattern` | Please match the requested format. |
+
+Override any message with the `messages` prop, for example
+`messages={{ min: "You must be 18 or older" }}`. The `min` and `max` defaults are worded for
+dates, so a custom message reads better on numbers.
+
+For anything else, pass React Hook Form's own `rules`, such as a `validate` function. A rule in
+`rules` wins over the shorthand prop for the same rule.
+
+Schema validation with zod or yup works the usual way, through a resolver on `useForm`. Resolver
+errors land in the same field state, so they show as helper text too. Choose one approach per
+form: with a resolver, React Hook Form ignores field-level rules, including the ones these props
+create.
+
+## Default and empty values
+
+Each element normalizes the empty value its MUI component expects. Set `defaultValues` to match,
+so every field starts controlled:
+
+| Element | Empty value | Stored value |
+| --- | --- | --- |
+| [`MuiTextFieldElement`](/docs/rhf-adapters/mui-material/components/mui-text-field-element) | `""` | The string; with `type="number"`, a number or `null` |
+| [`MuiSelectElement`](/docs/rhf-adapters/mui-material/components/mui-select-element) | `""`, or `[]` with `multiple` | The selected `value`, or an array of them |
+| [`MuiAutocompleteElement`](/docs/rhf-adapters/mui-material/components/mui-autocomplete-element) | `null`, or `[]` with `multiple` | The whole option, or an array of options |
+| [`MuiCheckboxElement`](/docs/rhf-adapters/mui-material/components/mui-checkbox-element) | `[]`; unchecking every box stores `undefined` | An array of the checked boxes' `value`s |
+| [`MuiXDatePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-picker-element) | `null` | A date object from your `LocalizationProvider` adapter |
+
+When the stored shape should differ from what the component shows, use `transform`. For example,
+the [Autocomplete hook demo](/docs/rhf-adapters/mui-material/hooks/use-mui-autocomplete-adapter)
+stores a country code while the input shows the country object. A checkbox can store a boolean
+with a one-line transform, shown on the
+[MuiCheckboxElement page](/docs/rhf-adapters/mui-material/components/mui-checkbox-element#a-single-boolean-checkbox).
+
+## When you need your own component
+
+Every element has a matching hook, such as
+[`useMuiTextFieldAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-text-field-adapter), that
+returns the props instead of rendering. Use the hook when the field needs layout or behaviour the
+element doesn't offer. For a component library that has no adapter yet, build one on
+[`useControllerAdapter`](/docs/rhf-core/hooks/use-controller-adapter) from `@piplup/rhf-core`.
+
+## Every MUI element
+
+- **Text inputs:** [TextField](/docs/rhf-adapters/mui-material/components/mui-text-field-element),
+  [Input](/docs/rhf-adapters/mui-material/components/mui-input-element),
+  [OutlinedInput](/docs/rhf-adapters/mui-material/components/mui-outlined-input-element),
+  [FilledInput](/docs/rhf-adapters/mui-material/components/mui-filled-input-element),
+  [InputBase](/docs/rhf-adapters/mui-material/components/mui-input-base-element)
+- **Choices:** [Select](/docs/rhf-adapters/mui-material/components/mui-select-element),
+  [Autocomplete](/docs/rhf-adapters/mui-material/components/mui-autocomplete-element),
+  [Checkbox](/docs/rhf-adapters/mui-material/components/mui-checkbox-element),
+  [RadioGroup](/docs/rhf-adapters/mui-material/components/mui-radio-group-element),
+  [Radio](/docs/rhf-adapters/mui-material/components/mui-radio-element),
+  [Switch](/docs/rhf-adapters/mui-material/components/mui-switch-element),
+  [Slider](/docs/rhf-adapters/mui-material/components/mui-slider-element),
+  [Rating](/docs/rhf-adapters/mui-material/components/mui-rating-element)
+- **Dates and times:** [DatePicker](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-picker-element),
+  [TimePicker](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-time-picker-element),
+  [DateTimePicker](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-time-picker-element),
+  and [the rest of MUI X](/docs/rhf-adapters/mui-x-date-pickers/installation)
+- **Labels, errors and buttons:** [FormHelperText](/docs/rhf-adapters/mui-material/components/mui-form-helper-text-element),
+  [FormLabel](/docs/rhf-adapters/mui-material/components/mui-form-label-element),
+  [InputLabel](/docs/rhf-adapters/mui-material/components/mui-input-label-element),
+  [Button](/docs/rhf-adapters/mui-material/components/mui-button-element)
+- **MUI community inputs:** [chips](/docs/rhf-adapters/mui-chips-input/components/mui-chips-input-element),
+  [color](/docs/rhf-adapters/mui-color-input/components/mui-color-input-element),
+  [file](/docs/rhf-adapters/mui-file-input/components/mui-file-input-element),
+  [OTP](/docs/rhf-adapters/mui-one-time-password-input/components/mui-otp-input-element),
+  [phone number](/docs/rhf-adapters/mui-tel-input/components/mui-tel-input-element)
+
+## FAQ
+
+<Faq />

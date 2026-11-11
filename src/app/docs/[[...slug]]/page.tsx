@@ -12,7 +12,13 @@ import { getMDXComponents } from '@/components/mdx';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import { gitConfig } from '@/lib/shared';
-import { breadcrumbJsonLd, softwareSourceCodeJsonLd, techArticleJsonLd } from '@/lib/json-ld';
+import {
+  breadcrumbJsonLd,
+  faqPageJsonLd,
+  softwareSourceCodeJsonLd,
+  techArticleJsonLd,
+} from '@/lib/json-ld';
+import { Faq } from '@/components/faq';
 import { openGraph } from '@/lib/open-graph';
 import { packageTitleSuffix, packageForSlugs } from '@/lib/package-meta';
 
@@ -26,6 +32,15 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
 
   const slugs = params.slug ?? [];
   const pkg = packageForSlugs(slugs);
+
+  // Google only accepts FAQ markup for questions the reader can see, so a page with `faq` data must
+  // also render it under a `## FAQ` heading. Fail the build rather than ship hidden markup.
+  const { faq } = page.data;
+  if (faq?.length && !page.data.toc.some((item) => item.url === '#faq')) {
+    throw new Error(
+      `${page.path} has \`faq\` frontmatter but no "## FAQ" heading with <Faq /> under it.`,
+    );
+  }
 
   return (
     <>
@@ -61,6 +76,12 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
           }}
         />
       ) : null}
+      {faq?.length ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(faq)) }}
+        />
+      ) : null}
     <DocsPage toc={page.data.toc} full={page.data.full}>
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
@@ -76,6 +97,7 @@ export default async function Page(props: PageProps<'/docs/[[...slug]]'>) {
           components={getMDXComponents({
             // this allows you to link to other pages with relative file paths
             a: createRelativeLink(source, page),
+            Faq: () => <Faq items={faq} />,
           })}
         />
       </DocsBody>
