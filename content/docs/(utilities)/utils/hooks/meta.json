@@ -5,7 +5,11 @@
     "use-event-callback",
     "use-event-listener",
     "use-fork-ref",
+    "use-id",
     "use-isomorphic-effect",
-    "use-local-storage"
+    "use-local-storage",
+    "use-media-query",
+    "use-prefers-reduced-motion",
+    "use-timeout"
   ]
 }
