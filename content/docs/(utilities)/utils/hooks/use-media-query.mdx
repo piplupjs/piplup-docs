@@ -1,0 +1,87 @@
+---
+title: useMediaQuery
+description: React hook that subscribes to a CSS media query and re-renders when it starts or stops matching.
+---
+
+`useMediaQuery` returns `true` while the document matches a CSS media query, and re-renders the component when that changes. It is built on `useSyncExternalStore`, so every component reading the same query sees the same value in the same render.
+
+```tsx
+import { useMediaQuery } from "@piplup/utils";
+
+function Layout({ children }: { children: React.ReactNode }) {
+  const isWide = useMediaQuery("(min-width: 900px)");
+
+  if (isWide) {
+    return <SidebarLayout>{children}</SidebarLayout>;
+  }
+
+  return <StackedLayout>{children}</StackedLayout>;
+}
+```
+
+The query can be any valid CSS media query, with or without a leading `@media`, so `"@media (min-width: 900px)"` works too.
+
+## Server rendering
+
+`window.matchMedia` doesn't exist on the server, so the hook can't know the real value there. It returns `defaultMatches` (`false` by default) on the server and during hydration, then switches to the real value right after.
+
+- **Pick the likelier default.** If most visitors are on desktop, `useMediaQuery("(min-width: 900px)", { defaultMatches: true })` avoids a layout flip for them.
+- **Resolve it on the server.** Pass `ssrMatchMedia` to answer the query from the request, for example by guessing the device from the user agent.
+- **Client-only components.** If the component never renders on the server, `noSsr: true` reads the real value on the first render and skips the extra render.
+
+<Callout type="warn">
+  Only use `noSsr` in components that are never server-rendered. Otherwise the first client render can disagree with the server HTML and React reports a hydration mismatch.
+</Callout>
+
+## Reading a query once
+
+`matchesQuery` checks a query at call time instead of subscribing to it. Use it in effects and event handlers, where a hook can't run or where the value may have changed since the last render.
+
+```tsx
+import { matchesQuery } from "@piplup/utils";
+
+function openMenu() {
+  if (matchesQuery("(max-width: 599px)")) {
+    openFullScreenSheet();
+  } else {
+    openPopover();
+  }
+}
+```
+
+On the server, `matchesQuery` uses `ssrMatchMedia` when it is passed, and otherwise returns `false`.
+
+## Parameters
+
+<TypeTable type={{
+  query: {
+    description: "CSS media query to watch, with or without a leading `@media`.",
+    type: "string",
+    required: true,
+  },
+  "options.defaultMatches": {
+    description: "Returned on the server and during hydration.",
+    type: "boolean",
+    default: "false",
+  },
+  "options.matchMedia": {
+    description: "Your own `matchMedia`, for example an iframe's `contentWindow.matchMedia`. Pass a stable reference: a new function on every render resubscribes on every render.",
+    type: "typeof window.matchMedia",
+  },
+  "options.noSsr": {
+    description: "Read the real value on the first client render instead of `defaultMatches`.",
+    type: "boolean",
+    default: "false",
+  },
+  "options.ssrMatchMedia": {
+    description: "Resolves the query on the server.",
+    type: "(query: string) => { matches: boolean }",
+    default: "null",
+  },
+}} />
+
+`matchesQuery(query, options)` takes the same `query`, and an `options` object with only `matchMedia` and `ssrMatchMedia`.
+
+## Return value
+
+`boolean`: `true` while the document matches the query.

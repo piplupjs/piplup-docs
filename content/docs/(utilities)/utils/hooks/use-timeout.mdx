@@ -1,0 +1,57 @@
+---
+title: useTimeout
+description: React hook that calls a function once after a delay, with cleanup on unmount.
+---
+
+`useTimeout` calls `callback` once, `delay` milliseconds after the component mounts. The timer is cleared when the component unmounts, so the callback never runs on an unmounted component.
+
+```tsx
+import { useTimeout } from "@piplup/utils";
+
+function Toast({ message, onClose }: { message: string; onClose: () => void }) {
+  useTimeout(onClose, 5000);
+
+  return <div role="status">{message}</div>;
+}
+```
+
+## When it runs
+
+- **Changing `delay`** clears the pending timer and starts a new one with the new delay.
+- **Passing `null`** as `delay` cancels the pending timer. Pass a number again to start a new one.
+- **Changing `callback`** does not restart the timer. When it fires, it calls the latest `callback`, so you don't need to wrap it in `useCallback`.
+- **Server rendering:** nothing runs on the server. The timer starts after the component mounts.
+
+```tsx
+function AutoDismiss({ onClose }: { onClose: () => void }) {
+  const [hovered, setHovered] = React.useState(false);
+
+  // Pause while hovered: null cancels the timer, leaving restarts it.
+  useTimeout(onClose, hovered ? null : 4000);
+
+  return (
+    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      Saved
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<TypeTable type={{
+  callback: {
+    description: "Function to call when the timer fires. The latest one passed is called.",
+    type: "() => void",
+    required: true,
+  },
+  delay: {
+    description: "Milliseconds to wait, or `null` to cancel the timer.",
+    type: "number | null",
+    required: true,
+  },
+}} />
+
+## Return value
+
+`void`

@@ -1,0 +1,46 @@
+---
+title: usePrefersReducedMotion
+description: React hook that reports whether the user asked their OS to reduce motion.
+---
+
+`usePrefersReducedMotion` returns `true` when the user has turned on the "reduce motion" setting in their operating system, and re-renders when they change it. It is [`useMediaQuery`](/docs/utils/hooks/use-media-query) for the `(prefers-reduced-motion: reduce)` query.
+
+```tsx
+import { usePrefersReducedMotion } from "@piplup/utils";
+
+function Hero() {
+  const reduceMotion = usePrefersReducedMotion();
+
+  return <video autoPlay={!reduceMotion} muted loop src="/hero.mp4" />;
+}
+```
+
+## Checking right before an animation
+
+`prefersReducedMotion()` reads the setting at call time. Use it in effects and event handlers, for example just before starting an animation, since the setting can change while the page is open.
+
+```tsx
+import { prefersReducedMotion } from "@piplup/utils";
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+}
+```
+
+## Server rendering
+
+On the server the hook returns `false` (full motion) unless you pass options. It takes the same options as [`useMediaQuery`](/docs/utils/hooks/use-media-query#parameters), so `{ defaultMatches: true }` renders the reduced version until the real setting is known.
+
+## Parameters
+
+<TypeTable type={{
+  options: {
+    description: "Same options as `useMediaQuery`: `defaultMatches`, `matchMedia`, `noSsr` and `ssrMatchMedia`. `prefersReducedMotion()` accepts only `matchMedia` and `ssrMatchMedia`.",
+    type: "UseMediaQueryOptions",
+    default: "{}",
+  },
+}} />
+
+## Return value
+
+`boolean`: `true` when the user prefers reduced motion.

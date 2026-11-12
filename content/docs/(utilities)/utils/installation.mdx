@@ -39,8 +39,15 @@ import {
   useEventCallback,
   useEventListener,
   useForkRef,
+  useId,
   useIsomorphicEffect,
   useLocalStorage,
+  useMediaQuery,
+  usePrefersReducedMotion,
+  useTimeout,
+  // media query helpers
+  matchesQuery,
+  prefersReducedMotion,
 } from "@piplup/utils";
 ```
 
@@ -52,6 +59,8 @@ The bundle starts with a `"use client"` directive, so in the Next.js App Router 
 - `useLocalStorage` starts from its `initialValue` on the server and reads the stored value after hydration.
 - `useIsomorphicEffect` is `useLayoutEffect` in the browser and `useEffect` on the server.
 - `useEventListener` attaches its listener in an effect, so it never touches `window` on the server.
+- `useMediaQuery` and `usePrefersReducedMotion` return their `defaultMatches` option (`false` by default) on the server and during hydration, then the real value.
+- `useTimeout` starts its timer after mounting, so it never runs on the server.
 
 ## Quick example
 
@@ -85,3 +94,4 @@ Writing with `localStorage.setItem` directly does not update hooks in the same t
 - [useLocalStorage](/docs/utils/hooks/use-local-storage)
 - [useEventListener](/docs/utils/hooks/use-event-listener)
 - [useForkRef](/docs/utils/hooks/use-fork-ref)
+- [useMediaQuery](/docs/utils/hooks/use-media-query)
