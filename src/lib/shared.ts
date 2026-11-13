@@ -1,4 +1,11 @@
 export const appName = 'Piplup';
+/**
+ * The name people type into search. "piplupjs" is rare enough that Google autocorrects it to
+ * "piplup" (the Pokémon), so we state it as an alternate name in structured data and in page text.
+ */
+export const appSearchName = 'PiplupJS';
+/** `alternateName` for the WebSite and Organization JSON-LD, which Google's site names read. */
+export const appAlternateNames = [appSearchName, 'piplupjs', 'piplupjs.com'];
 export const appTagline = 'Lightweight, modular React libraries';
 /** The meta description for the home page and the default for others: keep it under 160 characters. */
 export const appDescription =

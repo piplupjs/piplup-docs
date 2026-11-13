@@ -23,7 +23,10 @@ export function InvoiceForm() {
 
 export function CodeSample() {
   return (
-    <section className="mx-auto max-w-3xl px-4 py-12">
+    // `w-full`: the layout is a flex column, so `mx-auto` alone shrink-wraps the section to its
+    // widest child. Here that is the longest code line, which pushes the page wider than a phone
+    // instead of letting the code block scroll.
+    <section className="mx-auto w-full max-w-3xl px-4 py-12">
       <h2 className="text-center text-2xl font-semibold tracking-tight">
         Wired up, not wrapped up
       </h2>

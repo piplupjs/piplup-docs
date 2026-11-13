@@ -1,4 +1,13 @@
-import { appDescription, appName, docsRoute, domain, gitConfig, logoPath, npmOrg } from './shared';
+import {
+  appAlternateNames,
+  appDescription,
+  appName,
+  docsRoute,
+  domain,
+  gitConfig,
+  logoPath,
+  npmOrg,
+} from './shared';
 
 /**
  * Structured data helpers. Every payload is built from our own constants and from page frontmatter
@@ -14,6 +23,7 @@ export function webSiteJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: appName,
+    alternateName: appAlternateNames,
     description: appDescription,
     url: domain,
     publisher: { '@type': 'Organization', name: appName, url: domain },
@@ -33,6 +43,7 @@ export function organizationJsonLd() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: appName,
+    alternateName: appAlternateNames,
     url: domain,
     logo: absolute(logoPath),
     sameAs: [`https://github.com/${gitConfig.user}`, npmOrg],
