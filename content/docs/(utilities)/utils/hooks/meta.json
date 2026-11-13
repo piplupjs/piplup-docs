@@ -2,6 +2,7 @@
   "$schema": "../../../../.source/json-schema/docs.meta.json",
   "title": "Hooks",
   "pages": [
+    "use-countdown",
     "use-event-callback",
     "use-event-listener",
     "use-fork-ref",

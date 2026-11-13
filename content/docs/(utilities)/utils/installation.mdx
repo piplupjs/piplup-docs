@@ -36,6 +36,8 @@ import {
   removeItem,
   setItem,
   // hooks
+  useCountdown,
+  useCountdownValue,
   useEventCallback,
   useEventListener,
   useForkRef,
@@ -48,6 +50,8 @@ import {
   // media query helpers
   matchesQuery,
   prefersReducedMotion,
+  // countdown without React
+  createCountdown,
 } from "@piplup/utils";
 ```
 
@@ -61,6 +65,7 @@ The bundle starts with a `"use client"` directive, so in the Next.js App Router 
 - `useEventListener` attaches its listener in an effect, so it never touches `window` on the server.
 - `useMediaQuery` and `usePrefersReducedMotion` return their `defaultMatches` option (`false` by default) on the server and during hydration, then the real value.
 - `useTimeout` starts its timer after mounting, so it never runs on the server.
+- `useCountdown` renders `from` on the server and on the first client render; `autoStart` starts it after mounting.
 
 ## Quick example
 

@@ -1,0 +1,171 @@
+---
+title: useCountdown
+description: React countdown hook that re-renders only the components that show the count, stays accurate in background tabs, and can count from a server start time.
+---
+
+`useCountdown` creates a countdown and returns a controller for it. It never re-renders the component that calls it. Components that show a value read it with `useCountdownValue`, and re-render only when the value they read changes.
+
+```tsx
+import { useCountdown, useCountdownValue } from "@piplup/utils";
+import type { Countdown } from "@piplup/utils";
+
+function ResendButton({ onResend }: { onResend: () => void }) {
+  const countdown = useCountdown({ from: 30, autoStart: true });
+  // Re-renders once, when the countdown finishes.
+  const canResend = useCountdownValue(countdown, (state) => state.status === "finished");
+
+  return (
+    <button
+      disabled={!canResend}
+      onClick={() => {
+        onResend();
+        countdown.restart();
+      }}
+    >
+      Resend code {!canResend && <Remaining countdown={countdown} />}
+    </button>
+  );
+}
+
+// Re-renders every second, and nothing else does.
+function Remaining({ countdown }: { countdown: Countdown }) {
+  return <>in {useCountdownValue(countdown)}s</>;
+}
+```
+
+Over 30 seconds, `ResendButton` renders twice (on mount and when the countdown finishes) and `Remaining` renders once per second. A hook that returned the count directly would re-render `ResendButton`, and everything inside it, every second.
+
+## Reading values
+
+`useCountdownValue(countdown)` returns the count. Pass a selector to read something else:
+
+```tsx
+const count = useCountdownValue(countdown);
+const status = useCountdownValue(countdown, (state) => state.status);
+const label = useCountdownValue(countdown, (state) => formatSeconds(state.count));
+```
+
+The component re-renders only when the selected value changes, compared with `Object.is`. Return a number, string or boolean where you can. A selector that returns a new object every time still works, but then the component re-renders on every change to the countdown.
+
+To update the page without any React render, for example a large clock, subscribe and write to the DOM yourself:
+
+```tsx
+React.useEffect(
+  () =>
+    countdown.subscribe((state) => {
+      clockRef.current!.textContent = String(state.count);
+    }),
+  [countdown],
+);
+```
+
+## Controlling it
+
+The controller and its methods keep the same identity for the component's lifetime, so you can pass them as props or event handlers directly, for example `onClick={countdown.pause}`.
+
+| Method | What it does |
+| --- | --- |
+| `start()` | Starts from `from` when idle or finished. Resumes when paused. Does nothing while running. |
+| `pause()` | Pauses a running countdown. Resuming continues the current step where it left off. |
+| `reset()` | Stops and goes back to `from`, idle. |
+| `restart()` | Starts again from `from`, counting from now, in a single update. |
+| `getState()` | Returns `{ count, status }` without subscribing, for event handlers. |
+| `subscribe(listener)` | Calls `listener` with the new state on every change. Returns an unsubscribe function. |
+
+`status` is `"idle"`, `"running"`, `"paused"` or `"finished"`.
+
+`onComplete` runs once when the count reaches `to`. It doesn't need `useCallback`: the latest function is called. To loop, call `countdown.restart()` inside it.
+
+## Counting from a known start time
+
+For a one-time code or a session that expires, the countdown should start when the code was sent, not when the page loaded. Pass `startedAt` in epoch milliseconds:
+
+```tsx
+const countdown = useCountdown({ from: 30, autoStart: true, startedAt: codeSentAt });
+```
+
+If the page loads 4 seconds after `codeSentAt`, the countdown starts at 26. If the deadline has already passed, it finishes straight away and calls `onComplete`. `startedAt` is used by the first start after it changes; `restart()` always counts from now.
+
+## Changing the options
+
+Options never reset a running countdown:
+
+- While idle, a new `from` shows straight away.
+- While running or paused, new `from`, `to` and `interval` values apply from the next `start()` or `restart()`.
+
+New options reach the countdown after the next render, so changing `from` and calling `restart()` in the same event handler restarts with the old value. Restart in an effect instead:
+
+```tsx
+const [from, setFrom] = React.useState(30);
+const countdown = useCountdown({ from });
+
+React.useEffect(() => {
+  countdown.restart();
+}, [countdown, from]);
+```
+
+## Accuracy
+
+The count is worked out from the clock, not by counting timer callbacks:
+
+- **Late timers don't add up.** Each step is scheduled for its exact time, so a slow render doesn't push later steps back.
+- **Background tabs:** browsers slow timers down in hidden tabs. When the timer next runs, the count jumps to the right value. `onComplete` can fire late, so check expiry on the server for anything that matters.
+- **Clock changes:** the countdown follows the system clock. If the clock jumps forward, steps are skipped; if it jumps back, the count never goes back up.
+- **`<Activity>`:** in React 19.2 and later, a hidden `<Activity>` stops the timer. Time keeps passing, so the countdown catches up, or finishes, when it's shown again.
+
+## Server rendering
+
+The countdown renders `from` on the server and on the first client render, so hydration matches. `autoStart` starts it after mounting, and nothing runs on the server.
+
+## Without React
+
+`createCountdown` returns the same countdown without any React. It doesn't start until you call `start()`, and `setOptions()` replaces its options:
+
+```ts
+import { createCountdown } from "@piplup/utils";
+
+const countdown = createCountdown({ from: 10, onComplete: () => console.log("done") });
+countdown.subscribe(({ count }) => render(count));
+countdown.start();
+```
+
+## Parameters
+
+<TypeTable type={{
+  from: {
+    description: "Value to count from.",
+    type: "number",
+    required: true,
+  },
+  to: {
+    description: "Value to count to. Counts down when `from` is greater, up when it is smaller. The countdown always ends exactly on `to`.",
+    type: "number",
+    default: "0",
+  },
+  interval: {
+    description: "Milliseconds per step. Must be greater than 0.",
+    type: "number",
+    default: "1000",
+  },
+  autoStart: {
+    description: "Start after the component mounts. Applies once per component.",
+    type: "boolean",
+    default: "false",
+  },
+  startedAt: {
+    description: "Epoch milliseconds the countdown really started at. The first start after it changes skips the time that has already passed.",
+    type: "number",
+  },
+  onComplete: {
+    description: "Called once when the count reaches `to`.",
+    type: "() => void",
+  },
+}} />
+
+`from`, `to`, `interval` and `startedAt` must be finite numbers, and `interval` must be greater than 0. Anything else throws a `TypeError`.
+
+## Return value
+
+`useCountdown` returns a `Countdown` controller: `start`, `pause`, `reset`, `restart`, `getState` and `subscribe`.
+
+`useCountdownValue(countdown, selector?)` returns the selected value, or the count when no selector is passed.
