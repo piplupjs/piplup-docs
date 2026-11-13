@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { appTagline, docsRoute, gitConfig } from '@/lib/shared';
+import { appSearchName, appTagline, docsRoute, gitConfig } from '@/lib/shared';
 
 export function Hero() {
   return (
@@ -12,7 +12,7 @@ export function Hero() {
       <h1 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl">{appTagline}</h1>
 
       <p className="mt-5 text-lg text-fd-muted-foreground text-balance">
-        Small packages that each solve one problem well — React Hook Form adapters for MUI,
+        {appSearchName} is a set of small packages that each solve one problem well — React Hook Form adapters for MUI,
         role-based access control, cache busting — so you install what you need and nothing else.
       </p>
 

@@ -7,6 +7,7 @@ import { Why } from './_components/why';
 import {
   appDescription,
   appName,
+  appSearchName,
   blogRoute,
   docsRoute,
   npmOrg,
@@ -17,9 +18,10 @@ import { organizationJsonLd, webSiteJsonLd } from '@/lib/json-ld';
 
 /**
  * The tagline stays the H1, but nobody searches for "lightweight, modular React libraries", so the
- * <title> names what the packages do. Brand first: this is the page that ranks for "piplup".
+ * <title> names what the packages do. Brand first, as "PiplupJS": that is the query this page can
+ * win, since "piplup" alone belongs to the Pokémon and Google autocorrects "piplupjs" towards it.
  */
-const homeTitle = `${appName}: React Hook Form for MUI, RBAC, cache busting`;
+const homeTitle = `${appSearchName}: React Hook Form for MUI, RBAC, cache busting`;
 
 export const metadata: Metadata = {
   title: { absolute: homeTitle },
