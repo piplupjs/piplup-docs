@@ -10,7 +10,7 @@ Use the hook when the message is part of a custom field component, or when you w
 ## Import
 
 ```tsx
-import { useMuiFormHelperTextAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiFormHelperTextAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ import { useMuiFormHelperTextAdapter } from "@piplup/rhf-adapters/mui-material";
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-material/form-helper-text/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-material/form-helper-text/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/form-helper-text/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/form-helper-text/element.tsx',
     },
   ]}
 />
@@ -36,10 +36,10 @@ The hook reads the field's state by `name` and registers nothing, like [useMuiFo
 
 **Children and the error message.** You pass the normal text as `children`. What comes back as `children` depends on `composeHelperText`:
 
-| `composeHelperText` | Field valid | Field invalid |
-| --- | --- | --- |
-| not set (default) | your `children` | your `children` (only `error` changes) |
-| `true` | your `children` | the error message |
+| `composeHelperText` | Field valid     | Field invalid                          |
+| ------------------- | --------------- | -------------------------------------- |
+| not set (default)   | your `children` | your `children` (only `error` changes) |
+| `true`              | your `children` | the error message                      |
 
 The element always sets `composeHelperText: true`; the hook doesn't. If the error has no message, your `children` are shown.
 
@@ -48,23 +48,16 @@ The element always sets `composeHelperText: true`; the hook doesn't. If the erro
 **Formatting the message.** By default the message is `error.message` when it's a string. Pass `errorParser` to return any React node instead. It receives the field's error object, or `undefined` when there is none.
 
 <Callout type="warn">
-  A parser from [`FormErrorProvider`](/docs/rhf-core/components/form-error-provider) takes priority over the `errorParser` you pass to this hook. Inside a provider, your per-field parser is ignored.
+  A parser from [`FormErrorProvider`](/docs/rhf-core/components/form-error-provider) takes priority
+  over the `errorParser` you pass to this hook. Inside a provider, your per-field parser is ignored.
 </Callout>
 
 **Accessibility.** The hook doesn't link the message to the input. Give `FormHelperText` an `id` and point the input's `aria-describedby` at it, as the demo does.
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiFormHelperTextAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiFormHelperTextAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiFormHelperTextAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiFormHelperTextAdapterReturnType" cwd />

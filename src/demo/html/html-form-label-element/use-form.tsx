@@ -1,63 +1,59 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
 import {
   HtmlFormHelperTextElement,
   HtmlFormLabelElement,
   HtmlInputElement,
-} from "@piplup/rhf-adapters/html";
+} from '@piplup/rhf-adapters/html';
+import { useForm } from 'react-hook-form';
 
 export default function Page() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      email: "",
+      email: '',
     },
   });
 
   return (
     <form
-      noValidate
       onSubmit={handleSubmit((data) => {
         alert(JSON.stringify(data));
       })}
+      noValidate
     >
       <div>
         <HtmlFormLabelElement
-          id="email-label"
-          htmlFor="email"
-          control={control}
-          name="email"
-          className="block"
           style={({ error }) => ({
-            ...(error && { color: "red" }),
+            ...(error && { color: 'red' }),
           })}
+          className="block"
+          control={control}
+          htmlFor="email"
+          id="email-label"
+          name="email"
         >
           Email
         </HtmlFormLabelElement>
         <HtmlInputElement
-          control={control}
-          name="email"
-          required
           messages={{
-            required: "Email is required",
+            required: 'Email is required',
           }}
           aria-describedby="email-help"
-          placeholder="Enter your email address"
           aria-labelledby="email-label"
           className="border px-2 block rounded"
-        />
-        <HtmlFormHelperTextElement
-          id="email-help"
-          name="email"
           control={control}
-        >
+          name="email"
+          placeholder="Enter your email address"
+          required
+        />
+        <HtmlFormHelperTextElement control={control} id="email-help" name="email">
           &quot;e.g. test@gmail.co&quot;
         </HtmlFormHelperTextElement>
       </div>
       <input
+        className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded mt-3"
         type="submit"
         value="Submit"
-        className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded mt-3"
       />
     </form>
   );

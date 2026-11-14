@@ -1,17 +1,17 @@
 ---
 title: Date pickers with React Hook Form
-seoTitle: "React Hook Form date picker with MUI X and Zod"
-description: "Use MUI X date pickers in react-hook-form: set up the picker, load dates from an API, submit them in the right format, validate a date range and use Zod."
+seoTitle: 'React Hook Form date picker with MUI X and Zod'
+description: 'Use MUI X date pickers in react-hook-form: set up the picker, load dates from an API, submit them in the right format, validate a date range and use Zod.'
 faq:
-  - question: "How do I use a date picker with React Hook Form?"
-    answer: "Date pickers are controlled components, so connect them with a `Controller` or an element that wraps one. With MUI X, wrap the form in `LocalizationProvider` with a date adapter such as `AdapterDayjs`, and render `MuiXDatePickerElement` from `@piplup/rhf-adapters/mui-x-date-pickers` with `control` and `name`."
-  - question: "Should I store dates as strings or date objects in the form?"
-    answer: "Store the date object your picker adapter uses, such as a Dayjs object, and use `null` for an empty picker. Convert strings from your API into date objects when you build `defaultValues`, and format dates back into strings when you submit. The picker can then compare and validate dates without parsing."
-  - question: "Why is my date one day off after I submit?"
-    answer: "`toISOString()` converts the picked local midnight to UTC, which falls on the previous day for users east of UTC, such as in Europe or Asia. For a date without a time, send `format(\"YYYY-MM-DD\")` instead. Use `toISOString()` for a date and time that marks an exact moment."
-  - question: "How do I make the end date come after the start date?"
-    answer: "Watch the start date with `useWatch` and pass it, plus one day, as the end picker's `minDate`. Add `rules={{ deps: \"checkOut\" }}` to the start picker so that, once the form has been submitted, the end date revalidates when the start date changes."
-  - question: "How do I validate dates with Zod?"
+  - question: 'How do I use a date picker with React Hook Form?'
+    answer: 'Date pickers are controlled components, so connect them with a `Controller` or an element that wraps one. With MUI X, wrap the form in `LocalizationProvider` with a date adapter such as `AdapterDayjs`, and render `MuiXDatePickerElement` from `@piplup/rhf-adapters/mui-x-date-pickers` with `control` and `name`.'
+  - question: 'Should I store dates as strings or date objects in the form?'
+    answer: 'Store the date object your picker adapter uses, such as a Dayjs object, and use `null` for an empty picker. Convert strings from your API into date objects when you build `defaultValues`, and format dates back into strings when you submit. The picker can then compare and validate dates without parsing.'
+  - question: 'Why is my date one day off after I submit?'
+    answer: '`toISOString()` converts the picked local midnight to UTC, which falls on the previous day for users east of UTC, such as in Europe or Asia. For a date without a time, send `format("YYYY-MM-DD")` instead. Use `toISOString()` for a date and time that marks an exact moment.'
+  - question: 'How do I make the end date come after the start date?'
+    answer: 'Watch the start date with `useWatch` and pass it, plus one day, as the end picker''s `minDate`. Add `rules={{ deps: "checkOut" }}` to the start picker so that, once the form has been submitted, the end date revalidates when the start date changes.'
+  - question: 'How do I validate dates with Zod?'
     answer: "Use `z.custom` with `dayjs.isDayjs(value) && value.isValid()` for each date, then a `.refine` on the object for rules across dates, with `path` set to the field that should show the error. With a resolver, react-hook-form skips field-level rules, so the picker's `minDate` and `disablePast` no longer validate; put those limits in the schema."
 ---
 
@@ -32,11 +32,11 @@ Every MUI X picker needs a `LocalizationProvider` above it, with the adapter for
 library. Put it at the root of your app, or around the form:
 
 ```tsx title="src/appointment-form.tsx"
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiXDatePickerElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import type { Dayjs } from "dayjs";
-import { useForm } from "react-hook-form";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiXDatePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import type { Dayjs } from 'dayjs';
+import { useForm } from 'react-hook-form';
 
 type Appointment = { date: Dayjs | null };
 
@@ -78,7 +78,7 @@ then compare dates for `minDate` and similar limits without parsing strings.
 APIs send dates as strings. Parse them while building `defaultValues`:
 
 ```tsx
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 type ApiBooking = { checkIn: string | null; checkOut: string | null };
 
@@ -102,18 +102,18 @@ Format the dates in the submit handler:
 ```tsx
 const onSubmit = handleSubmit((values) =>
   api.saveBooking({
-    checkIn: values.checkIn?.format("YYYY-MM-DD") ?? null,
-    checkOut: values.checkOut?.format("YYYY-MM-DD") ?? null,
+    checkIn: values.checkIn?.format('YYYY-MM-DD') ?? null,
+    checkOut: values.checkOut?.format('YYYY-MM-DD') ?? null,
   }),
 );
 ```
 
 Choose the format by what the value means:
 
-| The value is | Send | Example |
-| --- | --- | --- |
-| A calendar date, such as a birthday or a check-in day | `format("YYYY-MM-DD")` | `2026-11-20` |
-| An exact moment, such as a meeting start | `toISOString()` | `2026-11-20T09:30:00.000Z` |
+| The value is                                          | Send                   | Example                    |
+| ----------------------------------------------------- | ---------------------- | -------------------------- |
+| A calendar date, such as a birthday or a check-in day | `format("YYYY-MM-DD")` | `2026-11-20`               |
+| An exact moment, such as a meeting start              | `toISOString()`        | `2026-11-20T09:30:00.000Z` |
 
 A date picker returns local midnight of the picked day. `toISOString()` converts that to UTC,
 which is the previous day for users east of UTC, so a calendar date sent that way can arrive a day
@@ -133,9 +133,9 @@ validate the form, so a date typed by hand outside the range fails on submit wit
   required
   disableFuture
   messages={{
-    required: "Enter your date of birth",
+    required: 'Enter your date of birth',
     disableFuture: "Date of birth can't be in the future",
-    invalidDate: "Enter a date such as 05/31/1990",
+    invalidDate: 'Enter a date such as 05/31/1990',
   }}
 />
 ```
@@ -152,8 +152,8 @@ book, then move the check-in past the check-out:
 <Demo
   tabs={[
     {
-      label: "Booking",
-      path: "demo/guides/date-range-booking.tsx",
+      label: 'Booking',
+      path: 'demo/guides/date-range-booking.tsx',
     },
   ]}
 />
@@ -177,8 +177,8 @@ With a schema, the date rules live next to the rest of your validation. `z.custo
 valid Dayjs object, and a `.refine` on the object compares the two dates:
 
 ```tsx title="src/booking-schema.ts"
-import dayjs, { type Dayjs } from "dayjs";
-import { z } from "zod";
+import dayjs, { type Dayjs } from 'dayjs';
+import { z } from 'zod';
 
 const date = (message: string) =>
   z
@@ -187,15 +187,15 @@ const date = (message: string) =>
 
 export const bookingSchema = z
   .object({
-    checkIn: date("Pick a check-in date").refine(
-      (value) => !value.isBefore(dayjs(), "day"),
+    checkIn: date('Pick a check-in date').refine(
+      (value) => !value.isBefore(dayjs(), 'day'),
       "Check-in can't be in the past",
     ),
-    checkOut: date("Pick a check-out date"),
+    checkOut: date('Pick a check-out date'),
   })
-  .refine((values) => values.checkOut.isAfter(values.checkIn, "day"), {
-    path: ["checkOut"],
-    message: "Check-out must be after check-in",
+  .refine((values) => values.checkOut.isAfter(values.checkIn, 'day'), {
+    path: ['checkOut'],
+    message: 'Check-out must be after check-in',
   });
 ```
 
@@ -203,7 +203,7 @@ The `transform` makes the parsed type `Dayjs` while the form's type still allows
 types to `useForm`, and the submit handler gets dates that are never `null`:
 
 ```tsx
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const { control, handleSubmit } = useForm<
   z.input<typeof bookingSchema>,

@@ -10,7 +10,7 @@ Use the element for one-off fields. Reach for the hook when you write your own `
 ## Import
 
 ```tsx
-import { useNumberFormatBaseAdapter } from "@piplup/rhf-adapters/react-number-format";
+import { useNumberFormatBaseAdapter } from '@piplup/rhf-adapters/react-number-format';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `CardExpiryField` formats digits as `MM/YY`, renders a `TextField`, and rej
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/react-number-format/number-format-base/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/react-number-format/number-format-base/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/number-format-base/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/number-format-base/element.tsx',
     },
   ]}
 />
@@ -40,12 +40,12 @@ To store something else, pass `transform.output`. It receives the same arguments
 
 **Validation.** All rules apply to the stored value, not to what the user sees:
 
-| Prop | Checks | Default message |
-| --- | --- | --- |
-| `required` | value is not empty | Please fill out this field. |
-| `minLength` / `maxLength` | length of the stored string | Please lengthen this text to *n* characters or more / Please shorten this text to *n* characters or less. |
-| `pattern` | stored string matches | Please match the requested format. |
-| `min` / `max` | stored value as a number | Value must be *n* or later. / Value must be *n* or earlier. |
+| Prop                      | Checks                      | Default message                                                                                           |
+| ------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `required`                | value is not empty          | Please fill out this field.                                                                               |
+| `minLength` / `maxLength` | length of the stored string | Please lengthen this text to _n_ characters or more / Please shorten this text to _n_ characters or less. |
+| `pattern`                 | stored string matches       | Please match the requested format.                                                                        |
+| `min` / `max`             | stored value as a number    | Value must be _n_ or later. / Value must be _n_ or earlier.                                               |
 
 Override any of them through `messages`. For checks that span parts of the value, like the expiry date above, use `rules.validate`.
 

@@ -1,44 +1,46 @@
-"use client";
+'use client';
 
-import { type ChangeEvent, useId } from "react";
-import Stack from "@mui/material/Stack";
-import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
-import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
+import * as React from 'react';
+
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import Stack from '@mui/material/Stack';
 import {
   MuiButtonElement,
   useMuiInputAdapterProps,
   useMuiInputLabelAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+} from '@piplup/rhf-adapters/mui-material';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = { promoCode: string };
 
 // The floating label turns red when the promo code is invalid. The label
 // hook does not register anything; it only reads the field's error.
 function PromoCodeField({ control }: { control: Control<FormValues> }) {
-  const id = useId();
+  const id = React.useId();
 
-  const { helperText: _labelHelperText, ...label } = useMuiInputLabelAdapter<
+  const { helperText: labelHelperText, ...label } = useMuiInputLabelAdapter<
     FormValues,
-    "promoCode",
+    'promoCode',
     HTMLLabelElement
   >({
     control,
-    name: "promoCode",
+    name: 'promoCode',
   });
 
-  const { ref, helperText, ...input } = useMuiInputAdapterProps({
-    control,
-    name: "promoCode",
-    pattern: /^[A-Z]{4}-\d{4}$/,
+  const { helperText, ref, ...input } = useMuiInputAdapterProps({
     composeHelperText: true,
-    helperText: "Optional, e.g. SAVE-2024",
-    messages: { pattern: "Codes look like SAVE-2024" },
+    control,
+    helperText: 'Optional, e.g. SAVE-2024',
+    messages: { pattern: 'Codes look like SAVE-2024' },
+    name: 'promoCode',
+    pattern: /^[A-Z]{4}-\d{4}$/,
     transform: {
-      output: (event: ChangeEvent<HTMLInputElement>) =>
-        event.target.value.toUpperCase(),
+      output: (event: React.ChangeEvent<HTMLInputElement>) => event.target.value.toUpperCase(),
     },
   });
 
@@ -55,20 +57,15 @@ function PromoCodeField({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { promoCode: "" },
+    defaultValues: { promoCode: '' },
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <PromoCodeField control={control} />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Apply
           </MuiButtonElement>
         </div>

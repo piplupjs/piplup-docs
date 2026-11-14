@@ -4,7 +4,7 @@ description: A cross-platform effect hook aliasing `useLayoutEffect` on the clie
 ---
 
 ```tsx
-import { useIsomorphicEffect } from "@piplup/utils";
+import { useIsomorphicEffect } from '@piplup/utils';
 
 function Component() {
   useIsomorphicEffect(() => {
@@ -17,24 +17,22 @@ function Component() {
 
 ## Props
 
-<TypeTable type={{
-  effect: {
-    description: (
-      <>
-        Effect callback that runs like `useLayoutEffect` on the client and
-        `useEffect` on the server (no-op for layout semantics server-side).
-      </>
-    ),
-    type: "() => void | (() => void)",
-    required: true,
-  },
-  deps: {
-    description: (
-      <>
-        Dependency array controlling when the effect re-runs.
-      </>
-    ),
-    type: "any[]",
-    required: false,
-  },
-}} />
+<TypeTable
+  type={{
+    effect: {
+      description: (
+        <>
+          Effect callback that runs like `useLayoutEffect` on the client and `useEffect` on the
+          server (no-op for layout semantics server-side).
+        </>
+      ),
+      type: '() => void | (() => void)',
+      required: true,
+    },
+    deps: {
+      description: <>Dependency array controlling when the effect re-runs.</>,
+      type: 'any[]',
+      required: false,
+    },
+  }}
+/>

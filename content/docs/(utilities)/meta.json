@@ -4,8 +4,5 @@
   "description": "Helpers and hooks the other packages are built on",
   "icon": "Wrench",
   "root": true,
-  "pages": [
-    "utilities",
-    "utils"
-  ]
+  "pages": ["utilities", "utils"]
 }

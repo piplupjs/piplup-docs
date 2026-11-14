@@ -1,40 +1,40 @@
-"use client";
+'use client';
 
-import { useId } from "react";
-import Stack from "@mui/material/Stack";
-import InputBase from "@mui/material/InputBase";
-import Typography from "@mui/material/Typography";
-import {
-  MuiButtonElement,
-  useMuiInputBaseAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+import * as React from 'react';
 
-type FormValues = { seats: number | null };
+import InputBase from '@mui/material/InputBase';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { MuiButtonElement, useMuiInputBaseAdapter } from '@piplup/rhf-adapters/mui-material';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
+
+type FormValues = { seats: null | number };
 
 // A borderless number field. The form stores a number (or null when empty),
 // and the hook adds min/max rules with custom messages.
 function SeatsField({ control }: { control: Control<FormValues> }) {
-  const id = useId();
-  const { ref, helperText, error, ...adapter } = useMuiInputBaseAdapter({
-    control,
-    name: "seats",
-    type: "number",
-    required: true,
-    min: 1,
-    max: 8,
+  const id = React.useId();
+  const { error, helperText, ref, ...adapter } = useMuiInputBaseAdapter({
     composeHelperText: true,
-    helperText: "Between 1 and 8 seats per booking",
+    control,
+    helperText: 'Between 1 and 8 seats per booking',
+    max: 8,
     messages: {
-      required: "How many seats do you need?",
-      min: "Book at least one seat",
       max: (max) => `Groups larger than ${max} need to call us`,
+      min: 'Book at least one seat',
+      required: 'How many seats do you need?',
     },
+    min: 1,
+    name: 'seats',
+    required: true,
     transform: {
       // An empty number field is stored as null. Give the input an empty
       // string instead so it stays controlled.
-      input: (value) => value ?? "",
+      input: (value) => value ?? '',
     },
+    type: 'number',
   });
 
   return (
@@ -44,21 +44,21 @@ function SeatsField({ control }: { control: Control<FormValues> }) {
       </Typography>
       <InputBase
         {...adapter}
-        id={id}
-        error={error}
-        inputRef={ref}
-        slotProps={{ input: { min: 1, max: 8 } }}
         sx={{
+          bgcolor: 'action.hover',
+          borderRadius: 1,
+          maxWidth: 200,
+          outline: error ? '2px solid' : 'none',
+          outlineColor: 'error.main',
           px: 1.5,
           py: 0.5,
-          borderRadius: 1,
-          bgcolor: "action.hover",
-          maxWidth: 200,
-          outline: error ? "2px solid" : "none",
-          outlineColor: "error.main",
         }}
+        error={error}
+        id={id}
+        inputRef={ref}
+        slotProps={{ input: { max: 8, min: 1 } }}
       />
-      <Typography variant="caption" color={error ? "error" : "text.secondary"}>
+      <Typography color={error ? 'error' : 'text.secondary'} variant="caption">
         {helperText}
       </Typography>
     </Stack>
@@ -71,16 +71,11 @@ export default function Page() {
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <SeatsField control={control} />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Book
           </MuiButtonElement>
         </div>

@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { HtmlInputElement } from '@piplup/rhf-adapters/html';
+import { useForm } from 'react-hook-form';
 
 export default function Page() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      myWeek: "",
+      myWeek: '',
     },
   });
 
   return (
     <form
-      noValidate
       onSubmit={handleSubmit((data) => {
         alert(JSON.stringify(data, null, 2));
       })}
+      noValidate
     >
-      <HtmlInputElement name="myWeek" type="week" control={control} />
+      <HtmlInputElement control={control} name="myWeek" type="week" />
     </form>
   );
 }

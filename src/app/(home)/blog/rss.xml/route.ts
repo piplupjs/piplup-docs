@@ -1,5 +1,5 @@
-import { getSortedPosts } from '@/lib/source';
 import { appName, appDescription, blogRoute, domain } from '@/lib/shared';
+import { getSortedPosts } from '@/lib/source';
 
 export const revalidate = false;
 
@@ -15,7 +15,7 @@ function escape(value: string): string {
 
 export function GET(): Response {
   const posts = getSortedPosts();
-  const self = `${domain}${blogRoute}/rss.xml`;
+  const feedUrl = `${domain}${blogRoute}/rss.xml`;
 
   const items = posts
     .map((post) => {
@@ -39,7 +39,7 @@ export function GET(): Response {
     <link>${domain}${blogRoute}</link>
     <description>${escape(appDescription)}</description>
     <language>en</language>
-    <atom:link href="${self}" rel="self" type="application/rss+xml" />
+    <atom:link href="${feedUrl}" rel="self" type="application/rss+xml" />
 ${items}
   </channel>
 </rss>
@@ -47,8 +47,8 @@ ${items}
 
   return new Response(xml, {
     headers: {
-      'Content-Type': 'application/rss+xml; charset=utf-8',
       'Cache-Control': 'public, max-age=3600',
+      'Content-Type': 'application/rss+xml; charset=utf-8',
     },
   });
 }

@@ -1,7 +1,7 @@
 ---
 title: MuiColorInputElement
-seoTitle: "MUI Color Input with React Hook Form"
-description: "Use mui-color-input with react-hook-form: MuiColorInputElement stores the color as a string in the format you choose, with validation."
+seoTitle: 'MUI Color Input with React Hook Form'
+description: 'Use mui-color-input with react-hook-form: MuiColorInputElement stores the color as a string in the format you choose, with validation.'
 ---
 
 `MuiColorInputElement` renders `MuiColorInput` from `mui-color-input` and stores the selected color in React Hook Form as a string. It accepts all `MuiColorInput` props, such as `format`, `isAlphaHidden` and `fallbackValue`. To build your own color field, use [`useMuiColorInputAdapter`](/docs/rhf-adapters/mui-color-input/hooks/use-mui-color-input-adapter).
@@ -9,15 +9,15 @@ description: "Use mui-color-input with react-hook-form: MuiColorInputElement sto
 ## Import
 
 ```tsx
-import { MuiColorInputElement } from "@piplup/rhf-adapters/mui-color-input";
+import { MuiColorInputElement } from '@piplup/rhf-adapters/mui-color-input';
 ```
 
 ## Usage
 
 <Demo
   tabs={[
-    { label: "useForm", path: "demo/adapters/mui-color-input/use-form.tsx" },
-    { label: "FormContainer", path: "demo/adapters/mui-color-input/form-container.tsx" },
+    { label: 'useForm', path: 'demo/adapters/mui-color-input/use-form.tsx' },
+    { label: 'FormContainer', path: 'demo/adapters/mui-color-input/form-container.tsx' },
   ]}
 />
 
@@ -28,7 +28,7 @@ The element stores whatever is in the text box, valid or not. There are two ways
 - **Validate it.** Add `rules.validate` with `matchIsValidColor` from `mui-color-input`, as on the Background field below. Type `#12` and submit.
 - **Replace it.** Set `fallbackValue`. When the input loses focus with invalid text, the component swaps in the fallback and stores it, as on the Border field. Type `xyz` and tab away.
 
-<Demo tabs={[{ label: "Validation", path: "demo/adapters/mui-color-input/validation.tsx" }]} />
+<Demo tabs={[{ label: 'Validation', path: 'demo/adapters/mui-color-input/validation.tsx' }]} />
 
 ## How it works
 

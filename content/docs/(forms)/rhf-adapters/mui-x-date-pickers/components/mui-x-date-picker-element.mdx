@@ -1,18 +1,18 @@
 ---
 title: MuiXDatePickerElement
-seoTitle: "MUI X DatePicker with React Hook Form"
-description: "Use the MUI X DatePicker with react-hook-form. MuiXDatePickerElement binds the picked date and its validation to a form field, no Controller needed."
+seoTitle: 'MUI X DatePicker with React Hook Form'
+description: 'Use the MUI X DatePicker with react-hook-form. MuiXDatePickerElement binds the picked date and its validation to a form field, no Controller needed.'
 faq:
-  - question: "How do I use the MUI X DatePicker with React Hook Form?"
+  - question: 'How do I use the MUI X DatePicker with React Hook Form?'
     answer: "Wrap the form in MUI X's `LocalizationProvider` with a date adapter such as `AdapterDayjs`, then render `MuiXDatePickerElement` with `control` and a field `name`. The picked date is stored in the form, and validation errors show as the picker's helper text."
-  - question: "What type is the date stored in the form?"
-    answer: "A date object from the adapter you gave `LocalizationProvider`: a Dayjs object with `AdapterDayjs`, a `Date` with `AdapterDateFns`, and so on. An empty picker stores `null`. Format it when you submit, for example `values.date?.format(\"YYYY-MM-DD\")` with Dayjs."
-  - question: "Do minDate, maxDate and disablePast validate the form?"
-    answer: "Yes. Besides limiting what the user can pick, they become react-hook-form validation, so a date typed outside the range fails on submit with its own message, such as \"Past date is not allowed\". Change the messages with the `messages` prop."
-  - question: "How do I make the end date come after the start date?"
+  - question: 'What type is the date stored in the form?'
+    answer: 'A date object from the adapter you gave `LocalizationProvider`: a Dayjs object with `AdapterDayjs`, a `Date` with `AdapterDateFns`, and so on. An empty picker stores `null`. Format it when you submit, for example `values.date?.format("YYYY-MM-DD")` with Dayjs.'
+  - question: 'Do minDate, maxDate and disablePast validate the form?'
+    answer: 'Yes. Besides limiting what the user can pick, they become react-hook-form validation, so a date typed outside the range fails on submit with its own message, such as "Past date is not allowed". Change the messages with the `messages` prop.'
+  - question: 'How do I make the end date come after the start date?'
     answer: "Watch the start date and pass it as the end picker's `minDate`, with a `messages.minDate` of your own. The picker then greys out earlier days, and an earlier date typed by hand fails validation with your message."
-  - question: "What happens when the user types an invalid date?"
-    answer: "The field fails validation with \"Date is not a valid date\", which you can change with `messages.invalidDate`. An empty picker isn't invalid; use `required` to make the date mandatory."
+  - question: 'What happens when the user types an invalid date?'
+    answer: 'The field fails validation with "Date is not a valid date", which you can change with `messages.invalidDate`. An empty picker isn''t invalid; use `required` to make the date mandatory.'
 ---
 
 `MuiXDatePickerElement` is the MUI X `DatePicker` connected to React Hook Form. It stores the
@@ -23,7 +23,7 @@ adapters? Start with [Using MUI with React Hook Form](/docs/react-hook-form-mui)
 ## Import
 
 ```tsx
-import { MuiXDatePickerElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { MuiXDatePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -31,12 +31,12 @@ import { MuiXDatePickerElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
 <Demo
   tabs={[
     {
-      label: "useForm",
-      path: "demo/adapters/mui-x-date-pickers/date-picker/use-form.tsx",
+      label: 'useForm',
+      path: 'demo/adapters/mui-x-date-pickers/date-picker/use-form.tsx',
     },
     {
-      label: "FormContainer",
-      path: "demo/adapters/mui-x-date-pickers/date-picker/form-container.tsx",
+      label: 'FormContainer',
+      path: 'demo/adapters/mui-x-date-pickers/date-picker/form-container.tsx',
     },
   ]}
 />
@@ -60,11 +60,11 @@ validation. A date typed by hand outside the range fails on submit with its own 
 booking form requires a check-in date that isn't in the past, and a check-out after it:
 
 ```tsx
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiXDatePickerElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import type { Dayjs } from "dayjs";
-import { useForm } from "react-hook-form";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiXDatePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import type { Dayjs } from 'dayjs';
+import { useForm } from 'react-hook-form';
 
 type Booking = { checkIn: Dayjs | null; checkOut: Dayjs | null };
 
@@ -72,7 +72,7 @@ export function BookingForm() {
   const { control, handleSubmit, watch } = useForm<Booking>({
     defaultValues: { checkIn: null, checkOut: null },
   });
-  const checkIn = watch("checkIn");
+  const checkIn = watch('checkIn');
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -80,8 +80,8 @@ export function BookingForm() {
         noValidate
         onSubmit={handleSubmit((values) =>
           console.log({
-            checkIn: values.checkIn?.format("YYYY-MM-DD"),
-            checkOut: values.checkOut?.format("YYYY-MM-DD"),
+            checkIn: values.checkIn?.format('YYYY-MM-DD'),
+            checkOut: values.checkOut?.format('YYYY-MM-DD'),
           }),
         )}
       >
@@ -92,7 +92,7 @@ export function BookingForm() {
           required
           disablePast
           messages={{
-            required: "Pick a check-in date",
+            required: 'Pick a check-in date',
             disablePast: "Check-in can't be in the past",
           }}
         />
@@ -102,7 +102,7 @@ export function BookingForm() {
           label="Check-out"
           required
           minDate={checkIn ?? undefined}
-          messages={{ minDate: "Check-out must be after check-in" }}
+          messages={{ minDate: 'Check-out must be after check-in' }}
         />
       </form>
     </LocalizationProvider>
@@ -112,27 +112,23 @@ export function BookingForm() {
 
 Each limit has a default message that `messages` can replace:
 
-| Limit | Default message |
-| --- | --- |
-| `minDate` | Date must be later than the minimum allowed date |
-| `maxDate` | Date should be earlier than the maximum allowed date |
-| `disablePast` | Past date is not allowed |
-| `disableFuture` | Future date is not allowed |
-| `shouldDisableDate` | Date is not allowed |
-| `shouldDisableMonth` | Month is not allowed |
-| `shouldDisableYear` | Year is not allowed |
-| An unparseable typed date | Date is not a valid date (`messages.invalidDate`) |
+| Limit                     | Default message                                      |
+| ------------------------- | ---------------------------------------------------- |
+| `minDate`                 | Date must be later than the minimum allowed date     |
+| `maxDate`                 | Date should be earlier than the maximum allowed date |
+| `disablePast`             | Past date is not allowed                             |
+| `disableFuture`           | Future date is not allowed                           |
+| `shouldDisableDate`       | Date is not allowed                                  |
+| `shouldDisableMonth`      | Month is not allowed                                 |
+| `shouldDisableYear`       | Year is not allowed                                  |
+| An unparseable typed date | Date is not a valid date (`messages.invalidDate`)    |
 
 An empty picker passes these checks, so add `required` when a date is mandatory. Your own
 `rules.validate` functions still run alongside them.
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="MuiXDatePickerElementProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="MuiXDatePickerElementProps" cwd />
 
 `MuiXDatePickerElement` supports all standard props of the MUI X DatePicker component, along with additional adapter-specific props. For a complete list of available DatePicker properties, refer to the MUI X Date Pickers [API documentation](https://mui.com/x/api/date-pickers/date-picker/).
 

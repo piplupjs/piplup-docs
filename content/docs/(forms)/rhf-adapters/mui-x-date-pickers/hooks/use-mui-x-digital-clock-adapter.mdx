@@ -10,7 +10,7 @@ The element shows the list only and drops the error message. Use the hook for sl
 ## Import
 
 ```tsx
-import { useMuiXDigitalClockAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { useMuiXDigitalClockAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `SlotPicker` lists 30-minute slots from 09:00 to 16:30 and hides booked one
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-x-date-pickers/digital-clock/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/digital-clock/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/digital-clock/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/digital-clock/element.tsx',
     },
   ]}
 />
@@ -37,7 +37,9 @@ Validation and default messages are the same as [`useMuiXTimePickerAdapter`](/do
 **`shouldDisableTime` uses the `"hours"` view.** `DigitalClock` has one option per `timeStep` (30 minutes by default), and checks each option with `shouldDisableTime(option, "hours")`, even for options like 13:30. Validation calls the same function with `"hours"` first. So a slot check written for `view === "hours"` both disables the option and produces the `shouldDisableTime-hours` error. Override that key; its default text is "Hour is disabled", which reads oddly for a 13:30 slot.
 
 <Callout type="warn">
-  A check that only returns `true` for `view === "minutes"` does not disable anything in `DigitalClock`, but validation still rejects the value with the `shouldDisableTime-minutes` message. Users can pick a slot that then fails on submit.
+  A check that only returns `true` for `view === "minutes"` does not disable anything in
+  `DigitalClock`, but validation still rejects the value with the `shouldDisableTime-minutes`
+  message. Users can pick a slot that then fails on submit.
 </Callout>
 
 **`skipDisabled`.** With `skipDisabled`, disabled options are hidden instead of greyed out. This is a `DigitalClock` prop and does not change validation: a booked time set through `defaultValues` or `setValue` still fails.

@@ -1,18 +1,15 @@
-"use client";
+'use client';
 
-import { TextField } from "@mui/material";
-import {
-  MuiAutocompleteElement,
-  MuiButtonElement,
-} from "@piplup/rhf-adapters/mui-material";
-import { FormContainer } from "@piplup/rhf-core";
+import { TextField } from '@mui/material';
+import { MuiAutocompleteElement, MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
-  const options = ["React", "Vue", "Svelte"];
+  const options = ['React', 'Vue', 'Svelte'];
 
   return (
     <FormContainer
-      defaultValues={{ framework: "React" }}
+      defaultValues={{ framework: 'React' }}
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <MuiAutocompleteElement
@@ -20,7 +17,7 @@ export default function Page() {
         options={options}
         renderInput={(params) => <TextField {...params} label="Framework" />}
       />
-      <MuiButtonElement type="submit" variant="contained" sx={{ mt: 2 }}>
+      <MuiButtonElement sx={{ mt: 2 }} type="submit" variant="contained">
         Submit
       </MuiButtonElement>
     </FormContainer>

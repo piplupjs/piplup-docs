@@ -1,7 +1,9 @@
-"use client";
+'use client';
 
-import { type Control, useForm } from "react-hook-form";
-import { useFormReset } from "@piplup/rhf-core";
+import { useFormReset } from '@piplup/rhf-core';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FieldValues = {
   firstName: string;
@@ -15,17 +17,17 @@ function ResetButton({ control }: { control?: Control<FieldValues> }) {
 
   return (
     <button
-      type="button"
-      className="border border-black hover:border-black/90 px-4 py-1 rounded"
       onClick={() =>
         reset(
           {
-            firstName: "Taylor",
+            firstName: 'Taylor',
             subscribed: false,
           },
           { keepDirty: false },
         )
       }
+      className="border border-black hover:border-black/90 px-4 py-1 rounded"
+      type="button"
     >
       Reset form
     </button>
@@ -33,43 +35,27 @@ function ResetButton({ control }: { control?: Control<FieldValues> }) {
 }
 
 export default function Page() {
-  const { control, register, handleSubmit } = useForm({
+  const { control, handleSubmit, register } = useForm({
     defaultValues: {
-      firstName: "Taylor",
+      firstName: 'Taylor',
       subscribed: false,
     },
   });
 
   return (
-    <form
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-      noValidate
-    >
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <div>
         <label htmlFor="firstName">First name</label>
-        <input
-          id="firstName"
-          {...register("firstName")}
-          className="border rounded block px-2"
-        />
+        <input id="firstName" {...register('firstName')} className="border rounded block px-2" />
       </div>
 
       <label className="flex flex-row gap-2 items-center">
-        <input
-          type="checkbox"
-          {...register("subscribed")}
-          className="border rounded"
-        />
+        <input type="checkbox" {...register('subscribed')} className="border rounded" />
         Subscribe to updates
       </label>
 
-      <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-        <button
-          type="submit"
-          className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded"
-        >
+      <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+        <button className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded" type="submit">
           Submit
         </button>
         <ResetButton control={control} />

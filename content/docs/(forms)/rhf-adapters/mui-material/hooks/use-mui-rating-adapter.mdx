@@ -10,7 +10,7 @@ Use the element when stars alone are enough. Reach for the hook when the rating 
 ## Import
 
 ```tsx
-import { useMuiRatingAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiRatingAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ A required rating with a label that follows the hovered star. Click the selected
 <Demo
   tabs={[
     {
-      label: "Review score",
-      path: "demo/adapters/mui-material/rating/custom-hook.tsx",
+      label: 'Review score',
+      path: 'demo/adapters/mui-material/rating/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/rating/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/rating/element.tsx',
     },
   ]}
 />
@@ -36,10 +36,10 @@ A required rating with a label that follows the hovered star. Click the selected
 
 **`max` and `min`.** `max` is returned and sets the number of stars, as on `Rating`. Both `max` and `min` also become validation rules:
 
-| Prop | Rule | Default message |
-| --- | --- | --- |
-| `min` | Rating must be at least `min` | Value must be `min` or later. |
-| `max` | Rating must be at most `max` | Value must be `max` or earlier. |
+| Prop  | Rule                          | Default message                 |
+| ----- | ----------------------------- | ------------------------------- |
+| `min` | Rating must be at least `min` | Value must be `min` or later.   |
+| `max` | Rating must be at most `max`  | Value must be `max` or earlier. |
 
 The `max` rule can't fail, since `Rating` doesn't go past `max`. The `min` rule is useful for "at least 2 stars", but the default wording is generic, so set `messages.min`. A `min` of `0` adds no rule, and an empty (`null`) rating passes the `min` rule, so add `required` if a rating must be given. `min` isn't a `Rating` prop; it only affects validation.
 
@@ -48,21 +48,14 @@ The `max` rule can't fail, since `Rating` doesn't go past `max`. The `min` rule 
 **Blur.** The returned `onBlur` marks the field as touched when focus leaves the rating's radio inputs.
 
 <Callout type="warn">
-  `Rating` has no `error` or `helperText` props. Remove them from the returned object before spreading, as the demo and the element do.
+  `Rating` has no `error` or `helperText` props. Remove them from the returned object before
+  spreading, as the demo and the element do.
 </Callout>
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiRatingAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiRatingAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiRatingAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiRatingAdapterReturnType" cwd />

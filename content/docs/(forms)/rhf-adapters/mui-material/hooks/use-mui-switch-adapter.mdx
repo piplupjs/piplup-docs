@@ -10,7 +10,7 @@ The element drops the error state and has no place for a message. Use the hook w
 ## Import
 
 ```tsx
-import { useMuiSwitchAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiSwitchAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ The terms switch must be on to submit. The newsletter switch stores `"subscribed
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-material/switch/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-material/switch/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/switch/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/switch/element.tsx',
     },
   ]}
 />
@@ -36,7 +36,7 @@ The terms switch must be on to submit. The newsletter switch stores `"subscribed
 
 **Storing other values.** `transform.input` maps the stored value to `checked`, and `transform.output` maps the change event to the stored value. Each replaces its default separately, so when the form stores anything other than a boolean, pass both. With only `output`, the default `!!value` still runs, and a stored `"unsubscribed"` shows as on because it's a non-empty string.
 
-**Required.** `required: true` adds a rule with the message "Please fill out this field.", which you can change through `messages.required`. React Hook Form treats `false` as empty for `required`, so a boolean switch must be on to pass. With a transform that stores strings, both strings are non-empty and `required` never fails. Use `rules.validate` in that case, e.g. `` validate: (value) => value === "subscribed" || "Please subscribe" ``.
+**Required.** `required: true` adds a rule with the message "Please fill out this field.", which you can change through `messages.required`. React Hook Form treats `false` as empty for `required`, so a boolean switch must be on to pass. With a transform that stores strings, both strings are non-empty and `required` never fails. Use `rules.validate` in that case, e.g. `validate: (value) => value === "subscribed" || "Please subscribe"`.
 
 The text rules (`min`, `max`, `minLength`, `maxLength`, `pattern`) are accepted but have nothing useful to check on a switch.
 
@@ -46,16 +46,8 @@ The text rules (`min`, `max`, `minLength`, `maxLength`, `pattern`) are accepted 
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiSwitchAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiSwitchAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiSwitchAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiSwitchAdapterReturnType" cwd />

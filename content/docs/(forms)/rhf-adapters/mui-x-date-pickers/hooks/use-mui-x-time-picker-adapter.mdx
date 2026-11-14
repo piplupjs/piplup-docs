@@ -10,7 +10,7 @@ Use the element for most forms. Reach for the hook when you want your own time f
 ## Import
 
 ```tsx
-import { useMuiXTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { useMuiXTimePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `ShiftStartField` only accepts times between 08:00 and 18:00 on the quarter
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-x-date-pickers/time-picker/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/time-picker/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/time-picker/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/time-picker/element.tsx',
     },
   ]}
 />
@@ -40,17 +40,17 @@ The hook must run inside a `LocalizationProvider`, because it reads the date ada
 
 **Validation.** The hook runs MUI X's `validateTime` on every non-empty value. Empty values pass; add `required` to reject them. Checks run in this order and only the first failure is reported:
 
-| Order | Key | Fails when | Default message |
-| --- | --- | --- | --- |
-| 1 | `invalidDate` | the value is not a valid date, e.g. a half-typed time | Date is not a valid date |
-| 2 | `minTime` | the time is before `minTime` | Time is earlier than the minimum allowed time |
-| 3 | `maxTime` | the time is after `maxTime` | Time is later than the maximum allowed time |
-| 4 | `disableFuture` | the value is after now | Future date is not allowed |
-| 5 | `disablePast` | the value is before now | Past date is not allowed |
-| 6 | `shouldDisableTime-hours` | `shouldDisableTime(value, "hours")` returns `true` | Hour is disabled |
-| 7 | `shouldDisableTime-minutes` | `shouldDisableTime(value, "minutes")` returns `true` | Minute is disabled |
-| 8 | `shouldDisableTime-seconds` | `shouldDisableTime(value, "seconds")` returns `true` | Second is disabled |
-| 9 | `minutesStep` | the minutes are not a multiple of `minutesStep` | Minute step is not valid |
+| Order | Key                         | Fails when                                            | Default message                               |
+| ----- | --------------------------- | ----------------------------------------------------- | --------------------------------------------- |
+| 1     | `invalidDate`               | the value is not a valid date, e.g. a half-typed time | Date is not a valid date                      |
+| 2     | `minTime`                   | the time is before `minTime`                          | Time is earlier than the minimum allowed time |
+| 3     | `maxTime`                   | the time is after `maxTime`                           | Time is later than the maximum allowed time   |
+| 4     | `disableFuture`             | the value is after now                                | Future date is not allowed                    |
+| 5     | `disablePast`               | the value is before now                               | Past date is not allowed                      |
+| 6     | `shouldDisableTime-hours`   | `shouldDisableTime(value, "hours")` returns `true`    | Hour is disabled                              |
+| 7     | `shouldDisableTime-minutes` | `shouldDisableTime(value, "minutes")` returns `true`  | Minute is disabled                            |
+| 8     | `shouldDisableTime-seconds` | `shouldDisableTime(value, "seconds")` returns `true`  | Second is disabled                            |
+| 9     | `minutesStep`               | the minutes are not a multiple of `minutesStep`       | Minute step is not valid                      |
 
 `required` uses "Please fill out this field." The messages above are the exact default text.
 
@@ -72,15 +72,15 @@ The hook must run inside a `LocalizationProvider`, because it reads the date ada
 
 The other time hooks use the same validation and messages. They differ in where errors can render and how a field becomes touched:
 
-| Hook | Text field | Errors shown by | Touched on |
-| --- | --- | --- | --- |
-| [`useMuiXDesktopTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-desktop-time-picker-adapter) | yes | `slotProps.textField` | input blur or picker close |
-| [`useMuiXMobileTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-mobile-time-picker-adapter) | yes | `slotProps.textField` | input blur or dialog close |
-| [`useMuiXStaticTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-static-time-picker-adapter) | no | you render them | never |
-| [`useMuiXTimeFieldAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-field-adapter) | yes, no popup | `error` / `helperText` props | input blur |
-| [`useMuiXTimeClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-clock-adapter) | no | you render them | blur inside the clock |
-| [`useMuiXDigitalClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-digital-clock-adapter) | no | you render them | blur inside the clock |
-| [`useMuiXMultiSectionDigitalClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-multi-section-digital-clock-adapter) | no | you render them | blur inside the clock |
+| Hook                                                                                                                                  | Text field    | Errors shown by              | Touched on                 |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---------------------------- | -------------------------- |
+| [`useMuiXDesktopTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-desktop-time-picker-adapter)                | yes           | `slotProps.textField`        | input blur or picker close |
+| [`useMuiXMobileTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-mobile-time-picker-adapter)                  | yes           | `slotProps.textField`        | input blur or dialog close |
+| [`useMuiXStaticTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-static-time-picker-adapter)                  | no            | you render them              | never                      |
+| [`useMuiXTimeFieldAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-field-adapter)                                 | yes, no popup | `error` / `helperText` props | input blur                 |
+| [`useMuiXTimeClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-clock-adapter)                                 | no            | you render them              | blur inside the clock      |
+| [`useMuiXDigitalClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-digital-clock-adapter)                           | no            | you render them              | blur inside the clock      |
+| [`useMuiXMultiSectionDigitalClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-multi-section-digital-clock-adapter) | no            | you render them              | blur inside the clock      |
 
 ## Props
 

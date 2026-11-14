@@ -14,7 +14,7 @@ access inside an event handler.
 ## Import
 
 ```tsx
-import { useAccessControl } from "@piplup/react-acl";
+import { useAccessControl } from '@piplup/react-acl';
 ```
 
 ## Usage
@@ -25,8 +25,8 @@ when it is clicked. The owner holds `post:*`, so every action shows without each
 <Demo
   tabs={[
     {
-      label: "Toolbar",
-      path: "demo/react-acl/use-access-control.tsx",
+      label: 'Toolbar',
+      path: 'demo/react-acl/use-access-control.tsx',
     },
   ]}
 />
@@ -35,11 +35,8 @@ when it is clicked. The owner holds `post:*`, so every action shows without each
 
 ```ts
 type UseAccessControl = () => {
-  can: (
-    permission: Permission | readonly Permission[],
-    matchMode?: "ALL" | "ANY",
-  ) => boolean;
-  hasRole: (role: Role | readonly Role[], matchMode?: "ALL" | "ANY") => boolean;
+  can: (permission: Permission | readonly Permission[], matchMode?: 'ALL' | 'ANY') => boolean;
+  hasRole: (role: Role | readonly Role[], matchMode?: 'ALL' | 'ANY') => boolean;
   loading: boolean;
   principal: AccessPrincipal;
 };
@@ -57,7 +54,7 @@ const { can, loading } = useAccessControl();
 
 if (loading) return <Skeleton />;
 
-return can("invoice:write") ? <EditInvoice /> : <ReadOnlyNotice />;
+return can('invoice:write') ? <EditInvoice /> : <ReadOnlyNotice />;
 ```
 
 Without that guard the read-only notice shows for a moment on first render, before the principal

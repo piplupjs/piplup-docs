@@ -1,36 +1,36 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { HtmlButtonElement, HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { HtmlButtonElement, HtmlInputElement } from '@piplup/rhf-adapters/html';
+import { useForm } from 'react-hook-form';
 
 export default function Page() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      input: "",
+      input: '',
     },
   });
 
   return (
     <form
-      noValidate
       onSubmit={handleSubmit((data) => {
         alert(JSON.stringify(data, null, 2));
       })}
+      noValidate
     >
       <div>
         <HtmlInputElement
+          className="border px-2 block rounded"
+          control={control}
           name="input"
           placeholder="Type text here"
           type="text"
-          control={control}
-          className="border px-2 block rounded"
         />
       </div>
       <div>
         <HtmlButtonElement
+          className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded mt-3"
           control={control}
           type="reset"
-          className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded mt-3"
         >
           Reset
         </HtmlButtonElement>

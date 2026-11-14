@@ -6,7 +6,7 @@ description: React hook that returns an id prop when one is passed, or a generat
 `useId` returns `idProp` when it is passed, and otherwise a unique ID from React's built-in `useId`. Components can accept an `id` prop and still have an ID to wire up `htmlFor` and `aria-*` attributes when it isn't passed.
 
 ```tsx
-import { useId } from "@piplup/utils";
+import { useId } from '@piplup/utils';
 
 function TextField({ id, label, hint }: { id?: string; label: string; hint: string }) {
   const inputId = useId(id);
@@ -30,12 +30,15 @@ React's `useId` is still called when `idProp` is passed, so the hook can be call
 
 ## Parameters
 
-<TypeTable type={{
-  idProp: {
-    description: "ID to return as is. When it is `undefined`, a generated ID is returned instead.",
-    type: "string",
-  },
-}} />
+<TypeTable
+  type={{
+    idProp: {
+      description:
+        'ID to return as is. When it is `undefined`, a generated ID is returned instead.',
+      type: 'string',
+    },
+  }}
+/>
 
 ## Return value
 

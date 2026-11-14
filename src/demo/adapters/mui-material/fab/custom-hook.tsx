@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
-import SendIcon from "@mui/icons-material/Send";
-import Fab from "@mui/material/Fab";
-import Stack from "@mui/material/Stack";
-import {
-  MuiTextFieldElement,
-  useMuiFabAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+import SendIcon from '@mui/icons-material/Send';
+import Fab from '@mui/material/Fab';
+import Stack from '@mui/material/Stack';
+import { MuiTextFieldElement, useMuiFabAdapter } from '@piplup/rhf-adapters/mui-material';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = { message: string };
 
@@ -16,19 +15,15 @@ type FormValues = { message: string };
 // It is disabled only while the submit handler runs.
 function SendFab({ control }: { control: Control<FormValues> }) {
   // Fab has no error or helperText props, so keep them off the DOM.
-  const {
-    error: _error,
-    helperText: _helperText,
-    ...adapter
-  } = useMuiFabAdapter<FormValues, HTMLButtonElement>({
+  const { error, helperText, ...adapter } = useMuiFabAdapter<FormValues, HTMLButtonElement>({
     control,
-    type: "submit",
     disableOnIsSubmitting: true,
     style: ({ error }) => ({ opacity: error ? 0.6 : 1 }),
+    type: 'submit',
   });
 
   return (
-    <Fab variant="extended" color="primary" {...adapter}>
+    <Fab color="primary" variant="extended" {...adapter}>
       <SendIcon sx={{ mr: 1 }} />
       Send
     </Fab>
@@ -37,27 +32,29 @@ function SendFab({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { message: "" },
+    defaultValues: { message: '' },
   });
 
   return (
     <form
-      noValidate
       onSubmit={handleSubmit(async (values) => {
         // Simulate a slow request so the disabled state is visible.
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        await new Promise((resolve) => {
+          setTimeout(resolve, 1500);
+        });
         alert(JSON.stringify(values, null, 2));
       })}
+      noValidate
     >
-      <Stack direction="column" spacing={2} sx={{ alignItems: "flex-start" }}>
+      <Stack direction="column" spacing={2} sx={{ alignItems: 'flex-start' }}>
         <MuiTextFieldElement
           control={control}
-          name="message"
           label="Message"
-          required
-          multiline
           minRows={3}
+          name="message"
           fullWidth
+          multiline
+          required
         />
         <SendFab control={control} />
       </Stack>

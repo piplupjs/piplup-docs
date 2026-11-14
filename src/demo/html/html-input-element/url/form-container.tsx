@@ -1,26 +1,22 @@
-"use client";
+'use client';
 
-import { FormContainer } from "@piplup/rhf-core";
-import { HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { HtmlInputElement } from '@piplup/rhf-adapters/html';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
   return (
     <FormContainer
-      onSubmit={(data) => {
-        alert(JSON.stringify(data, null, 2));
+      defaultValues={{
+        website: '',
       }}
       onError={(errors) => {
         alert(JSON.stringify(errors, null, 2));
       }}
-      defaultValues={{
-        website: "",
+      onSubmit={(data) => {
+        alert(JSON.stringify(data, null, 2));
       }}
     >
-      <HtmlInputElement
-        name="website"
-        placeholder="Type your website url"
-        type="url"
-      />
+      <HtmlInputElement name="website" placeholder="Type your website url" type="url" />
     </FormContainer>
   );
 }

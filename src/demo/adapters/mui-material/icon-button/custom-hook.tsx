@@ -1,28 +1,23 @@
-"use client";
+'use client';
 
-import ClearIcon from "@mui/icons-material/Clear";
-import SearchIcon from "@mui/icons-material/Search";
-import IconButton from "@mui/material/IconButton";
-import Stack from "@mui/material/Stack";
-import {
-  MuiTextFieldElement,
-  useMuiIconButtonAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+import ClearIcon from '@mui/icons-material/Clear';
+import SearchIcon from '@mui/icons-material/Search';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import { MuiTextFieldElement, useMuiIconButtonAdapter } from '@piplup/rhf-adapters/mui-material';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = { query: string };
 
 // Disabled while the form is invalid, e.g. when the query is too short.
 function SearchButton({ control }: { control: Control<FormValues> }) {
   // IconButton has no error or helperText props, so keep them off the DOM.
-  const {
-    error: _error,
-    helperText: _helperText,
-    ...adapter
-  } = useMuiIconButtonAdapter<FormValues, HTMLButtonElement>({
+  const { error, helperText, ...adapter } = useMuiIconButtonAdapter<FormValues, HTMLButtonElement>({
     control,
-    type: "submit",
     disableOnError: true,
+    type: 'submit',
   });
 
   return (
@@ -34,13 +29,9 @@ function SearchButton({ control }: { control: Control<FormValues> }) {
 
 // type="reset" resets the form to its default values.
 function ClearButton({ control }: { control: Control<FormValues> }) {
-  const {
-    error: _error,
-    helperText: _helperText,
-    ...adapter
-  } = useMuiIconButtonAdapter<FormValues, HTMLButtonElement>({
+  const { error, helperText, ...adapter } = useMuiIconButtonAdapter<FormValues, HTMLButtonElement>({
     control,
-    type: "reset",
+    type: 'reset',
   });
 
   return (
@@ -52,25 +43,20 @@ function ClearButton({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    mode: "onChange",
-    defaultValues: { query: "" },
+    defaultValues: { query: '' },
+    mode: 'onChange',
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
-      <Stack direction="row" spacing={1} sx={{ alignItems: "flex-start" }}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
+      <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-start' }}>
         <MuiTextFieldElement
           control={control}
-          name="query"
           label="Search products"
-          size="small"
+          messages={{ minLength: 'Type at least 3 characters' }}
           minLength={3}
-          messages={{ minLength: "Type at least 3 characters" }}
+          name="query"
+          size="small"
         />
         <SearchButton control={control} />
         <ClearButton control={control} />

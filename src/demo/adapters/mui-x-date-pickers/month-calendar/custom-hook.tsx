@@ -1,52 +1,44 @@
-"use client";
+'use client';
 
-import dayjs, { type Dayjs } from "dayjs";
-import FormHelperText from "@mui/material/FormHelperText";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { LocalizationProvider, MonthCalendar } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { useMuiXMonthCalendarAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import { type Control, useForm } from "react-hook-form";
+import FormHelperText from '@mui/material/FormHelperText';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { LocalizationProvider, MonthCalendar } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useMuiXMonthCalendarAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import dayjs from 'dayjs';
+import { useForm } from 'react-hook-form';
+
+import type { Dayjs } from 'dayjs';
+import type { Control } from 'react-hook-form';
 
 type FormValues = { billingStart: Dayjs | null };
 
 // Compare by month, not by day. MonthCalendar stores the 1st of the month when
 // nothing is selected yet, so `disablePast` would reject the current month.
 function isPastMonth(month: Dayjs) {
-  return month.isBefore(dayjs(), "month");
+  return month.isBefore(dayjs(), 'month');
 }
 
 function BillingMonthField({ control }: { control: Control<FormValues> }) {
   // Remove the props MonthCalendar does not accept; it would pass them to its root <div>.
-  const {
-    error,
-    helperText,
-    required: _required,
-    shouldDisableDate: _shouldDisableDate,
-    shouldDisableYear: _shouldDisableYear,
-    ...adapter
-  } = useMuiXMonthCalendarAdapter<
-    Dayjs,
-    FormValues,
-    "billingStart",
-    HTMLDivElement
-  >({
-    control,
-    name: "billingStart",
-    required: true,
-    composeHelperText: true,
-    shouldDisableMonth: isPastMonth,
-    messages: {
-      required: "Choose the first month to bill",
-      shouldDisableMonth: "Billing can't start in a past month",
-    },
-  });
+  const { error, helperText, required, shouldDisableDate, shouldDisableYear, ...adapter } =
+    useMuiXMonthCalendarAdapter<Dayjs, FormValues, 'billingStart', HTMLDivElement>({
+      composeHelperText: true,
+      control,
+      messages: {
+        required: 'Choose the first month to bill',
+        shouldDisableMonth: "Billing can't start in a past month",
+      },
+      name: 'billingStart',
+      required: true,
+      shouldDisableMonth: isPastMonth,
+    });
 
   return (
     <div>
-      <Typography variant="subtitle2" id="billing-start-label">
+      <Typography id="billing-start-label" variant="subtitle2">
         First billing month ({dayjs().year()})
       </Typography>
       <MonthCalendar gridLabelId="billing-start-label" {...adapter} />
@@ -63,15 +55,15 @@ export default function Page() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form
-        noValidate
         onSubmit={handleSubmit((values) =>
-          alert(values.billingStart?.startOf("month").format("YYYY-MM-DD")),
+          alert(values.billingStart?.startOf('month').format('YYYY-MM-DD')),
         )}
+        noValidate
       >
         <Stack direction="column" spacing={2}>
           <BillingMonthField control={control} />
           <div>
-            <MuiButtonElement control={control} variant="contained" type="submit">
+            <MuiButtonElement control={control} type="submit" variant="contained">
               Start subscription
             </MuiButtonElement>
           </div>

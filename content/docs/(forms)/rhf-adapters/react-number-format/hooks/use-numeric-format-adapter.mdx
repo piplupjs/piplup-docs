@@ -10,7 +10,7 @@ Use the element for one-off fields. Reach for the hook when you want a reusable 
 ## Import
 
 ```tsx
-import { useNumericFormatAdapter } from "@piplup/rhf-adapters/react-number-format";
+import { useNumericFormatAdapter } from '@piplup/rhf-adapters/react-number-format';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `BudgetField` shows `$12,500.00`-style input, stores a `number` (or `null` 
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/react-number-format/numeric-format/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/react-number-format/numeric-format/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/numeric-format/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/numeric-format/element.tsx',
     },
   ]}
 />
@@ -38,11 +38,11 @@ This `BudgetField` shows `$12,500.00`-style input, stores a `number` (or `null` 
 
 **Range checks.** `min` and `max` work with both storage styles. React Hook Form converts the stored string to a number before comparing, so `"12500.5"` is checked as `12500.5`. Formatting characters never reach the check.
 
-| Key | Default message |
-| --- | --- |
-| `required` | Please fill out this field. |
-| `min` | Value must be *min* or later. |
-| `max` | Value must be *max* or earlier. |
+| Key        | Default message                 |
+| ---------- | ------------------------------- |
+| `required` | Please fill out this field.     |
+| `min`      | Value must be _min_ or later.   |
+| `max`      | Value must be _max_ or earlier. |
 
 The default `min`/`max` wording is shared with date inputs, so most money fields set their own `messages`. `minLength` and `maxLength` count characters of the stored string (`"12500.5"` is 7), not of the formatted text.
 

@@ -1,9 +1,11 @@
+import * as React from 'react';
+
 import type { Metadata } from 'next';
+
 import Link from 'next/link';
-import { CodeSample } from './_components/code-sample';
-import { Concerns } from './_components/concerns';
-import { Hero } from './_components/hero';
-import { Why } from './_components/why';
+
+import { organizationJsonLd, webSiteJsonLd } from '@/lib/json-ld';
+import { openGraph } from '@/lib/open-graph';
 import {
   appDescription,
   appName,
@@ -13,8 +15,11 @@ import {
   npmOrg,
   socialCardPath,
 } from '@/lib/shared';
-import { openGraph } from '@/lib/open-graph';
-import { organizationJsonLd, webSiteJsonLd } from '@/lib/json-ld';
+
+import { CodeSample } from './_components/code-sample';
+import { Concerns } from './_components/concerns';
+import { Hero } from './_components/hero';
+import { Why } from './_components/why';
 
 /**
  * The tagline stays the H1, but nobody searches for "lightweight, modular React libraries", so the
@@ -24,28 +29,28 @@ import { organizationJsonLd, webSiteJsonLd } from '@/lib/json-ld';
 const homeTitle = `${appSearchName}: React Hook Form for MUI, RBAC, cache busting`;
 
 export const metadata: Metadata = {
-  title: { absolute: homeTitle },
+  alternates: { canonical: '/' },
   description: appDescription,
   openGraph: openGraph({
-    title: homeTitle,
     description: appDescription,
-    url: '/',
     images: socialCardPath,
+    title: homeTitle,
+    url: '/',
   }),
-  alternates: { canonical: '/' },
+  title: { absolute: homeTitle },
 };
 
 export default function Page() {
   return (
-    <>
+    <React.Fragment>
       <script
-        type="application/ld+json"
         // The payload is built from our own constants, never from user input.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd()) }}
+        type="application/ld+json"
       />
       <script
-        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
+        type="application/ld+json"
       />
 
       <Hero />
@@ -62,25 +67,25 @@ export default function Page() {
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link
-            href={docsRoute}
             className="rounded-lg bg-fd-primary px-5 py-2.5 text-sm font-medium text-fd-primary-foreground transition-opacity hover:opacity-90"
+            href={docsRoute}
           >
             Browse the docs
           </Link>
           <Link
-            href={blogRoute}
             className="rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-fd-accent"
+            href={blogRoute}
           >
             Read the blog
           </Link>
           <a
-            href={npmOrg}
             className="rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-fd-accent"
+            href={npmOrg}
           >
             {appName} on npm
           </a>
         </div>
       </section>
-    </>
+    </React.Fragment>
   );
 }

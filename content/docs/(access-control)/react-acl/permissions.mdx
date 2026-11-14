@@ -1,6 +1,6 @@
 ---
 title: Permissions
-seoTitle: "Wildcard permissions and typed permission names"
+seoTitle: 'Wildcard permissions and typed permission names'
 description: How permission names are matched, how wildcard grants work, and how to narrow Permission and Role to your own names.
 ---
 
@@ -17,21 +17,21 @@ server before handing the principal to the provider.
 Permission names are split into segments on `:`. A principal is granted a permission by the bare
 wildcard `*`, by an exact match, or by a wildcard on any **ancestor** segment of what was asked for.
 
-| Granted | Required | Result |
-| --- | --- | --- |
-| `*` | anything | ✅ |
-| `invoice:read` | `invoice:read` | ✅ |
-| `invoice:*` | `invoice:read` | ✅ |
-| `invoice:*` | `invoice:line:edit` | ✅ |
-| `invoice:line:*` | `invoice:line:edit` | ✅ |
-| `invoice:line:*` | `invoice:read` | ❌ |
-| `invoice:line:*` | `invoice:line` | ❌ |
-| `invoice:*` | `invoices:read` | ❌ |
-| `users:*` | `users.read` | ❌ |
+| Granted          | Required            | Result |
+| ---------------- | ------------------- | ------ |
+| `*`              | anything            | ✅     |
+| `invoice:read`   | `invoice:read`      | ✅     |
+| `invoice:*`      | `invoice:read`      | ✅     |
+| `invoice:*`      | `invoice:line:edit` | ✅     |
+| `invoice:line:*` | `invoice:line:edit` | ✅     |
+| `invoice:line:*` | `invoice:read`      | ❌     |
+| `invoice:line:*` | `invoice:line`      | ❌     |
+| `invoice:*`      | `invoices:read`     | ❌     |
+| `users:*`        | `users.read`        | ❌     |
 
 Two of those are worth dwelling on:
 
-- **`invoice:line:*` does not grant `invoice:line`.** A wildcard grants what sits *under* a name, not
+- **`invoice:line:*` does not grant `invoice:line`.** A wildcard grants what sits _under_ a name, not
   the name itself. Grant both if you mean both.
 - **Matching is by segment, not by text.** `invoice:*` does not grant `invoices:read`, and a dot is
   an ordinary character, so `users.read` is granted only by itself or by `*`. If you prefer dotted
@@ -46,12 +46,12 @@ with `roles: ["*"]` does not hold the `admin` role.
 them everywhere, rejecting typos in `Can`, `useAccessControl().can` and the check functions:
 
 ```ts title="src/types/react-acl.d.ts"
-declare module "@piplup/react-acl" {
+declare module '@piplup/react-acl' {
   interface PermissionsDef {
-    "*": never;
-    "invoice:read": never;
-    "invoice:write": never;
-    "report:*": never;
+    '*': never;
+    'invoice:read': never;
+    'invoice:write': never;
+    'report:*': never;
   }
 
   interface RolesDef {
@@ -72,18 +72,18 @@ that lets someone pick permissions to attach to a role. Only `*` counts as a wil
 so declare your own wildcards in `WildcardPermissionsDef` as well:
 
 ```ts title="src/types/react-acl.d.ts"
-declare module "@piplup/react-acl" {
+declare module '@piplup/react-acl' {
   interface WildcardPermissionsDef {
-    "report:*": never;
+    'report:*': never;
   }
 }
 ```
 
 ```ts
-import type { AssignablePermission } from "@piplup/react-acl";
+import type { AssignablePermission } from '@piplup/react-acl';
 
 // "invoice:read" | "invoice:write" — not "*" or "report:*"
-const options: AssignablePermission[] = ["invoice:read", "invoice:write"];
+const options: AssignablePermission[] = ['invoice:read', 'invoice:write'];
 ```
 
 Without that declaration, `AssignablePermission` still includes `report:*`.
@@ -98,11 +98,11 @@ Without that declaration, `AssignablePermission` still includes `report:*`.
 
 The principal type allows `null` and `undefined`, and they mean different things:
 
-| Principal | Meaning | Checks | `Can` renders |
-| --- | --- | --- | --- |
-| `undefined` | not fetched yet | `false` | `loading` |
-| `null` | loaded, anonymous | `false` | `fallback` |
-| `{ … }` | loaded | evaluated | `children` or `fallback` |
+| Principal   | Meaning           | Checks    | `Can` renders            |
+| ----------- | ----------------- | --------- | ------------------------ |
+| `undefined` | not fetched yet   | `false`   | `loading`                |
+| `null`      | loaded, anonymous | `false`   | `fallback`               |
+| `{ … }`     | loaded            | evaluated | `children` or `fallback` |
 
 So an anonymous visitor is denied rather than left waiting. See
 [AccessControlProvider](/docs/react-acl/components/access-control-provider#loading).

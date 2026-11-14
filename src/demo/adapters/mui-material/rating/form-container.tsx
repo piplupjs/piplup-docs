@@ -1,11 +1,8 @@
-"use client";
+'use client';
 
-import Stack from "@mui/material/Stack";
-import {
-  MuiRatingElement,
-  MuiButtonElement,
-} from "@piplup/rhf-adapters/mui-material";
-import { FormContainer } from "@piplup/rhf-core";
+import Stack from '@mui/material/Stack';
+import { MuiRatingElement, MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
   return (
@@ -16,7 +13,9 @@ export default function Page() {
       <Stack direction="column" spacing={2}>
         <MuiRatingElement name="rating" />
         <div>
-          <MuiButtonElement type="submit" variant="contained">Submit</MuiButtonElement>
+          <MuiButtonElement type="submit" variant="contained">
+            Submit
+          </MuiButtonElement>
         </div>
       </Stack>
     </FormContainer>

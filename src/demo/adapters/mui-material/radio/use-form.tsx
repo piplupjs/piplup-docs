@@ -1,32 +1,25 @@
-"use client";
+'use client';
 
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Stack from "@mui/material/Stack";
-import {
-  MuiRadioElement,
-  MuiButtonElement,
-} from "@piplup/rhf-adapters/mui-material";
-import { useForm } from "react-hook-form";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Stack from '@mui/material/Stack';
+import { MuiRadioElement, MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useForm } from 'react-hook-form';
 
 export default function Page() {
   const { control, handleSubmit } = useForm({
-    defaultValues: { choice: "" },
+    defaultValues: { choice: '' },
   });
 
   return (
-    <form
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
         <FormControlLabel
           control={
             <MuiRadioElement
+              checked={(value) => value === 'a'}
+              control={control}
               name="choice"
               value="a"
-              checked={(value) => value === "a"}
-              control={control}
             />
           }
           label="Choice A"
@@ -34,10 +27,10 @@ export default function Page() {
         <FormControlLabel
           control={
             <MuiRadioElement
+              checked={(value) => value === 'b'}
+              control={control}
               name="choice"
               value="b"
-              checked={(value) => value === "b"}
-              control={control}
             />
           }
           label="Choice B"

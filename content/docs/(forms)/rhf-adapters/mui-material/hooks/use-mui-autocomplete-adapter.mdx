@@ -10,7 +10,7 @@ Use the element for most forms. Reach for the hook when you want a reusable fiel
 ## Import
 
 ```tsx
-import { useMuiAutocompleteAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiAutocompleteAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ The options are `{ code, label }` objects, but the form stores only the code (`"
 <Demo
   tabs={[
     {
-      label: "Country field",
-      path: "demo/adapters/mui-material/autocomplete/custom-hook.tsx",
+      label: 'Country field',
+      path: 'demo/adapters/mui-material/autocomplete/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/autocomplete/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/autocomplete/element.tsx',
     },
   ]}
 />
@@ -43,25 +43,22 @@ The options are `{ code, label }` objects, but the form stores only the code (`"
 **Validation.** `required` fails for `null` and for an empty array. React Hook Form's `minLength` and `maxLength` don't apply to arrays, so limit the number of selected options with `rules.validate`.
 
 <Callout type="warn">
-  Your `transform.input` replaces the default one, including the `undefined` → `null` / `[]` handling, so return `null` (or `[]`) yourself when there's no match. Return the same option objects you pass in `options`, or set `isOptionEqualToValue`, so MUI can match the value to an option.
+  Your `transform.input` replaces the default one, including the `undefined` → `null` / `[]`
+  handling, so return `null` (or `[]`) yourself when there's no match. Return the same option
+  objects you pass in `options`, or set `isOptionEqualToValue`, so MUI can match the value to an
+  option.
 </Callout>
 
 <Callout type="warn">
-  `required` is passed to your `TextField`, which puts `required` on the text input. With `multiple`, the text input is usually empty after the user picks options, so the browser's own check blocks submission. Add `noValidate` to the form and let React Hook Form validate instead.
+  `required` is passed to your `TextField`, which puts `required` on the text input. With
+  `multiple`, the text input is usually empty after the user picks options, so the browser's own
+  check blocks submission. Add `noValidate` to the form and let React Hook Form validate instead.
 </Callout>
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiAutocompleteAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiAutocompleteAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiAutocompleteAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiAutocompleteAdapterReturnType" cwd />

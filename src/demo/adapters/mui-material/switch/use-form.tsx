@@ -1,12 +1,9 @@
-"use client";
+'use client';
 
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Stack from "@mui/material/Stack";
-import {
-  MuiSwitchElement,
-  MuiButtonElement,
-} from "@piplup/rhf-adapters/mui-material";
-import { useForm } from "react-hook-form";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Stack from '@mui/material/Stack';
+import { MuiSwitchElement, MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useForm } from 'react-hook-form';
 
 export default function Page() {
   const { control, handleSubmit } = useForm({
@@ -14,18 +11,14 @@ export default function Page() {
   });
 
   return (
-    <form
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
         <FormControlLabel
           control={<MuiSwitchElement control={control} name="newsletter" />}
           label="Newsletter"
         />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Submit
           </MuiButtonElement>
         </div>

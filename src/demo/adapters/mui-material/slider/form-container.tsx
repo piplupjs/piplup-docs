@@ -1,11 +1,8 @@
-"use client";
+'use client';
 
-import Stack from "@mui/material/Stack";
-import {
-  MuiSliderElement,
-  MuiButtonElement,
-} from "@piplup/rhf-adapters/mui-material";
-import { FormContainer } from "@piplup/rhf-core";
+import Stack from '@mui/material/Stack';
+import { MuiSliderElement, MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
   return (

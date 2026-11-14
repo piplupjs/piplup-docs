@@ -1,7 +1,5 @@
 {
   "$schema": "../../../../.source/json-schema/docs.meta.json",
   "title": "Helpers",
-  "pages": [
-    "overview"
-  ]
+  "pages": ["overview"]
 }

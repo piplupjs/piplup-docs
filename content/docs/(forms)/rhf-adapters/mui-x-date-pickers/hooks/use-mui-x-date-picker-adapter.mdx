@@ -10,7 +10,7 @@ Use the element for most forms. Reach for the hook when you want to build your o
 ## Import
 
 ```tsx
-import { useMuiXDatePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { useMuiXDatePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `AppointmentField` only accepts future weekdays and uses its own error mess
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-x-date-pickers/date-picker/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/date-picker/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-picker/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-picker/element.tsx',
     },
   ]}
 />
@@ -40,17 +40,17 @@ The hook must run inside a `LocalizationProvider`, because it reads the date ada
 
 Each failure has a default message, which you can replace through `messages`:
 
-| Key | Default message |
-| --- | --- |
-| `required` | Please fill out this field. |
-| `invalidDate` | Date is not a valid date |
-| `disablePast` | Past date is not allowed |
-| `disableFuture` | Future date is not allowed |
-| `minDate` | Date must be later than the minimum allowed date |
-| `maxDate` | Date should be earlier than the maximum allowed date |
-| `shouldDisableDate` | Date is not allowed |
-| `shouldDisableMonth` | Month is not allowed |
-| `shouldDisableYear` | Year is not allowed |
+| Key                  | Default message                                      |
+| -------------------- | ---------------------------------------------------- |
+| `required`           | Please fill out this field.                          |
+| `invalidDate`        | Date is not a valid date                             |
+| `disablePast`        | Past date is not allowed                             |
+| `disableFuture`      | Future date is not allowed                           |
+| `minDate`            | Date must be later than the minimum allowed date     |
+| `maxDate`            | Date should be earlier than the maximum allowed date |
+| `shouldDisableDate`  | Date is not allowed                                  |
+| `shouldDisableMonth` | Month is not allowed                                 |
+| `shouldDisableYear`  | Year is not allowed                                  |
 
 **Errors and blur.** The returned `slotProps.textField` sets `error` and `helperText` from the field state, and calls React Hook Form's `onBlur` so the field is marked as touched. Your own `slotProps.textField` (an object or a function) is merged in: an error message takes priority over your `helperText`, which shows when the field is valid. Closing the picker also counts as a blur.
 

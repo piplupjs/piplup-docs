@@ -1,38 +1,41 @@
-"use client";
+'use client';
 
-import dayjs, { type Dayjs } from "dayjs";
-import FormHelperText from "@mui/material/FormHelperText";
-import Stack from "@mui/material/Stack";
-import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { useMuiXDateCalendarAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import { type Control, useForm } from "react-hook-form";
+import FormHelperText from '@mui/material/FormHelperText';
+import Stack from '@mui/material/Stack';
+import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useMuiXDateCalendarAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import dayjs from 'dayjs';
+import { useForm } from 'react-hook-form';
+
+import type { Dayjs } from 'dayjs';
+import type { Control } from 'react-hook-form';
 
 type FormValues = { delivery: Dayjs | null };
 
 // DateCalendar has no text field, so this component renders the error itself.
 function DeliveryCalendar({ control }: { control: Control<FormValues> }) {
-  const { error, helperText, required: _required, ...adapter } = useMuiXDateCalendarAdapter<
+  const { error, helperText, required, ...adapter } = useMuiXDateCalendarAdapter<
     Dayjs,
     FormValues,
-    "delivery",
+    'delivery',
     HTMLDivElement
   >({
-    control,
-    name: "delivery",
-    required: true,
     composeHelperText: true,
-    helperText: "We deliver Monday to Saturday.",
+    control,
     disablePast: true,
-    maxDate: dayjs().add(30, "day"),
-    shouldDisableDate: (date) => date.day() === 0,
+    helperText: 'We deliver Monday to Saturday.',
+    maxDate: dayjs().add(30, 'day'),
     messages: {
-      required: "Choose a delivery day",
-      disablePast: "That day has passed. Pick a new one.",
+      disablePast: 'That day has passed. Pick a new one.',
+      maxDate: 'We only schedule 30 days ahead',
+      required: 'Choose a delivery day',
       shouldDisableDate: "We don't deliver on Sundays",
-      maxDate: "We only schedule 30 days ahead",
     },
+    name: 'delivery',
+    required: true,
+    shouldDisableDate: (date) => date.day() === 0,
   });
 
   return (
@@ -46,21 +49,19 @@ function DeliveryCalendar({ control }: { control: Control<FormValues> }) {
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
     // A saved draft from yesterday: the calendar shows it, validation rejects it.
-    defaultValues: { delivery: dayjs().subtract(1, "day") },
+    defaultValues: { delivery: dayjs().subtract(1, 'day') },
   });
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form
+        onSubmit={handleSubmit((values) => alert(values.delivery?.format('dddd, D MMMM YYYY')))}
         noValidate
-        onSubmit={handleSubmit((values) =>
-          alert(values.delivery?.format("dddd, D MMMM YYYY")),
-        )}
       >
         <Stack direction="column" spacing={2}>
           <DeliveryCalendar control={control} />
           <div>
-            <MuiButtonElement control={control} variant="contained" type="submit">
+            <MuiButtonElement control={control} type="submit" variant="contained">
               Schedule delivery
             </MuiButtonElement>
           </div>

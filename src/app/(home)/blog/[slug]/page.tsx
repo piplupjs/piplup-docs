@@ -1,24 +1,29 @@
 import type { Metadata } from 'next';
+
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
+
 import { getMDXComponents } from '@/components/mdx';
-import { blog, getBlogImage } from '@/lib/source';
 import { blogPostingJsonLd } from '@/lib/json-ld';
-import { blogRoute } from '@/lib/shared';
 import { openGraph } from '@/lib/open-graph';
+import { blogRoute } from '@/lib/shared';
+import { blog, getBlogImage } from '@/lib/source';
 
 const dateFormat = new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'long',
   day: 'numeric',
+  month: 'long',
   timeZone: 'UTC',
+  year: 'numeric',
 });
 
 export default async function Page(props: PageProps<'/blog/[slug]'>) {
   const params = await props.params;
   const page = blog.getPage([params.slug]);
-  if (!page) notFound();
+  if (!page) {
+    notFound();
+  }
 
   const MDX = page.data.body;
   const date = new Date(page.data.date);
@@ -26,26 +31,26 @@ export default async function Page(props: PageProps<'/blog/[slug]'>) {
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-16">
       <script
-        type="application/ld+json"
         // Built from this post's own frontmatter, which we author.
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             blogPostingJsonLd({
-              title: page.data.title,
-              description: page.data.description,
               author: page.data.author,
               date,
-              lastModified: page.data.lastModified,
-              url: page.url,
+              description: page.data.description,
               image: getBlogImage(page).url,
+              lastModified: page.data.lastModified,
+              title: page.data.title,
+              url: page.url,
             }),
           ),
         }}
+        type="application/ld+json"
       />
 
       <Link
-        href={blogRoute}
         className="text-sm text-fd-muted-foreground hover:underline underline-offset-4"
+        href={blogRoute}
       >
         ← Blog
       </Link>
@@ -58,13 +63,13 @@ export default async function Page(props: PageProps<'/blog/[slug]'>) {
         <span aria-hidden>·</span>
         <time dateTime={date.toISOString()}>{dateFormat.format(date)}</time>
         {page.data.tags.map((tag) => (
-          <span key={tag} className="rounded-md bg-fd-muted px-2 py-0.5 font-mono text-xs">
+          <span className="rounded-md bg-fd-muted px-2 py-0.5 font-mono text-xs" key={tag}>
             {tag}
           </span>
         ))}
       </div>
 
-      <InlineTOC items={page.data.toc} className="mt-8" />
+      <InlineTOC className="mt-8" items={page.data.toc} />
 
       <div className="prose mt-8">
         <MDX components={getMDXComponents()} />
@@ -80,24 +85,26 @@ export function generateStaticParams() {
 export async function generateMetadata(props: PageProps<'/blog/[slug]'>): Promise<Metadata> {
   const params = await props.params;
   const page = blog.getPage([params.slug]);
-  if (!page) notFound();
+  if (!page) {
+    notFound();
+  }
 
   const image = getBlogImage(page).url;
 
   return {
-    title: page.data.title,
-    description: page.data.description,
     alternates: { canonical: page.url },
+    description: page.data.description,
     openGraph: openGraph({
-      type: 'article',
-      title: page.data.title,
+      authors: [page.data.author],
       description: page.data.description,
-      url: page.url,
       images: image,
       publishedTime: new Date(page.data.date).toISOString(),
-      authors: [page.data.author],
       tags: [...page.data.tags],
+      title: page.data.title,
+      type: 'article',
+      url: page.url,
     }),
+    title: page.data.title,
     twitter: { card: 'summary_large_image', images: image },
   };
 }

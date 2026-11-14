@@ -10,7 +10,7 @@ Use the element for most forms. Reach for the hook when you want a reusable fiel
 ## Import
 
 ```tsx
-import { useMuiTextFieldAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiTextFieldAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `UsernameField` lowercases what you type and checks length and allowed char
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-material/text-field/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-material/text-field/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/textfield/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/textfield/element.tsx',
     },
   ]}
 />
@@ -45,21 +45,16 @@ This is why the result can be spread straight onto `TextField`. With `InputBase`
 **Types.** Pass the root element type as the fourth generic, `useMuiTextFieldAdapter<string, FormValues, "username", HTMLDivElement>(...)`, when TypeScript complains about `ref`. Without it, the returned `ref` is typed for `unknown` elements.
 
 <Callout type="warn">
-  Pass `type` to the hook, not to `TextField`. The result always contains `type`, so `<TextField type="password" {...adapter} />` ends up with `type={undefined}`. For `type: "image"` the result also contains `src`, which `TextField` doesn't accept. The element moves it to `slotProps.htmlInput`.
+  Pass `type` to the hook, not to `TextField`. The result always contains `type`, so `
+  <TextField type="password" {...adapter} />` ends up with `type={undefined}`. For `type: "image"`
+  the result also contains `src`, which `TextField` doesn't accept. The element moves it to
+  `slotProps.htmlInput`.
 </Callout>
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiTextFieldAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiTextFieldAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiTextFieldAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiTextFieldAdapterReturnType" cwd />

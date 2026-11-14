@@ -10,7 +10,7 @@ The element shows the clock only and drops the error message. Use the hook when 
 ## Import
 
 ```tsx
-import { useMuiXTimeClockAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { useMuiXTimeClockAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `WakeUpClock` rejects times before 06:00. The form starts with a saved valu
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-x-date-pickers/time-clock/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/time-clock/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/time-clock/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/time-clock/element.tsx',
     },
   ]}
 />
@@ -43,7 +43,9 @@ The result is shaped for a component with no text field:
 **Touched.** The hook does not accept an `onBlur` prop. The returned `onBlur` is React Hook Form's own, and `TimeClock` puts it on its root element. React blur events bubble, so the field is marked as touched when focus leaves any element inside the clock, for example after picking an hour with the keyboard.
 
 <Callout type="warn">
-  `TimeClock` updates the value at each step: moving the hour hand already sets a full time, before the user reaches the minutes view. With `mode: "onChange"`, an error can show while the user is still picking minutes.
+  `TimeClock` updates the value at each step: moving the hour hand already sets a full time, before
+  the user reaches the minutes view. With `mode: "onChange"`, an error can show while the user is
+  still picking minutes.
 </Callout>
 
 ## Props

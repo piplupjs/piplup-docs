@@ -1,7 +1,7 @@
 ---
 title: MuiChipsInputElement
-seoTitle: "MUI Chips Input with React Hook Form"
-description: "Use mui-chips-input with react-hook-form: MuiChipsInputElement stores chips as a string array, with per-chip and whole-array validation."
+seoTitle: 'MUI Chips Input with React Hook Form'
+description: 'Use mui-chips-input with react-hook-form: MuiChipsInputElement stores chips as a string array, with per-chip and whole-array validation.'
 ---
 
 `MuiChipsInputElement` renders `MuiChipsInput` from `mui-chips-input` and stores its chips in React Hook Form as a `string[]`. It accepts all `MuiChipsInput` and `TextField` props. To build your own chips field, or store the chips in another shape, use [`useMuiChipsInputAdapter`](/docs/rhf-adapters/mui-chips-input/hooks/use-mui-chips-input-adapter).
@@ -9,15 +9,15 @@ description: "Use mui-chips-input with react-hook-form: MuiChipsInputElement sto
 ## Import
 
 ```tsx
-import { MuiChipsInputElement } from "@piplup/rhf-adapters/mui-chips-input";
+import { MuiChipsInputElement } from '@piplup/rhf-adapters/mui-chips-input';
 ```
 
 ## Usage
 
 <Demo
   tabs={[
-    { label: "useForm", path: "demo/adapters/mui-chips-input/use-form.tsx" },
-    { label: "FormContainer", path: "demo/adapters/mui-chips-input/form-container.tsx" },
+    { label: 'useForm', path: 'demo/adapters/mui-chips-input/use-form.tsx' },
+    { label: 'FormContainer', path: 'demo/adapters/mui-chips-input/form-container.tsx' },
   ]}
 />
 
@@ -30,7 +30,7 @@ Chips can be checked in two places, and you usually want both:
 
 In this demo, `ben@example` comes from `defaultValues`, so only the form rule catches it. Submit to see the error, then remove the chip. The form also limits the list to three recipients.
 
-<Demo tabs={[{ label: "Validation", path: "demo/adapters/mui-chips-input/validation.tsx" }]} />
+<Demo tabs={[{ label: 'Validation', path: 'demo/adapters/mui-chips-input/validation.tsx' }]} />
 
 `validateChipValues` skips non-string entries and returns the first failing chip's `textError`. If your function returns `false`, or an empty `textError`, the field is marked invalid with an empty message, so the red state shows but your `helperText` stays. Return a `textError` to get a message.
 

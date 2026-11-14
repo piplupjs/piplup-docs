@@ -1,13 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import dayjs, { type Dayjs } from "dayjs";
-import Stack from "@mui/material/Stack";
-import { LocalizationProvider, MobileDateTimePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { useMuiXMobileDateTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import { type Control, useForm } from "react-hook-form";
+import * as React from 'react';
+
+import Stack from '@mui/material/Stack';
+import { LocalizationProvider, MobileDateTimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useMuiXMobileDateTimePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import dayjs from 'dayjs';
+import { useForm } from 'react-hook-form';
+
+import type { Dayjs } from 'dayjs';
+import type { Control } from 'react-hook-form';
 
 type FormValues = { pickup: Dayjs | null };
 
@@ -16,32 +20,32 @@ type FormValues = { pickup: Dayjs | null };
 // a "not before this moment" rule instead of a daily opening time. `disablePast`
 // makes the picker do the same, so the views grey out the right times.
 function PickupField({ control }: { control: Control<FormValues> }) {
-  const [earliest] = useState(() => dayjs().add(2, "hour").startOf("minute"));
+  const [earliest] = React.useState(() => dayjs().add(2, 'hour').startOf('minute'));
 
-  const adapter = useMuiXMobileDateTimePickerAdapter<Dayjs, FormValues, "pickup", HTMLDivElement>({
-    control,
-    name: "pickup",
-    required: true,
+  const adapter = useMuiXMobileDateTimePickerAdapter<Dayjs, FormValues, 'pickup', HTMLDivElement>({
     composeHelperText: true,
-    disablePast: true,
-    minDate: earliest,
-    maxDate: earliest.add(30, "day"),
-    minTime: earliest,
+    control,
     disableIgnoringDatePartForTimeValidation: true,
-    minutesStep: 30,
+    disablePast: true,
+    maxDate: earliest.add(30, 'day'),
     messages: {
-      required: "Choose a pickup time",
-      minDate: `Pickup can't be before ${earliest.format("ddd D MMM")}`,
-      minTime: `The earliest pickup is ${earliest.format("ddd HH:mm")}`,
-      maxDate: "Orders can be placed up to 30 days ahead",
-      minutesStep: "Pickups are every half hour",
+      maxDate: 'Orders can be placed up to 30 days ahead',
+      minDate: `Pickup can't be before ${earliest.format('ddd D MMM')}`,
+      minTime: `The earliest pickup is ${earliest.format('ddd HH:mm')}`,
+      minutesStep: 'Pickups are every half hour',
+      required: 'Choose a pickup time',
     },
+    minDate: earliest,
+    minTime: earliest,
+    minutesStep: 30,
+    name: 'pickup',
+    required: true,
     slotProps: {
-      textField: { helperText: "Tap to open the picker" },
+      textField: { helperText: 'Tap to open the picker' },
     },
   });
 
-  return <MobileDateTimePicker label="Pickup" ampm={false} {...adapter} />;
+  return <MobileDateTimePicker ampm={false} label="Pickup" {...adapter} />;
 }
 
 export default function Page() {
@@ -52,15 +56,13 @@ export default function Page() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form
+        onSubmit={handleSubmit((values) => alert(values.pickup?.format('ddd D MMM, HH:mm')))}
         noValidate
-        onSubmit={handleSubmit((values) =>
-          alert(values.pickup?.format("ddd D MMM, HH:mm")),
-        )}
       >
         <Stack direction="column" spacing={2}>
           <PickupField control={control} />
           <div>
-            <MuiButtonElement control={control} variant="contained" type="submit">
+            <MuiButtonElement control={control} type="submit" variant="contained">
               Place order
             </MuiButtonElement>
           </div>

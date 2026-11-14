@@ -10,7 +10,7 @@ Use the element for most forms. Use the hook when you build a touch-first date-t
 ## Import
 
 ```tsx
-import { useMuiXMobileDateTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { useMuiXMobileDateTimePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `PickupField` rejects anything earlier than two hours from now and only acc
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-x-date-pickers/mobile-date-time-picker/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/mobile-date-time-picker/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/mobile-date-time-picker/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/mobile-date-time-picker/element.tsx',
     },
   ]}
 />
@@ -52,4 +52,8 @@ Create the limit once, for example with `useState(() => dayjs().add(2, "hour"))`
 
 ## Return value
 
-<AutoTypeTable path="content/docs/props.ts" name="UseMuiXMobileDateTimePickerAdapterReturnType" cwd />
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseMuiXMobileDateTimePickerAdapterReturnType"
+  cwd
+/>

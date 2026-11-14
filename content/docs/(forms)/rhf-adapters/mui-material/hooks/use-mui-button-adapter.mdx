@@ -10,7 +10,7 @@ Use the element for ordinary submit and reset buttons. Reach for the hook when t
 ## Import
 
 ```tsx
-import { useMuiButtonAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiButtonAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ import { useMuiButtonAdapter } from "@piplup/rhf-adapters/mui-material";
 <Demo
   tabs={[
     {
-      label: "Custom buttons",
-      path: "demo/adapters/mui-material/button/custom-hook.tsx",
+      label: 'Custom buttons',
+      path: 'demo/adapters/mui-material/button/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/button/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/button/element.tsx',
     },
   ]}
 />
@@ -38,11 +38,11 @@ The button isn't a field. It doesn't register anything with React Hook Form; it 
 
 **Disabling.** The returned `disabled` is `true` when any of these apply:
 
-| Prop | Disables the button when |
-| --- | --- |
-| `disabled` | Always. |
+| Prop                    | Disables the button when                                                    |
+| ----------------------- | --------------------------------------------------------------------------- |
+| `disabled`              | Always.                                                                     |
 | `disableOnIsSubmitting` | The form is submitting, which includes waiting for an async submit handler. |
-| `disableOnError` | The button is in the error state (see below). |
+| `disableOnError`        | The button is in the error state (see below).                               |
 
 **Error state.** The returned `error` is your `error` prop if you pass one. Otherwise it's `true` whenever the form's `isValid` is `false`. That's the whole form, not one field: `name` and `exact` narrow which updates re-render the button, but `isValid` still covers every registered field.
 
@@ -55,25 +55,23 @@ The button isn't a field. It doesn't register anything with React Hook Form; it 
 **Helper text.** The hook also returns `helperText`. With `composeHelperText: true`, the error parser receives the form's errors object rather than one field's error (filtered to the listed keys when `name` is an array). The default parser only reads a top-level `message`, so pass your own `errorParser` if you want to show anything from it. A parser set with [`FormErrorProvider`](/docs/rhf-core/components/form-error-provider) takes priority over the `errorParser` prop.
 
 <Callout type="warn">
-  MUI's `Button` has no `error` or `helperText` props. Remove them from the returned object before spreading it onto the button, as the element and the demo do, so they don't end up on the DOM element.
+  MUI's `Button` has no `error` or `helperText` props. Remove them from the returned object before
+  spreading it onto the button, as the element and the demo do, so they don't end up on the DOM
+  element.
 </Callout>
 
 <Callout type="warn">
-  `isValid` is checked as soon as the form mounts and includes fields the user hasn't touched. With `disableOnError`, a form that starts with an empty required field has a disabled submit button, so the user can't submit to see which fields need attention. Use a validation `mode` such as `"onChange"` or `"onTouched"` so errors show as the user types, or skip `disableOnError` and signal the state another way.
+  `isValid` is checked as soon as the form mounts and includes fields the user hasn't touched. With
+  `disableOnError`, a form that starts with an empty required field has a disabled submit button, so
+  the user can't submit to see which fields need attention. Use a validation `mode` such as
+  `"onChange"` or `"onTouched"` so errors show as the user types, or skip `disableOnError` and
+  signal the state another way.
 </Callout>
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiButtonAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiButtonAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiButtonAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiButtonAdapterReturnType" cwd />

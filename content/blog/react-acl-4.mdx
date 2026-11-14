@@ -1,5 +1,5 @@
 ---
-title: "@piplup/react-acl 4.0: wildcards, typed permissions, one principal"
+title: '@piplup/react-acl 4.0: wildcards, typed permissions, one principal'
 description: Version 4 replaces the whole access-control API. Here is what changed, why the defaults moved, and how to migrate an existing app.
 author: Sadik Malik
 date: 2026-11-10
@@ -22,12 +22,12 @@ because it was copy-pasted source. 4.0 is that implementation, published.
 
 ## What changed
 
-| 3.x | 4.0 |
-| --- | --- |
-| `<AclProvider roles permissions loading>` | `<AccessControlProvider principal loading>` |
-| `<HasAccess roles permissions validationMode>` | `<Can role permission mode>` |
-| `useAcl().isAuthorized({ roles, permissions })` | `useAccessControl().can()` / `.hasRole()` |
-| — | `hasPermission`, `hasRole` and friends as plain functions |
+| 3.x                                             | 4.0                                                       |
+| ----------------------------------------------- | --------------------------------------------------------- |
+| `<AclProvider roles permissions loading>`       | `<AccessControlProvider principal loading>`               |
+| `<HasAccess roles permissions validationMode>`  | `<Can role permission mode>`                              |
+| `useAcl().isAuthorized({ roles, permissions })` | `useAccessControl().can()` / `.hasRole()`                 |
+| —                                               | `hasPermission`, `hasRole` and friends as plain functions |
 
 Roles and permissions now travel together as one **principal** object, which is also what the
 standalone check functions take:
@@ -48,7 +48,7 @@ Permission names split on `:`, and a wildcard on any ancestor segment grants its
 Two cases are worth committing to memory, because they are the ones people expect to go the other
 way:
 
-- `invoice:line:*` does **not** grant `invoice:line`. A wildcard grants what sits *under* a name,
+- `invoice:line:*` does **not** grant `invoice:line`. A wildcard grants what sits _under_ a name,
   not the name itself.
 - Matching is by segment, not by text, so `invoice:*` does not grant `invoices:read`. A dot is an
   ordinary character — `users.read` is granted only by itself or by `*`.
@@ -77,7 +77,7 @@ guarding exactly that, so the contract cannot regress unnoticed.
 The change most likely to bite on upgrade is not a rename:
 
 **Permission lists now default to `ALL`.** In 3.x, `<HasAccess permissions={['a', 'b']}>` passed if
-the user held *either*. In 4.0, `<Can permission={['a', 'b']}>` requires *both*. Add `mode="ANY"` to
+the user held _either_. In 4.0, `<Can permission={['a', 'b']}>` requires _both_. Add `mode="ANY"` to
 keep the old behaviour. Roles still default to `ANY`, since asking for one of several roles is the
 common case.
 

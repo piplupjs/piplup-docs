@@ -1,12 +1,15 @@
-"use client";
+'use client';
 
-import dayjs, { type Dayjs } from "dayjs";
-import Stack from "@mui/material/Stack";
-import { DesktopDateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { useMuiXDesktopDateTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import { type Control, useForm } from "react-hook-form";
+import Stack from '@mui/material/Stack';
+import { DesktopDateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useMuiXDesktopDateTimePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import dayjs from 'dayjs';
+import { useForm } from 'react-hook-form';
+
+import type { Dayjs } from 'dayjs';
+import type { Control } from 'react-hook-form';
 
 type FormValues = { callback: Dayjs | null };
 
@@ -19,31 +22,31 @@ function CallbackField({ control }: { control: Control<FormValues> }) {
   const adapter = useMuiXDesktopDateTimePickerAdapter<
     Dayjs,
     FormValues,
-    "callback",
+    'callback',
     HTMLDivElement
   >({
-    control,
-    name: "callback",
-    required: true,
     composeHelperText: true,
+    control,
     disablePast: true,
-    minDate: dayjs(),
-    maxDate: dayjs().add(14, "day"),
-    shouldDisableTime: (value, view) => view === "hours" && isClosedHour(value.hour()),
+    maxDate: dayjs().add(14, 'day'),
     messages: {
-      required: "When should we call you?",
-      disablePast: "Pick a time in the future",
-      maxDate: "We can call you within the next two weeks",
-      "shouldDisableTime-hours": "We call between 08:00 and 20:00, except 13:00 to 14:00",
+      disablePast: 'Pick a time in the future',
+      maxDate: 'We can call you within the next two weeks',
+      required: 'When should we call you?',
+      'shouldDisableTime-hours': 'We call between 08:00 and 20:00, except 13:00 to 14:00',
     },
+    minDate: dayjs(),
+    name: 'callback',
+    required: true,
+    shouldDisableTime: (value, view) => view === 'hours' && isClosedHour(value.hour()),
     // A function is called with the picker's owner state; the adapter adds its own
     // error, helperText and onBlur on top of what it returns.
     slotProps: {
-      textField: () => ({ helperText: "Times are in your local time zone" }),
+      textField: () => ({ helperText: 'Times are in your local time zone' }),
     },
   });
 
-  return <DesktopDateTimePicker label="Call me back at" ampm={false} {...adapter} />;
+  return <DesktopDateTimePicker ampm={false} label="Call me back at" {...adapter} />;
 }
 
 export default function Page() {
@@ -54,15 +57,13 @@ export default function Page() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form
+        onSubmit={handleSubmit((values) => alert(values.callback?.format('ddd D MMM, HH:mm')))}
         noValidate
-        onSubmit={handleSubmit((values) =>
-          alert(values.callback?.format("ddd D MMM, HH:mm")),
-        )}
       >
         <Stack direction="column" spacing={2}>
           <CallbackField control={control} />
           <div>
-            <MuiButtonElement control={control} variant="contained" type="submit">
+            <MuiButtonElement control={control} type="submit" variant="contained">
               Request callback
             </MuiButtonElement>
           </div>

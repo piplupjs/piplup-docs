@@ -1,7 +1,7 @@
 ---
 title: MuiTelInputElement
-seoTitle: "MUI Phone Number Input with React Hook Form"
-description: "Use mui-tel-input with react-hook-form: MuiTelInputElement stores an international phone number and validates it with matchIsValidTel."
+seoTitle: 'MUI Phone Number Input with React Hook Form'
+description: 'Use mui-tel-input with react-hook-form: MuiTelInputElement stores an international phone number and validates it with matchIsValidTel.'
 ---
 
 `MuiTelInputElement` renders `MuiTelInput` from `mui-tel-input`, with its country selector, and stores the phone number in React Hook Form as a string. It accepts all `MuiTelInput` props, such as `defaultCountry`, `onlyCountries` and `forceCallingCode`. To build your own phone field, use [`useMuiTelInputAdapter`](/docs/rhf-adapters/mui-tel-input/hooks/use-mui-tel-input-adapter).
@@ -9,15 +9,15 @@ description: "Use mui-tel-input with react-hook-form: MuiTelInputElement stores 
 ## Import
 
 ```tsx
-import { MuiTelInputElement } from "@piplup/rhf-adapters/mui-tel-input";
+import { MuiTelInputElement } from '@piplup/rhf-adapters/mui-tel-input';
 ```
 
 ## Usage
 
 <Demo
   tabs={[
-    { label: "useForm", path: "demo/adapters/mui-tel-input/use-form.tsx" },
-    { label: "FormContainer", path: "demo/adapters/mui-tel-input/form-container.tsx" },
+    { label: 'useForm', path: 'demo/adapters/mui-tel-input/use-form.tsx' },
+    { label: 'FormContainer', path: 'demo/adapters/mui-tel-input/form-container.tsx' },
   ]}
 />
 
@@ -25,7 +25,7 @@ import { MuiTelInputElement } from "@piplup/rhf-adapters/mui-tel-input";
 
 The element doesn't check whether a number is real. Use `matchIsValidTel` from `mui-tel-input` in `rules.validate`. It accepts the same `onlyCountries`, `excludedCountries` and `continents` options as the input, so the rule can match what the country menu offers. This demo starts on the UK, allows three countries, and rejects incomplete numbers.
 
-<Demo tabs={[{ label: "Validation", path: "demo/adapters/mui-tel-input/validation.tsx" }]} />
+<Demo tabs={[{ label: 'Validation', path: 'demo/adapters/mui-tel-input/validation.tsx' }]} />
 
 With `onlyCountries`, `matchIsValidTel` checks the country it detects from the number, not the one picked in the menu. Numbers that share a calling code with other territories can be detected as one of those. For example, `+44 7911 123456` is a valid number but is not detected as `GB`, so the rule above rejects it while `+44 7400 123456` passes.
 

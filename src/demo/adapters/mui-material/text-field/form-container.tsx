@@ -1,22 +1,19 @@
-"use client";
+'use client';
 
-import Stack from "@mui/material/Stack";
-import {
-  MuiButtonElement,
-  MuiTextFieldElement,
-} from "@piplup/rhf-adapters/mui-material";
-import { FormContainer } from "@piplup/rhf-core";
+import Stack from '@mui/material/Stack';
+import { MuiButtonElement, MuiTextFieldElement } from '@piplup/rhf-adapters/mui-material';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
   return (
     <FormContainer
-      defaultValues={{ text: "" }}
+      defaultValues={{ text: '' }}
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <Stack direction="column" spacing={2}>
-        <MuiTextFieldElement name="text" label="Text field" />
+        <MuiTextFieldElement label="Text field" name="text" />
         <div>
-          <MuiButtonElement variant="contained" type="submit">
+          <MuiButtonElement type="submit" variant="contained">
             Submit
           </MuiButtonElement>
         </div>

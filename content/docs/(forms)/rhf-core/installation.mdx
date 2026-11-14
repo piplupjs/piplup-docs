@@ -1,7 +1,7 @@
 ---
-title: "Installation — @piplup/rhf-core"
-seoTitle: "Build React Hook Form adapters — @piplup/rhf-core"
-description: "Install @piplup/rhf-core: hooks that adapt any React component to a react-hook-form field, plus a form container and error provider."
+title: 'Installation — @piplup/rhf-core'
+seoTitle: 'Build React Hook Form adapters — @piplup/rhf-core'
+description: 'Install @piplup/rhf-core: hooks that adapt any React component to a react-hook-form field, plus a form container and error provider.'
 ---
 
 `@piplup/rhf-core` contains the building blocks for connecting your own input components to React Hook Form: the `FormContainer` component and adapter hooks such as `useControllerAdapter`. It has no UI of its own. The ready-made components for HTML, MUI and other libraries live in [`@piplup/rhf-adapters`](/docs/rhf-adapters/html/installation), which is built on this package.
@@ -16,10 +16,10 @@ Install the package together with React Hook Form:
 
 ### Peer dependencies
 
-| Package | Version |
-| --- | --- |
-| `react` | `^19.0.0` |
-| `react-dom` | `^19.0.0` |
+| Package           | Version           |
+| ----------------- | ----------------- |
+| `react`           | `^19.0.0`         |
+| `react-dom`       | `^19.0.0`         |
 | `react-hook-form` | `>=7.65.0 <8.0.0` |
 
 React 18 is not supported by this version. `@piplup/utils` is a regular dependency and is installed for you.
@@ -38,7 +38,7 @@ import {
   useFormReset,
   useFormSetFocus,
   useFormStateAdapter,
-} from "@piplup/rhf-core";
+} from '@piplup/rhf-core';
 ```
 
 The bundle starts with a `"use client"` directive, so its components are Client Components in the Next.js App Router. Function props such as `onSubmit` can't be passed from a Server Component, so put your forms in a file marked `"use client"`.
@@ -48,9 +48,9 @@ The bundle starts with a `"use client"` directive, so its components are Client 
 `FormContainer` creates the form with `useForm`, provides it through context and renders a `<form noValidate>`. Fields inside it find the form through context, so they don't need a `control` prop.
 
 ```tsx
-"use client";
+'use client';
 
-import { FormContainer, useControllerAdapter } from "@piplup/rhf-core";
+import { FormContainer, useControllerAdapter } from '@piplup/rhf-core';
 
 function TextInput({ name, label }: { name: string; label: string }) {
   const field = useControllerAdapter<string>({
@@ -77,10 +77,7 @@ function TextInput({ name, label }: { name: string; label: string }) {
 
 export default function SignupForm() {
   return (
-    <FormContainer
-      defaultValues={{ email: "" }}
-      onSubmit={(values) => console.log(values)}
-    >
+    <FormContainer defaultValues={{ email: '' }} onSubmit={(values) => console.log(values)}>
       <TextInput name="email" label="Email" />
       <button type="submit">Sign up</button>
     </FormContainer>

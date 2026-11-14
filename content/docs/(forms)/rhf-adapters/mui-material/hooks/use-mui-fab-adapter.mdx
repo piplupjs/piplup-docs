@@ -10,7 +10,7 @@ The hook behaves exactly like [`useMuiButtonAdapter`](/docs/rhf-adapters/mui-mat
 ## Import
 
 ```tsx
-import { useMuiFabAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiFabAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ import { useMuiFabAdapter } from "@piplup/rhf-adapters/mui-material";
 <Demo
   tabs={[
     {
-      label: "Custom Fab",
-      path: "demo/adapters/mui-material/fab/custom-hook.tsx",
+      label: 'Custom Fab',
+      path: 'demo/adapters/mui-material/fab/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/fab/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/fab/element.tsx',
     },
   ]}
 />
@@ -41,7 +41,8 @@ For the full behavior (form state subscription, the disabling table, reset on `t
 **`classes`.** With class composition on (the default for the hook), `classes.root` is always applied, and `classes.disabled` and `classes.error` are added while those states are active. The hook also returns `classes` unchanged, so the same object reaches `Fab`'s own `classes` prop.
 
 <Callout type="warn">
-  `Fab` has no `error` or `helperText` props. Remove them from the returned object before spreading it, as the demo and the element do.
+  `Fab` has no `error` or `helperText` props. Remove them from the returned object before spreading
+  it, as the demo and the element do.
 </Callout>
 
 ## Props
@@ -50,8 +51,4 @@ For the full behavior (form state subscription, the disabling table, reset on `t
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiFabAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiFabAdapterReturnType" cwd />

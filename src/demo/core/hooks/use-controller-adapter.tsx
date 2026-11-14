@@ -1,25 +1,25 @@
 /* eslint-disable react-hooks/refs */
-"use client";
+'use client';
 
-import * as React from "react";
-import { FormContainer, useControllerAdapter } from "@piplup/rhf-core";
+import * as React from 'react';
+
+import { FormContainer, useControllerAdapter } from '@piplup/rhf-core';
 
 function CurrencyInput() {
   const adapter = useControllerAdapter<string>({
-    name: "amount",
     defaultValue: 0,
+    helperText: 'Enter an amount greater than 0.',
+    name: 'amount',
+    required: true,
     rules: {
       min: {
+        message: 'Amount must be at least 1.',
         value: 1,
-        message: "Amount must be at least 1.",
       },
     },
-    helperText: "Enter an amount greater than 0.",
-    required: true,
     transform: {
       input: (value) => value.toString(),
-      output: (event: React.ChangeEvent<HTMLInputElement>) =>
-        Number(event.target.value || 0),
+      output: (event: React.ChangeEvent<HTMLInputElement>) => Number(event.target.value || 0),
     },
   });
 
@@ -27,17 +27,17 @@ function CurrencyInput() {
     <div>
       <label htmlFor="amount">Amount</label>
       <input
-        id="amount"
-        ref={adapter.ref}
-        name={adapter.name}
-        value={adapter.value}
-        onChange={adapter.onChange}
-        onBlur={adapter.onBlur}
-        disabled={adapter.disabled}
         aria-invalid={adapter.error}
         className="border rounded block px-2"
+        disabled={adapter.disabled}
+        id="amount"
+        name={adapter.name}
+        onBlur={adapter.onBlur}
+        onChange={adapter.onChange}
+        ref={adapter.ref}
+        value={adapter.value}
       />
-      <p style={{ color: adapter.error ? "red" : "inherit" }}>{adapter.helperText}</p>
+      <p style={{ color: adapter.error ? 'red' : 'inherit' }}>{adapter.helperText}</p>
     </div>
   );
 }
@@ -49,7 +49,11 @@ export default function Page() {
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <CurrencyInput />
-      <button className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded" type="submit" style={{ marginTop: 12 }}>
+      <button
+        className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded"
+        style={{ marginTop: 12 }}
+        type="submit"
+      >
         Submit
       </button>
     </FormContainer>

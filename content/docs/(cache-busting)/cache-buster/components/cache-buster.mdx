@@ -1,6 +1,6 @@
 ---
 title: CacheBuster
-seoTitle: "CacheBuster: reload React apps on a new deploy"
+seoTitle: 'CacheBuster: reload React apps on a new deploy'
 description: Check for a new deployment when your app loads, and hold back rendering until the check is done, with the CacheBuster component.
 ---
 
@@ -11,12 +11,12 @@ Use `CacheBuster` when you want a gate around your app. Use `useReleaseStatus` w
 ## Basic usage
 
 ```tsx
-import { CacheBuster } from "@piplup/cache-buster";
+import { CacheBuster } from '@piplup/cache-buster';
 
 function App() {
   return (
     <CacheBuster
-      enabled={process.env.NODE_ENV === "production"}
+      enabled={process.env.NODE_ENV === 'production'}
       loading={<SplashScreen />}
       error={<YourApp />}
     >
@@ -42,13 +42,13 @@ The check runs once per page load for each `storageKey`, so React's StrictMode a
 
 ## What it renders
 
-| State | Renders | Default |
-| --- | --- | --- |
-| Check in progress | `loading` | nothing |
-| `new-release` | `loading`, while the page reloads | nothing |
-| `error` | `error` | nothing |
-| `no-release` | `children` | nothing |
-| `enabled={false}` | `children` after mount, without a request | — |
+| State             | Renders                                   | Default |
+| ----------------- | ----------------------------------------- | ------- |
+| Check in progress | `loading`                                 | nothing |
+| `new-release`     | `loading`, while the page reloads         | nothing |
+| `error`           | `error`                                   | nothing |
+| `no-release`      | `children`                                | nothing |
+| `enabled={false}` | `children` after mount, without a request | —       |
 
 **Reloading.** On `new-release`, `CacheBuster` calls `window.location.reload()` and keeps rendering `loading`, so the old release does not flash on screen. The new ID is already saved, so the reloaded page reports `no-release`. A marker in `sessionStorage` allows one reload per release ID in each tab: if a server keeps returning a different ID, the second `new-release` renders `children` instead of reloading again.
 
@@ -71,18 +71,15 @@ The release file is requested from `/RELEASE` at the site root by default. If yo
 ## Gotchas
 
 <Callout type="warn">
-  `error` has no default, so if you wrap your app and the request fails, nothing renders. Pass your app (or a message) as `error` too, as in the example above.
+  `error` has no default, so if you wrap your app and the request fails, nothing renders. Pass your
+  app (or a message) as `error` too, as in the example above.
 </Callout>
 
 - Set `verbose` to log each result to the console while you set things up.
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="CacheBusterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="CacheBusterProps" cwd />
 
 ## See also
 

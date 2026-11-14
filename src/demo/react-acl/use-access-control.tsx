@@ -1,25 +1,28 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import { AccessControlProvider, useAccessControl, type AccessPrincipal } from "@piplup/react-acl";
+import * as React from 'react';
+
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { AccessControlProvider, useAccessControl } from '@piplup/react-acl';
+
+import type { AccessPrincipal } from '@piplup/react-acl';
 
 const principals: Record<string, AccessPrincipal> = {
-  guest: { roles: ["guest"], permissions: [] },
-  editor: { roles: ["editor"], permissions: ["post:create", "post:publish"] },
-  owner: { roles: ["owner"], permissions: ["post:*"] },
+  editor: { permissions: ['post:create', 'post:publish'], roles: ['editor'] },
+  guest: { permissions: [], roles: ['guest'] },
+  owner: { permissions: ['post:*'], roles: ['owner'] },
 };
 
 type User = keyof typeof principals;
 
 const actions = [
-  { label: "New post", permission: "post:create" },
-  { label: "Publish", permission: "post:publish" },
-  { label: "Delete", permission: "post:delete" },
+  { label: 'New post', permission: 'post:create' },
+  { label: 'Publish', permission: 'post:publish' },
+  { label: 'Delete', permission: 'post:delete' },
 ];
 
 function PostToolbar() {
@@ -30,7 +33,7 @@ function PostToolbar() {
 
   // Check a role in an event handler, not only while rendering.
   const handleExport = () => {
-    alert(hasRole(["editor", "owner"]) ? "Exporting posts" : "Sign in to export");
+    alert(hasRole(['editor', 'owner']) ? 'Exporting posts' : 'Sign in to export');
   };
 
   if (loading) {
@@ -38,13 +41,13 @@ function PostToolbar() {
   }
 
   return (
-    <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
+    <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
       {visible.map((action) => (
         <Button key={action.label} variant="contained">
           {action.label}
         </Button>
       ))}
-      <Button variant="outlined" onClick={handleExport}>
+      <Button onClick={handleExport} variant="outlined">
         Export
       </Button>
     </Stack>
@@ -52,17 +55,17 @@ function PostToolbar() {
 }
 
 export default function Page() {
-  const [user, setUser] = React.useState<User>("editor");
+  const [user, setUser] = React.useState<User>('editor');
 
   return (
     <Stack spacing={2}>
       <TextField
-        select
-        size="small"
         label="Current user"
-        value={user}
-        onChange={(e) => setUser(e.target.value as User)}
+        onChange={(event) => setUser(event.target.value as User)}
+        size="small"
         sx={{ maxWidth: 200 }}
+        value={user}
+        select
       >
         {Object.keys(principals).map((name) => (
           <MenuItem key={name} value={name}>

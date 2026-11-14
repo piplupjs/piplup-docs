@@ -1,45 +1,39 @@
-"use client";
+'use client';
 
-import { useId } from "react";
-import Stack from "@mui/material/Stack";
-import FormControl from "@mui/material/FormControl";
+import * as React from 'react';
+
+import FormControl from '@mui/material/FormControl';
+import Stack from '@mui/material/Stack';
 import {
   MuiFormHelperTextElement,
   MuiInputElement,
   MuiFormLabelElement,
   MuiButtonElement,
-} from "@piplup/rhf-adapters/mui-material";
-import { FormContainer } from "@piplup/rhf-core";
+} from '@piplup/rhf-adapters/mui-material';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
-  const inputId = useId();
+  const inputId = React.useId();
   const helperTextId = `${inputId}-helper-text`;
 
   return (
     <FormContainer
-      defaultValues={{ email: "" }}
+      defaultValues={{ email: '' }}
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <Stack direction="column" spacing={2}>
         <FormControl variant="outlined">
-          <MuiFormLabelElement
-            name="email"
-            htmlFor={inputId}
-          >
+          <MuiFormLabelElement htmlFor={inputId} name="email">
             Email
           </MuiFormLabelElement>
           <MuiInputElement
-            name="email"
-            id={inputId}
-            type="email"
             aria-describedby={helperTextId}
+            id={inputId}
+            name="email"
+            type="email"
             required
           />
-          <MuiFormHelperTextElement
-            name="email"
-            id={helperTextId}
-            renderOnError
-          />
+          <MuiFormHelperTextElement id={helperTextId} name="email" renderOnError />
         </FormControl>
         <div>
           <MuiButtonElement type="submit" variant="contained">

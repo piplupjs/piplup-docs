@@ -10,7 +10,7 @@ Use the element for a bare slider. Reach for the hook when the slider needs a la
 ## Import
 
 ```tsx
-import { useMuiSliderAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiSliderAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ A price range slider that stores `{ min, max }` instead of an array, and require
 <Demo
   tabs={[
     {
-      label: "Price range",
-      path: "demo/adapters/mui-material/slider/custom-hook.tsx",
+      label: 'Price range',
+      path: 'demo/adapters/mui-material/slider/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/slider/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/slider/element.tsx',
     },
   ]}
 />
@@ -43,21 +43,15 @@ A price range slider that stores `{ min, max }` instead of an array, and require
 **Errors.** `Slider` has no helper text. Render the returned `helperText` in a `FormHelperText`. With `composeHelperText: true`, it's the field's error message, falling back to your `helperText` when there's no error.
 
 <Callout type="warn">
-  For a range slider, give the field an array default (in `defaultValues` or the hook's `defaultValue`). If the field is empty, the fallback is the single number `min`, and `Slider` renders one thumb instead of two.
+  For a range slider, give the field an array default (in `defaultValues` or the hook's
+  `defaultValue`). If the field is empty, the fallback is the single number `min`, and `Slider`
+  renders one thumb instead of two.
 </Callout>
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiSliderAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiSliderAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiSliderAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiSliderAdapterReturnType" cwd />

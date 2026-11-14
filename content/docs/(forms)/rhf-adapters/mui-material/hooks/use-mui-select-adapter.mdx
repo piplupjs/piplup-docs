@@ -10,7 +10,7 @@ description: Returns props that connect an MUI Select to React Hook Form, includ
 ## Import
 
 ```tsx
-import { useMuiSelectAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiSelectAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ A multiple select that needs at least one and at most three languages. The helpe
 <Demo
   tabs={[
     {
-      label: "Multiple select",
-      path: "demo/adapters/mui-material/select/custom-hook.tsx",
+      label: 'Multiple select',
+      path: 'demo/adapters/mui-material/select/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/select/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/select/element.tsx',
     },
   ]}
 />
@@ -41,25 +41,20 @@ A multiple select that needs at least one and at most three languages. The helpe
 **Errors and helper text.** `Select` accepts `error` but has no `helperText` prop. Render the returned `helperText` in a `FormHelperText`, and put `error` on the `FormControl` so the label and helper text turn red too. With `composeHelperText: true`, `helperText` is the field's error message, falling back to your `helperText` when there's no error.
 
 <Callout type="warn">
-  For a single select, give the field a default value such as `""` in `useForm`'s `defaultValues`. Without one, `Select` receives `undefined` at first, which MUI treats as uncontrolled, and logs a warning when a value is chosen.
+  For a single select, give the field a default value such as `""` in `useForm`'s `defaultValues`.
+  Without one, `Select` receives `undefined` at first, which MUI treats as uncontrolled, and logs a
+  warning when a value is chosen.
 </Callout>
 
 <Callout type="warn">
-  `helperText` isn't a `Select` prop. Remove it from the returned object before spreading, as the demo and the element do.
+  `helperText` isn't a `Select` prop. Remove it from the returned object before spreading, as the
+  demo and the element do.
 </Callout>
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiSelectAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiSelectAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiSelectAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiSelectAdapterReturnType" cwd />

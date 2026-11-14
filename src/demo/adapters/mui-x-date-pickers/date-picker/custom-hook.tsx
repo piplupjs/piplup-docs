@@ -1,32 +1,34 @@
-"use client";
+'use client';
 
-import type { Dayjs } from "dayjs";
-import Stack from "@mui/material/Stack";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { useMuiXDatePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import { type Control, useForm } from "react-hook-form";
+import Stack from '@mui/material/Stack';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useMuiXDatePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import { useForm } from 'react-hook-form';
+
+import type { Dayjs } from 'dayjs';
+import type { Control } from 'react-hook-form';
 
 type FormValues = { appointment: Dayjs | null };
 
 // A reusable field with project-wide defaults baked in: weekdays only,
 // no past dates, and custom validation messages.
 function AppointmentField({ control }: { control: Control<FormValues> }) {
-  const adapter = useMuiXDatePickerAdapter<Dayjs, FormValues, "appointment", HTMLDivElement>({
-    control,
-    name: "appointment",
-    required: true,
+  const adapter = useMuiXDatePickerAdapter<Dayjs, FormValues, 'appointment', HTMLDivElement>({
     composeHelperText: true,
+    control,
     disablePast: true,
-    shouldDisableDate: (date) => date.day() === 0 || date.day() === 6,
     messages: {
-      required: "Pick a date for your appointment",
       disablePast: "Appointments can't be in the past",
+      required: 'Pick a date for your appointment',
       shouldDisableDate: "We're closed on weekends",
     },
+    name: 'appointment',
+    required: true,
+    shouldDisableDate: (date) => date.day() === 0 || date.day() === 6,
     slotProps: {
-      textField: { helperText: "Weekdays only" },
+      textField: { helperText: 'Weekdays only' },
     },
   });
 
@@ -41,15 +43,13 @@ export default function Page() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form
+        onSubmit={handleSubmit((values) => alert(values.appointment?.format('dddd, D MMMM YYYY')))}
         noValidate
-        onSubmit={handleSubmit((values) =>
-          alert(values.appointment?.format("dddd, D MMMM YYYY")),
-        )}
       >
         <Stack direction="column" spacing={2}>
           <AppointmentField control={control} />
           <div>
-            <MuiButtonElement control={control} variant="contained" type="submit">
+            <MuiButtonElement control={control} type="submit" variant="contained">
               Book
             </MuiButtonElement>
           </div>
@@ -58,4 +58,3 @@ export default function Page() {
     </LocalizationProvider>
   );
 }
-

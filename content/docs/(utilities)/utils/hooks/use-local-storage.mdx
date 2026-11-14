@@ -6,18 +6,16 @@ description: Reactive hook that reads a localStorage key and re-renders when it 
 `useLocalStorage` returns the current string value of a `localStorage` key and re-renders when that key changes. It is read-only: write with `setItem` and `removeItem`, also exported from `@piplup/utils`.
 
 ```tsx
-import { removeItem, setItem, useLocalStorage } from "@piplup/utils";
+import { removeItem, setItem, useLocalStorage } from '@piplup/utils';
 
 function ThemeToggle() {
-  const theme = useLocalStorage("theme", "light");
+  const theme = useLocalStorage('theme', 'light');
 
   return (
     <div>
       <div>Theme: {theme}</div>
-      <button onClick={() => setItem("theme", theme === "light" ? "dark" : "light")}>
-        Toggle
-      </button>
-      <button onClick={() => removeItem("theme")}>Reset</button>
+      <button onClick={() => setItem('theme', theme === 'light' ? 'dark' : 'light')}>Toggle</button>
+      <button onClick={() => removeItem('theme')}>Reset</button>
     </div>
   );
 }
@@ -32,23 +30,26 @@ function ThemeToggle() {
 When the key is missing or removed, the hook returns `initialValue`.
 
 <Callout type="warn">
-  Values are strings only. `initialValue` must be a string or `null`; anything else throws a `TypeError`. Use `JSON.stringify` / `JSON.parse` to store other data.
+  Values are strings only. `initialValue` must be a string or `null`; anything else throws a
+  `TypeError`. Use `JSON.stringify` / `JSON.parse` to store other data.
 </Callout>
 
 ## Parameters
 
-<TypeTable type={{
-  key: {
-    description: "Storage key to read and watch.",
-    type: "string",
-    required: true,
-  },
-  initialValue: {
-    description: "Returned when the key has no stored value, and during server rendering.",
-    type: "string | null",
-    default: "null",
-  },
-}} />
+<TypeTable
+  type={{
+    key: {
+      description: 'Storage key to read and watch.',
+      type: 'string',
+      required: true,
+    },
+    initialValue: {
+      description: 'Returned when the key has no stored value, and during server rendering.',
+      type: 'string | null',
+      default: 'null',
+    },
+  }}
+/>
 
 ## Return value
 

@@ -1,8 +1,5 @@
 {
   "$schema": "../../../../.source/json-schema/docs.meta.json",
   "title": "Components",
-  "pages": [
-    "access-control-provider",
-    "can"
-  ]
+  "pages": ["access-control-provider", "can"]
 }

@@ -5,16 +5,16 @@
  * slug segment is still the package directory, exactly as it was before the regroup.
  */
 const PACKAGE_BY_SEGMENT: Record<string, string> = {
-  'rhf-core': '@piplup/rhf-core',
-  'rhf-adapters': '@piplup/rhf-adapters',
-  'react-acl': '@piplup/react-acl',
-  utils: '@piplup/utils',
   'cache-buster': '@piplup/cache-buster',
+  'react-acl': '@piplup/react-acl',
+  'rhf-adapters': '@piplup/rhf-adapters',
+  'rhf-core': '@piplup/rhf-core',
+  utils: '@piplup/utils',
   'vite-plugin-cache-buster': '@piplup/vite-plugin-cache-buster',
 };
 
 /** The npm package a docs page belongs to, or `null` for the overview and concern hub pages. */
-export function packageForSlugs(slugs: readonly string[]): string | null {
+export function packageForSlugs(slugs: readonly string[]): null | string {
   const first = slugs[0];
   return first ? (PACKAGE_BY_SEGMENT[first] ?? null) : null;
 }
@@ -31,10 +31,14 @@ export function packageForSlugs(slugs: readonly string[]): string | null {
  */
 export function packageTitleSuffix(slugs: readonly string[]): string {
   const pkg = packageForSlugs(slugs);
-  if (!pkg) return '';
+  if (!pkg) {
+    return '';
+  }
 
   const last = slugs[slugs.length - 1];
-  if (last === 'installation') return '';
+  if (last === 'installation') {
+    return '';
+  }
 
   return ` · ${pkg}`;
 }

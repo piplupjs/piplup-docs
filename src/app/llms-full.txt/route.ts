@@ -1,5 +1,5 @@
-import { getLLMText, source } from '@/lib/source';
 import { markdownCopyHeaders } from '@/lib/shared';
+import { getLLMText, source } from '@/lib/source';
 
 export const revalidate = false;
 

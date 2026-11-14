@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
-import { blog, source } from '@/lib/source';
+
 import { blogRoute, domain } from '@/lib/shared';
+import { blog, source } from '@/lib/source';
 
 /**
  * `/` is now a landing page of its own rather than a copy of `/docs`, so it is listed first and
@@ -9,9 +10,9 @@ import { blogRoute, domain } from '@/lib/shared';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const home: MetadataRoute.Sitemap = [
     {
-      url: domain,
       changeFrequency: 'monthly',
       priority: 1,
+      url: domain,
     },
   ];
 
@@ -19,26 +20,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .getPages()
     .filter((page) => !page.data.noindex)
     .map((page) => ({
-      url: `${domain}${page.url}`,
+      changeFrequency: 'weekly' as const,
       // `lastModified` comes from git via the collection's `lastModified` option.
       lastModified: page.data.lastModified,
-      changeFrequency: 'weekly' as const,
       priority: page.url === '/docs' ? 0.9 : 0.7,
+      url: `${domain}${page.url}`,
     }));
 
   const posts = blog.getPages().map((page) => ({
-    url: `${domain}${page.url}`,
-    lastModified: new Date(page.data.date),
     changeFrequency: 'yearly' as const,
+    lastModified: new Date(page.data.date),
     priority: 0.6,
+    url: `${domain}${page.url}`,
   }));
 
   const blogIndex: MetadataRoute.Sitemap = posts.length
     ? [
         {
-          url: `${domain}${blogRoute}`,
           changeFrequency: 'weekly',
           priority: 0.8,
+          url: `${domain}${blogRoute}`,
         },
       ]
     : [];

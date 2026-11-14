@@ -1,26 +1,27 @@
 import type { MetadataRoute } from 'next';
+
 import { appDescription, appName, appTagline, brandColor } from '@/lib/shared';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${appName} — ${appTagline}`,
-    short_name: appName,
-    description: appDescription,
-    start_url: '/',
-    display: 'standalone',
     background_color: '#ffffff',
-    theme_color: brandColor,
+    description: appDescription,
+    display: 'standalone',
     icons: [
       {
-        src: '/logo.svg',
         sizes: 'any',
+        src: '/logo.svg',
         type: 'image/svg+xml',
       },
       {
-        src: '/favicon.ico',
         sizes: '48x48',
+        src: '/favicon.ico',
         type: 'image/x-icon',
       },
     ],
+    name: `${appName} — ${appTagline}`,
+    short_name: appName,
+    start_url: '/',
+    theme_color: brandColor,
   };
 }
