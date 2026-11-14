@@ -20,25 +20,25 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <MuiChipsInputElement
-          control={control}
-          name="recipients"
-          label="Recipients"
-          helperText="Up to 3 email addresses"
-          required
-          messages={{ required: 'Add at least one recipient' }}
-          validate={isEmail}
           rules={{
             validate: {
-              emails: validateChipValues(isEmail),
               count: (value) => value.length <= 3 || 'You can add up to 3 recipients',
+              emails: validateChipValues(isEmail),
             },
           }}
+          control={control}
+          helperText="Up to 3 email addresses"
+          label="Recipients"
+          messages={{ required: 'Add at least one recipient' }}
+          name="recipients"
+          validate={isEmail}
+          required
         />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Send
           </MuiButtonElement>
         </div>

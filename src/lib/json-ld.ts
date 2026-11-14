@@ -22,19 +22,19 @@ export function webSiteJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: appName,
     alternateName: appAlternateNames,
     description: appDescription,
-    url: domain,
-    publisher: { '@type': 'Organization', name: appName, url: domain },
+    name: appName,
     potentialAction: {
       '@type': 'SearchAction',
+      'query-input': 'required name=search_term_string',
       target: {
         '@type': 'EntryPoint',
         urlTemplate: `${domain}${docsRoute}?q={search_term_string}`,
       },
-      'query-input': 'required name=search_term_string',
     },
+    publisher: { '@type': 'Organization', name: appName, url: domain },
+    url: domain,
   };
 }
 
@@ -42,11 +42,11 @@ export function organizationJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: appName,
     alternateName: appAlternateNames,
-    url: domain,
     logo: absolute(logoPath),
+    name: appName,
     sameAs: [`https://github.com/${gitConfig.user}`, npmOrg],
+    url: domain,
   };
 }
 
@@ -71,9 +71,9 @@ export function breadcrumbJsonLd(slugs: string[], title: string) {
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, index) => ({
       '@type': 'ListItem',
-      position: index + 1,
-      name: item.name,
       item: item.url,
+      name: item.name,
+      position: index + 1,
     })),
   };
 }
@@ -83,14 +83,14 @@ export function softwareSourceCodeJsonLd(packageName: string, description: strin
   return {
     '@context': 'https://schema.org',
     '@type': 'SoftwareSourceCode',
-    name: packageName,
-    description,
-    url: absolute(url),
+    author: { '@type': 'Organization', name: appName, url: domain },
     codeRepository: `https://github.com/${gitConfig.user}`,
+    description,
+    license: 'https://opensource.org/licenses/MIT',
+    name: packageName,
     programmingLanguage: 'TypeScript',
     runtimePlatform: 'React',
-    license: 'https://opensource.org/licenses/MIT',
-    author: { '@type': 'Organization', name: appName, url: domain },
+    url: absolute(url),
   };
 }
 
@@ -99,74 +99,74 @@ export function softwareSourceCodeJsonLd(packageName: string, description: strin
  * reference docs; it is left out rather than guessed when git history is unavailable.
  */
 export function techArticleJsonLd(page: {
-  title: string;
-  description?: string;
-  url: string;
-  image: string;
-  lastModified?: Date;
   /** The npm package the page documents, if any. */
   about?: string;
+  description?: string;
+  image: string;
+  lastModified?: Date;
+  title: string;
+  url: string;
 }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
-    headline: page.title,
     description: page.description,
-    url: absolute(page.url),
-    mainEntityOfPage: { '@type': 'WebPage', '@id': absolute(page.url) },
+    headline: page.title,
     image: absolute(page.image),
     inLanguage: 'en',
+    mainEntityOfPage: { '@id': absolute(page.url), '@type': 'WebPage' },
+    url: absolute(page.url),
     ...(page.lastModified ? { dateModified: page.lastModified.toISOString() } : {}),
     ...(page.about ? { about: { '@type': 'SoftwareSourceCode', name: page.about } } : {}),
     author: { '@type': 'Organization', name: appName, url: domain },
     publisher: {
       '@type': 'Organization',
+      logo: { '@type': 'ImageObject', url: absolute(logoPath) },
       name: appName,
       url: domain,
-      logo: { '@type': 'ImageObject', url: absolute(logoPath) },
     },
   };
 }
 
 /** From a page's `faq` frontmatter, which is also rendered visibly, as Google requires. */
-export function faqPageJsonLd(faq: ReadonlyArray<{ question: string; answer: string }>) {
+export function faqPageJsonLd(faq: ReadonlyArray<{ answer: string; question: string }>) {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: faq.map(({ question, answer }) => ({
+    mainEntity: faq.map(({ answer, question }) => ({
       '@type': 'Question',
-      name: question,
       // Structured data is plain text, so drop the code markers the visible copy renders.
       acceptedAnswer: { '@type': 'Answer', text: answer.replaceAll('`', '') },
+      name: question,
     })),
   };
 }
 
 export function blogPostingJsonLd(post: {
-  title: string;
-  description?: string;
   author: string;
   date: Date;
+  description?: string;
+  image: string;
   /** Last git change to the post; falls back to `date`. */
   lastModified?: Date;
+  title: string;
   url: string;
-  image: string;
 }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.description,
-    datePublished: post.date.toISOString(),
+    author: { '@type': 'Person', name: post.author },
     // A post first committed before its `date` would otherwise claim to be modified before it
     // was published.
     dateModified: (post.lastModified && post.lastModified > post.date
       ? post.lastModified
       : post.date
     ).toISOString(),
-    author: { '@type': 'Person', name: post.author },
-    publisher: { '@type': 'Organization', name: appName, url: domain },
+    datePublished: post.date.toISOString(),
+    description: post.description,
+    headline: post.title,
     image: absolute(post.image),
-    mainEntityOfPage: { '@type': 'WebPage', '@id': absolute(post.url) },
+    mainEntityOfPage: { '@id': absolute(post.url), '@type': 'WebPage' },
+    publisher: { '@type': 'Organization', name: appName, url: domain },
   };
 }

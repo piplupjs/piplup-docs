@@ -1,7 +1,9 @@
 'use client';
 
-import { type Control, useForm } from 'react-hook-form';
 import { useFieldStateAdapter } from '@piplup/rhf-core';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FieldValues = {
   email: string;
@@ -9,21 +11,21 @@ type FieldValues = {
 
 function EmailHelperText({ control }: { control?: Control<FieldValues> }) {
   const helper = useFieldStateAdapter({
-    name: 'email',
-    helperText: 'We will only use this for account updates.',
-    disableOnIsSubmitting: true,
     control,
+    disableOnIsSubmitting: true,
+    helperText: 'We will only use this for account updates.',
+    name: 'email',
   });
 
   return (
-    <p className={helper.className} style={helper.style} aria-live="polite">
+    <p aria-live="polite" className={helper.className} style={helper.style}>
       {helper.helperText}
     </p>
   );
 }
 
 export default function Page() {
-  const { register, handleSubmit, control } = useForm({
+  const { control, handleSubmit, register } = useForm({
     defaultValues: {
       email: '',
     },
@@ -35,8 +37,8 @@ export default function Page() {
         <label htmlFor="email">Email</label>
         <input
           id="email"
-          type="email"
           placeholder="name@example.com"
+          type="email"
           {...register('email', {
             required: 'Email is required.',
           })}
@@ -46,8 +48,8 @@ export default function Page() {
       <EmailHelperText control={control} />
       <button
         className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded"
-        type="submit"
         style={{ marginTop: 12 }}
+        type="submit"
       >
         Submit
       </button>

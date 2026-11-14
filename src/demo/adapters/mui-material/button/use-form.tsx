@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack spacing={2}>
-        <MuiTextFieldElement control={control} name="name" label="Name" />
+        <MuiTextFieldElement control={control} label="Name" name="name" />
         <div>
           <MuiButtonElement control={control} type="submit" variant="contained">
             Save

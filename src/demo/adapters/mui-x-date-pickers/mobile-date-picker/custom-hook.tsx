@@ -1,12 +1,15 @@
 'use client';
 
-import dayjs, { type Dayjs } from 'dayjs';
 import Stack from '@mui/material/Stack';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
 import { useMuiXMobileDatePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
-import { type Control, useForm } from 'react-hook-form';
+import dayjs from 'dayjs';
+import { useForm } from 'react-hook-form';
+
+import type { Dayjs } from 'dayjs';
+import type { Control } from 'react-hook-form';
 
 type FormValues = { crossing: Dayjs | null };
 
@@ -17,19 +20,19 @@ function isOffSeason(date: Dayjs) {
 
 function FerryDateField({ control }: { control: Control<FormValues> }) {
   const adapter = useMuiXMobileDatePickerAdapter<Dayjs, FormValues, 'crossing', HTMLDivElement>({
-    control,
-    name: 'crossing',
-    required: true,
     composeHelperText: true,
+    control,
     disablePast: true,
     maxDate: dayjs().add(1, 'year').endOf('year'),
-    shouldDisableMonth: isOffSeason,
     messages: {
-      required: 'Choose a crossing date',
       disablePast: 'That crossing has already sailed',
-      shouldDisableMonth: 'The ferry only runs from April to October',
       maxDate: 'Bookings open one season ahead',
+      required: 'Choose a crossing date',
+      shouldDisableMonth: 'The ferry only runs from April to October',
     },
+    name: 'crossing',
+    required: true,
+    shouldDisableMonth: isOffSeason,
     slotProps: {
       textField: { helperText: 'Season: April to October' },
     },
@@ -38,8 +41,8 @@ function FerryDateField({ control }: { control: Control<FormValues> }) {
   return (
     <MobileDatePicker
       label="Crossing date"
-      views={['year', 'month', 'day']}
       openTo="month"
+      views={['year', 'month', 'day']}
       {...adapter}
     />
   );
@@ -53,13 +56,13 @@ export default function Page() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form
-        noValidate
         onSubmit={handleSubmit((values) => alert(values.crossing?.format('dddd, D MMMM YYYY')))}
+        noValidate
       >
         <Stack direction="column" spacing={2}>
           <FerryDateField control={control} />
           <div>
-            <MuiButtonElement control={control} variant="contained" type="submit">
+            <MuiButtonElement control={control} type="submit" variant="contained">
               Book crossing
             </MuiButtonElement>
           </div>

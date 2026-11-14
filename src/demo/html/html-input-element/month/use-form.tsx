@@ -1,7 +1,7 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
 import { HtmlInputElement } from '@piplup/rhf-adapters/html';
+import { useForm } from 'react-hook-form';
 
 export default function Page() {
   const { control, handleSubmit } = useForm({
@@ -12,12 +12,12 @@ export default function Page() {
 
   return (
     <form
-      noValidate
       onSubmit={handleSubmit((data) => {
         alert(JSON.stringify(data, null, 2));
       })}
+      noValidate
     >
-      <HtmlInputElement name="birthMonth" type="month" control={control} />
+      <HtmlInputElement control={control} name="birthMonth" type="month" />
     </form>
   );
 }

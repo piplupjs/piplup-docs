@@ -4,8 +4,10 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
 import { usePatternFormatAdapter } from '@piplup/rhf-adapters/react-number-format';
-import { type Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { PatternFormat } from 'react-number-format';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = { phone: string };
 
@@ -13,15 +15,15 @@ type FormValues = { phone: string };
 // run against "2125550100", not "+1 (212) 555-0100".
 function UsPhoneField({ control }: { control: Control<FormValues> }) {
   const adapter = usePatternFormatAdapter<string, FormValues, 'phone'>({
-    control,
-    name: 'phone',
-    required: true,
     composeHelperText: true,
-    pattern: /^\d{10}$/,
+    control,
     messages: {
-      required: 'Enter a phone number',
       pattern: 'Enter all 10 digits',
+      required: 'Enter a phone number',
     },
+    name: 'phone',
+    pattern: /^\d{10}$/,
+    required: true,
     rules: {
       validate: (value) => !/^[01]/.test(value) || "Area codes can't start with 0 or 1",
     },
@@ -30,8 +32,8 @@ function UsPhoneField({ control }: { control: Control<FormValues> }) {
   return (
     <PatternFormat
       customInput={TextField}
-      label="Mobile number"
       format="+1 (###) ###-####"
+      label="Mobile number"
       mask="_"
       {...adapter}
     />
@@ -44,11 +46,11 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <UsPhoneField control={control} />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Submit
           </MuiButtonElement>
         </div>

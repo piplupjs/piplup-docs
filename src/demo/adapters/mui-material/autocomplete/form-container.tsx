@@ -17,7 +17,7 @@ export default function Page() {
         options={options}
         renderInput={(params) => <TextField {...params} label="Framework" />}
       />
-      <MuiButtonElement type="submit" variant="contained" sx={{ mt: 2 }}>
+      <MuiButtonElement sx={{ mt: 2 }} type="submit" variant="contained">
         Submit
       </MuiButtonElement>
     </FormContainer>

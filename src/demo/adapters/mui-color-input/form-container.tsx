@@ -12,7 +12,7 @@ export default function Page() {
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <Stack direction="column" spacing={2}>
-        <MuiColorInputElement name="accent" label="Accent color" />
+        <MuiColorInputElement label="Accent color" name="accent" />
         <div>
           <MuiButtonElement type="submit" variant="contained">
             Submit

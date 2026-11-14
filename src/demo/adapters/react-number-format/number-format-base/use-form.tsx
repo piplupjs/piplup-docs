@@ -1,8 +1,8 @@
 'use client';
 
 import Stack from '@mui/material/Stack';
-import { NumberFormatBaseElement } from '@piplup/rhf-adapters/react-number-format';
 import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { NumberFormatBaseElement } from '@piplup/rhf-adapters/react-number-format';
 import { useForm } from 'react-hook-form';
 
 export default function Page() {
@@ -12,7 +12,7 @@ export default function Page() {
   return (
     <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
-        <NumberFormatBaseElement control={control} name="amount" format={(value) => value} />
+        <NumberFormatBaseElement control={control} format={(value) => value} name="amount" />
         <div>
           <MuiButtonElement control={control} type="submit" variant="contained">
             Submit

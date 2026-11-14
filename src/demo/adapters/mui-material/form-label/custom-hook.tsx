@@ -1,42 +1,45 @@
 'use client';
 
-import { useId } from 'react';
-import Stack from '@mui/material/Stack';
-import FormLabel from '@mui/material/FormLabel';
+import * as React from 'react';
+
 import FormHelperText from '@mui/material/FormHelperText';
+import FormLabel from '@mui/material/FormLabel';
 import InputBase from '@mui/material/InputBase';
+import Stack from '@mui/material/Stack';
 import {
   MuiButtonElement,
   useMuiFormHelperTextAdapter,
   useMuiFormLabelAdapter,
   useMuiInputBaseAdapter,
 } from '@piplup/rhf-adapters/mui-material';
-import { type Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = { bio: string };
 
 // A field built from three hooks. Only the input registers the value.
 // The label and helper text read the same field's error state by name.
 function BioField({ control }: { control: Control<FormValues> }) {
-  const inputId = useId();
+  const inputId = React.useId();
   const helperId = `${inputId}-helper`;
 
   const {
+    helperText: inputHelperText,
     ref,
-    helperText: _inputHelperText,
     ...input
   } = useMuiInputBaseAdapter({
     control,
-    name: 'bio',
-    required: true,
     maxLength: 160,
     messages: {
-      required: 'Tell us a little about yourself',
       maxLength: (max) => `Keep it under ${max} characters`,
+      required: 'Tell us a little about yourself',
     },
+    name: 'bio',
+    required: true,
   });
 
-  const { helperText: _labelHelperText, ...label } = useMuiFormLabelAdapter<
+  const { helperText: labelHelperText, ...label } = useMuiFormLabelAdapter<
     FormValues,
     'bio',
     HTMLLabelElement
@@ -46,10 +49,10 @@ function BioField({ control }: { control: Control<FormValues> }) {
   });
 
   const helper = useMuiFormHelperTextAdapter<FormValues, 'bio', HTMLParagraphElement>({
+    children: 'Shown on your public profile',
+    composeHelperText: true,
     control,
     name: 'bio',
-    composeHelperText: true,
-    children: 'Shown on your public profile',
   });
 
   return (
@@ -59,17 +62,17 @@ function BioField({ control }: { control: Control<FormValues> }) {
       </FormLabel>
       <InputBase
         {...input}
+        sx={{
+          border: 1,
+          borderColor: input.error ? 'error.main' : 'divider',
+          borderRadius: 1,
+          p: 1,
+        }}
         id={inputId}
         inputRef={ref}
-        multiline
         minRows={3}
         slotProps={{ input: { 'aria-describedby': helperId } }}
-        sx={{
-          p: 1,
-          border: 1,
-          borderRadius: 1,
-          borderColor: input.error ? 'error.main' : 'divider',
-        }}
+        multiline
       />
       <FormHelperText {...helper} id={helperId} />
     </Stack>
@@ -82,11 +85,11 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <BioField control={control} />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Save
           </MuiButtonElement>
         </div>

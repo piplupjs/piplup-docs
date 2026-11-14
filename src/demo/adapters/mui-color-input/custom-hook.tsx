@@ -5,16 +5,17 @@ import Stack from '@mui/material/Stack';
 import { useMuiColorInputAdapter } from '@piplup/rhf-adapters/mui-color-input';
 import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
 import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
-import { type Control, useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = { buttonColor: string };
 
 // Perceived brightness of a "#rrggbb" color, from 0 (black) to 255 (white).
 function brightness(hex: string) {
-  const rgb = parseInt(hex.slice(1, 7), 16);
-  const r = (rgb >> 16) & 255;
-  const g = (rgb >> 8) & 255;
-  const b = rgb & 255;
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
 
   return (r * 299 + g * 587 + b * 114) / 1000;
 }
@@ -23,21 +24,21 @@ function brightness(hex: string) {
 // and it rejects colors too light for white button text.
 function ButtonColorField({ control }: { control: Control<FormValues> }) {
   const adapter = useMuiColorInputAdapter<string, FormValues, 'buttonColor', HTMLDivElement>({
-    control,
-    name: 'buttonColor',
-    required: true,
     composeHelperText: true,
+    control,
     helperText: 'Used behind white button text',
     messages: { required: 'Pick a button color' },
+    name: 'buttonColor',
+    required: true,
     rules: {
       validate: {
-        valid: (value) => matchIsValidColor(value) || 'Enter a valid hex color',
         contrast: (value) => brightness(value) < 128 || 'Too light for white text',
+        valid: (value) => matchIsValidColor(value) || 'Enter a valid hex color',
       },
     },
   });
 
-  return <MuiColorInput label="Button color" format="hex" isAlphaHidden {...adapter} />;
+  return <MuiColorInput format="hex" label="Button color" isAlphaHidden {...adapter} />;
 }
 
 function Preview({ control }: { control: Control<FormValues> }) {
@@ -45,7 +46,7 @@ function Preview({ control }: { control: Control<FormValues> }) {
   const background = matchIsValidColor(color) ? color : undefined;
 
   return (
-    <Button variant="contained" sx={{ bgcolor: background, alignSelf: 'flex-start' }}>
+    <Button sx={{ alignSelf: 'flex-start', bgcolor: background }} variant="contained">
       Preview
     </Button>
   );
@@ -57,12 +58,12 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <ButtonColorField control={control} />
         <Preview control={control} />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Save theme
           </MuiButtonElement>
         </div>

@@ -1,7 +1,7 @@
 'use client';
 
-import Stack from '@mui/material/Stack';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Stack from '@mui/material/Stack';
 import { MuiButtonElement, MuiCheckboxElement } from '@piplup/rhf-adapters/mui-material';
 import { FormContainer } from '@piplup/rhf-core';
 
@@ -11,11 +11,10 @@ export default function Page() {
       defaultValues={{ terms: true }}
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
-      <Stack spacing={2} direction="column">
+      <Stack direction="column" spacing={2}>
         <FormControlLabel
           control={
             <MuiCheckboxElement
-              name="terms"
               transform={{
                 input(value) {
                   // Checkbox expects value to be always array
@@ -25,6 +24,7 @@ export default function Page() {
                   return checked;
                 },
               }}
+              name="terms"
             />
           }
           label="Accept terms & conditions"

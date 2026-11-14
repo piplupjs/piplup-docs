@@ -1,12 +1,12 @@
 'use client';
 
-import dayjs from 'dayjs';
 import Stack from '@mui/material/Stack';
-import { MuiXMobileDateTimePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
-import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { MuiXMobileDateTimePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
 import { FormContainer } from '@piplup/rhf-core';
+import dayjs from 'dayjs';
 
 export default function Page() {
   return (
@@ -16,9 +16,9 @@ export default function Page() {
         onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
       >
         <Stack direction="column" spacing={2}>
-          <MuiXMobileDateTimePickerElement name="appointment" label="Appointment" />
+          <MuiXMobileDateTimePickerElement label="Appointment" name="appointment" />
           <div>
-            <MuiButtonElement variant="contained" type="submit">
+            <MuiButtonElement type="submit" variant="contained">
               Submit
             </MuiButtonElement>
           </div>

@@ -4,8 +4,10 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
 import { useNumberFormatBaseAdapter } from '@piplup/rhf-adapters/react-number-format';
-import { type Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { NumberFormatBase } from 'react-number-format';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = { expiry: string };
 
@@ -40,12 +42,12 @@ function isExpired(digits: string) {
 
 function CardExpiryField({ control }: { control: Control<FormValues> }) {
   const adapter = useNumberFormatBaseAdapter<string, FormValues, 'expiry'>({
-    control,
-    name: 'expiry',
-    required: true,
     composeHelperText: true,
+    control,
     helperText: 'MM/YY',
     messages: { required: "Enter the card's expiry date" },
+    name: 'expiry',
+    required: true,
     rules: {
       validate: {
         complete: (value) => value.length === 4 || 'Enter both month and year',
@@ -57,8 +59,8 @@ function CardExpiryField({ control }: { control: Control<FormValues> }) {
   return (
     <NumberFormatBase
       customInput={TextField}
-      label="Expiry date"
       format={formatExpiry}
+      label="Expiry date"
       {...adapter}
     />
   );
@@ -70,11 +72,11 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <CardExpiryField control={control} />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Save card
           </MuiButtonElement>
         </div>

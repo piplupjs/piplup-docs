@@ -1,5 +1,7 @@
 import Link from 'next/link';
+
 import { ArrowRight } from 'lucide-react';
+
 import { concerns } from '@/lib/shared';
 
 export function Concerns() {
@@ -13,9 +15,9 @@ export function Concerns() {
       <div className="mt-10 grid gap-4 sm:grid-cols-2">
         {concerns.map((concern) => (
           <Link
-            key={concern.href}
-            href={concern.href}
             className="group flex flex-col rounded-xl border p-5 transition-colors hover:bg-fd-accent/50"
+            href={concern.href}
+            key={concern.href}
           >
             <h3 className="flex items-center gap-1.5 font-semibold">
               {concern.title}
@@ -27,8 +29,8 @@ export function Concerns() {
             <ul className="mt-4 flex flex-wrap gap-1.5">
               {concern.packages.map((name) => (
                 <li
-                  key={name}
                   className="rounded-md bg-fd-muted px-2 py-0.5 font-mono text-xs text-fd-muted-foreground"
+                  key={name}
                 >
                   {name}
                 </li>

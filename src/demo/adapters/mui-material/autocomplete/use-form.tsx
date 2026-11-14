@@ -5,7 +5,7 @@ import { MuiAutocompleteElement, MuiButtonElement } from '@piplup/rhf-adapters/m
 import { useForm } from 'react-hook-form';
 
 export default function Page() {
-  const { control, handleSubmit } = useForm<{ framework: string | null }>({
+  const { control, handleSubmit } = useForm<{ framework: null | string }>({
     defaultValues: { framework: 'React' },
   });
   const options = ['React', 'Vue', 'Svelte'];
@@ -18,7 +18,7 @@ export default function Page() {
         options={options}
         renderInput={(params) => <TextField {...params} label="Framework" />}
       />
-      <MuiButtonElement control={control} type="submit" variant="contained" sx={{ mt: 2 }}>
+      <MuiButtonElement control={control} sx={{ mt: 2 }} type="submit" variant="contained">
         Submit
       </MuiButtonElement>
     </form>

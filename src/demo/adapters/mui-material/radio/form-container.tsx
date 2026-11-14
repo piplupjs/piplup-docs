@@ -13,11 +13,11 @@ export default function Page() {
     >
       <Stack direction="column" spacing={2}>
         <FormControlLabel
-          control={<MuiRadioElement name="choice" value="a" checked={(value) => value === 'a'} />}
+          control={<MuiRadioElement checked={(value) => value === 'a'} name="choice" value="a" />}
           label="Choice A"
         />
         <FormControlLabel
-          control={<MuiRadioElement name="choice" value="b" checked={(value) => value === 'b'} />}
+          control={<MuiRadioElement checked={(value) => value === 'b'} name="choice" value="b" />}
           label="Choice B"
         />
         <div>

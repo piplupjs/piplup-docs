@@ -18,7 +18,7 @@ export default function Page() {
           label="Newsletter"
         />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Submit
           </MuiButtonElement>
         </div>

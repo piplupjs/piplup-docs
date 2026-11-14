@@ -1,8 +1,10 @@
 'use client';
 
-import { useForm, type Control } from 'react-hook-form';
-import { useFieldState } from '@piplup/rhf-core';
 import { HtmlButtonElement } from '@piplup/rhf-adapters/html';
+import { useFieldState } from '@piplup/rhf-core';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FieldValues = {
   password: string;
@@ -10,8 +12,8 @@ type FieldValues = {
 
 function PasswordStatus({ control }: { control?: Control<FieldValues> }) {
   const fieldState = useFieldState({
-    name: 'password',
     control,
+    name: 'password',
   });
 
   if (!fieldState.isTouched) {
@@ -28,7 +30,7 @@ function PasswordStatus({ control }: { control?: Control<FieldValues> }) {
 }
 
 export default function Page() {
-  const { control, register, handleSubmit } = useForm({
+  const { control, handleSubmit, register } = useForm({
     defaultValues: {
       password: '',
     },
@@ -42,11 +44,11 @@ export default function Page() {
           id="password"
           type="password"
           {...register('password', {
-            required: 'Password is required.',
             minLength: {
-              value: 8,
               message: 'Password must be at least 8 characters.',
+              value: 8,
             },
+            required: 'Password is required.',
           })}
           className="border rounded block px-2"
         />

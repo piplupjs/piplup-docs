@@ -12,7 +12,7 @@ export default function Page() {
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <Stack direction="column" spacing={2}>
-        <MuiFileInputElement name="resume" label="Resume" />
+        <MuiFileInputElement label="Resume" name="resume" />
         <div>
           <MuiButtonElement type="submit" variant="contained">
             Submit

@@ -1,15 +1,18 @@
 'use client';
 
 import * as React from 'react';
+
 import Box from '@mui/material/Box';
 import FormHelperText from '@mui/material/FormHelperText';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { MuiButtonElement, useMuiRatingAdapter } from '@piplup/rhf-adapters/mui-material';
-import { type Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
-type FormValues = { score: number | null };
+import type { Control } from 'react-hook-form';
+
+type FormValues = { score: null | number };
 
 const LABELS: Record<number, string> = {
   1: 'Poor',
@@ -25,16 +28,16 @@ function ScoreField({ control }: { control: Control<FormValues> }) {
   const [hover, setHover] = React.useState(-1);
 
   const { error, helperText, ...adapter } = useMuiRatingAdapter<
-    number | null,
+    null | number,
     FormValues,
     'score',
     HTMLSpanElement
   >({
+    composeHelperText: true,
     control,
+    messages: { required: 'Please rate your stay' },
     name: 'score',
     required: true,
-    composeHelperText: true,
-    messages: { required: 'Please rate your stay' },
   });
 
   const shown = hover !== -1 ? hover : adapter.value;
@@ -57,7 +60,7 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <ScoreField control={control} />
         <div>

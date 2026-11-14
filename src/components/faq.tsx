@@ -1,9 +1,9 @@
-import type { ReactNode } from 'react';
+import * as React from 'react';
 
-export type FaqItem = { question: string; answer: string };
+export type FaqItem = { answer: string; question: string };
 
 /** Turns `code` spans in a plain-text answer into <code>, and leaves the rest as text. */
-function renderInlineCode(text: string): ReactNode[] {
+function renderInlineCode(text: string): React.ReactNode[] {
   return text
     .split(/(`[^`]+`)/g)
     .map((part, index) =>
@@ -28,16 +28,18 @@ function slugify(text: string): string {
  * from the same list. Place it under a `## FAQ` heading so the table of contents links to it.
  */
 export function Faq({ items }: { items?: readonly FaqItem[] }) {
-  if (!items?.length) return null;
+  if (!items?.length) {
+    return null;
+  }
 
   return (
-    <>
-      {items.map(({ question, answer }) => (
+    <React.Fragment>
+      {items.map(({ answer, question }) => (
         <section key={question}>
           <h3 id={`faq-${slugify(question)}`}>{renderInlineCode(question)}</h3>
           <p>{renderInlineCode(answer)}</p>
         </section>
       ))}
-    </>
+    </React.Fragment>
   );
 }

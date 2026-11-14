@@ -1,15 +1,18 @@
 'use client';
 
+import type * as React from 'react';
+
 import Autocomplete from '@mui/material/Autocomplete';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { MuiButtonElement, useMuiAutocompleteAdapter } from '@piplup/rhf-adapters/mui-material';
-import type * as React from 'react';
-import { type Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type Country = { code: string; label: string };
 
-type FormValues = { country: string | null };
+type FormValues = { country: null | string };
 
 const COUNTRIES: Country[] = [
   { code: 'CA', label: 'Canada' },
@@ -30,24 +33,24 @@ function CountryField({ control }: { control: Control<FormValues> }) {
     'country',
     HTMLDivElement
   >({
-    control,
-    name: 'country',
-    required: true,
     composeHelperText: true,
+    control,
     helperText: 'Where should we ship your order?',
     messages: { required: 'Choose a country' },
+    name: 'country',
+    // params includes error, helperText and required from the adapter.
+    renderInput: (params) => <TextField {...params} label="Country" />,
+    required: true,
     transform: {
       input: (code) => COUNTRIES.find((country) => country.code === code) ?? null,
       output: (_event: React.SyntheticEvent, option: Country | null) => option?.code ?? null,
     },
-    // params includes error, helperText and required from the adapter.
-    renderInput: (params) => <TextField {...params} label="Country" />,
   });
 
   return (
     <Autocomplete
-      options={COUNTRIES}
       getOptionLabel={(option) => option.label}
+      options={COUNTRIES}
       sx={{ width: 300 }}
       {...adapter}
     />
@@ -60,7 +63,7 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <CountryField control={control} />
         <div>

@@ -1,12 +1,14 @@
 'use client';
 
-import type { Dayjs } from 'dayjs';
 import Stack from '@mui/material/Stack';
 import { DesktopTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
 import { useMuiXDesktopTimePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
-import { type Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+
+import type { Dayjs } from 'dayjs';
+import type { Control } from 'react-hook-form';
 
 type FormValues = { meeting: Dayjs | null };
 
@@ -14,15 +16,15 @@ type FormValues = { meeting: Dayjs | null };
 // fails validation with the "shouldDisableTime-hours" message.
 function MeetingTimeField({ control }: { control: Control<FormValues> }) {
   const adapter = useMuiXDesktopTimePickerAdapter<Dayjs, FormValues, 'meeting', HTMLDivElement>({
-    control,
-    name: 'meeting',
-    required: true,
     composeHelperText: true,
-    shouldDisableTime: (value, view) => view === 'hours' && value.hour() === 12,
+    control,
     messages: {
       required: 'Pick a meeting time',
       'shouldDisableTime-hours': 'No meetings over lunch (12:00 to 13:00)',
     },
+    name: 'meeting',
+    required: true,
+    shouldDisableTime: (value, view) => view === 'hours' && value.hour() === 12,
     slotProps: {
       textField: { helperText: 'Type a time or use the clock button' },
     },
@@ -38,11 +40,11 @@ export default function Page() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <form noValidate onSubmit={handleSubmit((values) => alert(values.meeting?.format('h:mm A')))}>
+      <form onSubmit={handleSubmit((values) => alert(values.meeting?.format('h:mm A')))} noValidate>
         <Stack direction="column" spacing={2}>
           <MeetingTimeField control={control} />
           <div>
-            <MuiButtonElement control={control} variant="contained" type="submit">
+            <MuiButtonElement control={control} type="submit" variant="contained">
               Schedule
             </MuiButtonElement>
           </div>

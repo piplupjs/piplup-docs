@@ -1,36 +1,39 @@
 'use client';
 
-import dayjs, { type Dayjs } from 'dayjs';
 import Stack from '@mui/material/Stack';
 import { DateField, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
 import { useMuiXDateFieldAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
-import { type Control, useForm } from 'react-hook-form';
+import dayjs from 'dayjs';
+import { useForm } from 'react-hook-form';
+
+import type { Dayjs } from 'dayjs';
+import type { Control } from 'react-hook-form';
 
 type FormValues = { birthDate: Dayjs | null };
 
 // A keyboard-only birth date field. Users must be 18 or older.
 function BirthDateField({ control }: { control: Control<FormValues> }) {
   const adapter = useMuiXDateFieldAdapter<Dayjs, FormValues, 'birthDate', HTMLDivElement>({
-    control,
-    name: 'birthDate',
-    required: true,
     composeHelperText: true,
-    helperText: 'DD/MM/YYYY',
+    control,
     disableFuture: true,
-    minDate: dayjs('1900-01-01'),
+    helperText: 'DD/MM/YYYY',
     maxDate: dayjs().subtract(18, 'year'),
     messages: {
-      required: 'Enter your date of birth',
-      invalidDate: () => 'Finish typing the date',
       disableFuture: "Date of birth can't be in the future",
-      minDate: 'Enter a date after 1900',
+      invalidDate: () => 'Finish typing the date',
       maxDate: 'You must be 18 or older to sign up',
+      minDate: 'Enter a date after 1900',
+      required: 'Enter your date of birth',
     },
+    minDate: dayjs('1900-01-01'),
+    name: 'birthDate',
+    required: true,
   });
 
-  return <DateField label="Date of birth" format="DD/MM/YYYY" {...adapter} />;
+  return <DateField format="DD/MM/YYYY" label="Date of birth" {...adapter} />;
 }
 
 export default function Page() {
@@ -41,13 +44,13 @@ export default function Page() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form
-        noValidate
         onSubmit={handleSubmit((values) => alert(values.birthDate?.format('YYYY-MM-DD')))}
+        noValidate
       >
         <Stack direction="column" spacing={2}>
           <BirthDateField control={control} />
           <div>
-            <MuiButtonElement control={control} variant="contained" type="submit">
+            <MuiButtonElement control={control} type="submit" variant="contained">
               Continue
             </MuiButtonElement>
           </div>

@@ -1,11 +1,14 @@
 'use client';
 
-import type { ChangeEvent } from 'react';
+import type * as React from 'react';
+
+import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import { MuiButtonElement, useMuiTextFieldAdapter } from '@piplup/rhf-adapters/mui-material';
-import { type Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = { username: string };
 
@@ -13,34 +16,34 @@ type FormValues = { username: string };
 // length and character rules with its own messages.
 function UsernameField({ control }: { control: Control<FormValues> }) {
   const adapter = useMuiTextFieldAdapter<string, FormValues, 'username', HTMLDivElement>({
-    control,
-    name: 'username',
-    required: true,
-    minLength: 3,
-    maxLength: 20,
-    pattern: /^[a-z0-9_]+$/,
     composeHelperText: true,
+    control,
     helperText: 'Letters, numbers and underscores',
+    maxLength: 20,
     messages: {
-      required: 'Choose a username',
-      minLength: 'Use at least 3 characters',
       maxLength: 'Use 20 characters or fewer',
+      minLength: 'Use at least 3 characters',
       pattern: 'Only letters, numbers and underscores are allowed',
+      required: 'Choose a username',
     },
+    minLength: 3,
+    name: 'username',
+    pattern: /^[a-z0-9_]+$/,
+    required: true,
     transform: {
-      output: (event: ChangeEvent<HTMLInputElement>) => event.target.value.toLowerCase(),
+      output: (event: React.ChangeEvent<HTMLInputElement>) => event.target.value.toLowerCase(),
     },
   });
 
   return (
     <TextField
       {...adapter}
-      label="Username"
       slotProps={{
         input: {
           startAdornment: <InputAdornment position="start">@</InputAdornment>,
         },
       }}
+      label="Username"
     />
   );
 }
@@ -51,11 +54,11 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <UsernameField control={control} />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Create account
           </MuiButtonElement>
         </div>

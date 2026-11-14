@@ -11,7 +11,7 @@ export default function Page() {
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <Stack spacing={2}>
-        <MuiTextFieldElement name="name" label="Name" />
+        <MuiTextFieldElement label="Name" name="name" />
         <div>
           <MuiButtonElement type="submit" variant="contained">
             Save

@@ -1,8 +1,8 @@
 'use client';
 
 import Stack from '@mui/material/Stack';
-import { NumericFormatElement } from '@piplup/rhf-adapters/react-number-format';
 import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { NumericFormatElement } from '@piplup/rhf-adapters/react-number-format';
 import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
@@ -12,7 +12,7 @@ export default function Page() {
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <Stack direction="column" spacing={2}>
-        <NumericFormatElement name="price" thousandSeparator prefix="$" />
+        <NumericFormatElement name="price" prefix="$" thousandSeparator />
         <div>
           <MuiButtonElement type="submit" variant="contained">
             Submit

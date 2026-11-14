@@ -17,7 +17,6 @@ export default function Page() {
 
   return (
     <form
-      noValidate
       onSubmit={handleSubmit((values) =>
         // File objects serialize to {} with JSON.stringify, so list them by hand.
         alert(
@@ -26,35 +25,36 @@ export default function Page() {
             .join('\n'),
         ),
       )}
+      noValidate
     >
       <Stack direction="column" spacing={2}>
         <MuiFileInputElement
-          control={control}
-          name="photos"
-          label="Photos"
-          placeholder="Choose up to 3 images"
-          multiple
-          required
-          messages={{ required: 'Attach at least one photo' }}
-          // `accept` only filters the browser's file picker. The rules below enforce it.
-          slotProps={{ htmlInput: { accept: 'image/*' } }}
           rules={{
             validate: {
               count: (files) => files.length <= 3 || 'Attach up to 3 photos',
-              type: (files) =>
-                files.every((file) => file.type.startsWith('image/')) ||
-                'Only image files are allowed',
               size: (files) =>
                 files.every((file) => file.size <= MAX_SIZE) ||
                 'Each photo must be 1 MB or smaller',
+              type: (files) =>
+                files.every((file) => file.type.startsWith('image/')) ||
+                'Only image files are allowed',
             },
           }}
+          control={control}
+          label="Photos"
+          messages={{ required: 'Attach at least one photo' }}
+          name="photos"
+          placeholder="Choose up to 3 images"
+          // `accept` only filters the browser's file picker. The rules below enforce it.
+          slotProps={{ htmlInput: { accept: 'image/*' } }}
+          multiple
+          required
         />
         <Stack direction="row" spacing={1}>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Upload
           </MuiButtonElement>
-          <Button variant="outlined" onClick={() => reset()}>
+          <Button onClick={() => reset()} variant="outlined">
             Reset
           </Button>
         </Stack>

@@ -12,9 +12,9 @@ export default function Page() {
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <Stack spacing={2}>
-        <MuiTextFieldElement name="name" label="Name" />
+        <MuiTextFieldElement label="Name" name="name" />
         <div>
-          <MuiIconButtonElement type="submit" color="primary">
+          <MuiIconButtonElement color="primary" type="submit">
             <AddIcon />
           </MuiIconButtonElement>
         </div>

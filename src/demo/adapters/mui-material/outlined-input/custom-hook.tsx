@@ -1,54 +1,57 @@
 'use client';
 
-import { useId, useState } from 'react';
-import Stack from '@mui/material/Stack';
+import * as React from 'react';
+
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import Stack from '@mui/material/Stack';
 import { MuiButtonElement, useMuiOutlinedInputAdapter } from '@piplup/rhf-adapters/mui-material';
-import { type Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = { password: string };
 
 // A password field with a show/hide toggle. The input type is passed to the
 // hook, not to OutlinedInput, because the adapter returns its own `type`.
 function PasswordField({ control }: { control: Control<FormValues> }) {
-  const id = useId();
-  const [visible, setVisible] = useState(false);
-  const { ref, helperText, ...adapter } = useMuiOutlinedInputAdapter({
-    control,
-    name: 'password',
-    type: visible ? 'text' : 'password',
-    required: true,
-    minLength: 8,
-    maxLength: 64,
+  const id = React.useId();
+  const [visible, setVisible] = React.useState(false);
+  const { helperText, ref, ...adapter } = useMuiOutlinedInputAdapter({
     composeHelperText: true,
+    control,
     helperText: 'At least 8 characters',
+    maxLength: 64,
     messages: {
-      required: 'Choose a password',
       minLength: (length) => `Use at least ${length} characters`,
+      required: 'Choose a password',
     },
+    minLength: 8,
+    name: 'password',
+    required: true,
+    type: visible ? 'text' : 'password',
   });
 
   return (
-    <FormControl variant="outlined" error={adapter.error} required>
+    <FormControl error={adapter.error} variant="outlined" required>
       <InputLabel htmlFor={id}>Password</InputLabel>
       <OutlinedInput
         {...adapter}
-        id={id}
-        inputRef={ref}
-        label="Password"
-        autoComplete="new-password"
         endAdornment={
           <InputAdornment position="end">
-            <Button size="small" onClick={() => setVisible((v) => !v)}>
+            <Button onClick={() => setVisible((v) => !v)} size="small">
               {visible ? 'Hide' : 'Show'}
             </Button>
           </InputAdornment>
         }
+        autoComplete="new-password"
+        id={id}
+        inputRef={ref}
+        label="Password"
       />
       <FormHelperText>{helperText}</FormHelperText>
     </FormControl>
@@ -61,11 +64,11 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <PasswordField control={control} />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Set password
           </MuiButtonElement>
         </div>

@@ -14,7 +14,7 @@ export default function Page() {
       <Stack direction="column" spacing={2}>
         <FormControlLabel control={<MuiSwitchElement name="newsletter" />} label="Newsletter" />
         <div>
-          <MuiButtonElement variant="contained" type="submit">
+          <MuiButtonElement type="submit" variant="contained">
             Submit
           </MuiButtonElement>
         </div>

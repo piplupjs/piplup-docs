@@ -11,9 +11,9 @@ export default function Page() {
   return (
     <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack spacing={2}>
-        <MuiTextFieldElement control={control} name="name" label="Name" />
+        <MuiTextFieldElement control={control} label="Name" name="name" />
         <div>
-          <MuiFabElement control={control} type="submit" color="secondary" size="small">
+          <MuiFabElement color="secondary" control={control} size="small" type="submit">
             <AddIcon />
           </MuiFabElement>
         </div>

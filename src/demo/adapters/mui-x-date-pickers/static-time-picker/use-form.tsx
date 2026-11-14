@@ -1,11 +1,11 @@
 'use client';
 
-import dayjs from 'dayjs';
 import Stack from '@mui/material/Stack';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MuiXStaticTimePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
 import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { MuiXStaticTimePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 
 export default function Page() {
@@ -18,7 +18,7 @@ export default function Page() {
         <Stack direction="column" spacing={2}>
           <MuiXStaticTimePickerElement control={control} name="reminderTime" />
           <div>
-            <MuiButtonElement control={control} variant="contained" type="submit">
+            <MuiButtonElement control={control} type="submit" variant="contained">
               Submit
             </MuiButtonElement>
           </div>

@@ -1,11 +1,15 @@
-import { RootProvider } from 'fumadocs-ui/provider/next';
 import './global.css';
-import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
+
+import { Inter } from 'next/font/google';
+
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
+
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { RootProvider } from 'fumadocs-ui/provider/next';
+
 import { appDescription, appName, appTagline, domain, socialCardPath } from '@/lib/shared';
 
 const inter = Inter({
@@ -13,14 +17,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(domain),
-  title: {
-    default: `${appName} — ${appTagline}`,
-    // Pages set a bare title; this keeps the brand in the tab and in results.
-    template: `%s | ${appName}`,
-  },
-  description: appDescription,
   applicationName: appName,
+  authors: [{ name: 'Sadik Malik', url: 'https://github.com/sadik-malik' }],
+  creator: appName,
+  description: appDescription,
   keywords: [
     'react',
     'react-hook-form',
@@ -33,28 +33,32 @@ export const metadata: Metadata = {
     'react hooks',
     'typescript',
   ],
-  authors: [{ name: 'Sadik Malik', url: 'https://github.com/sadik-malik' }],
-  creator: appName,
-  publisher: appName,
+  metadataBase: new URL(domain),
   openGraph: {
-    type: 'website',
-    siteName: appName,
-    locale: 'en_US',
-    url: domain,
-    title: `${appName} — ${appTagline}`,
     description: appDescription,
     images: socialCardPath,
+    locale: 'en_US',
+    siteName: appName,
+    title: `${appName} — ${appTagline}`,
+    type: 'website',
+    url: domain,
+  },
+  publisher: appName,
+  robots: {
+    follow: true,
+    googleBot: { follow: true, index: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+    index: true,
+  },
+  title: {
+    default: `${appName} — ${appTagline}`,
+    // Pages set a bare title; this keeps the brand in the tab and in results.
+    template: `%s | ${appName}`,
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${appName} — ${appTagline}`,
     description: appDescription,
     images: socialCardPath,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+    title: `${appName} — ${appTagline}`,
   },
   // Set these in the deployment environment; nothing secret is committed.
   verification: {
@@ -67,7 +71,7 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
+    <html className={inter.className} lang="en" suppressHydrationWarning>
       <body className="flex flex-col min-h-screen" suppressHydrationWarning>
         <AppRouterCacheProvider>
           <RootProvider>{children}</RootProvider>

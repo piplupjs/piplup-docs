@@ -1,26 +1,29 @@
 'use client';
 
-import type { ChangeEvent } from 'react';
-import Stack from '@mui/material/Stack';
-import Switch from '@mui/material/Switch';
+import type * as React from 'react';
+
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
+import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
 import { MuiButtonElement, useMuiSwitchAdapter } from '@piplup/rhf-adapters/mui-material';
-import { type Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = {
-  terms: boolean;
   newsletter: 'subscribed' | 'unsubscribed';
+  terms: boolean;
 };
 
 // A switch that must be on. `false` fails the `required` rule.
 function TermsSwitch({ control }: { control: Control<FormValues> }) {
-  const { helperText, error, ...adapter } = useMuiSwitchAdapter<boolean, FormValues, 'terms'>({
+  const { error, helperText, ...adapter } = useMuiSwitchAdapter<boolean, FormValues, 'terms'>({
+    composeHelperText: true,
     control,
+    messages: { required: 'You need to accept the terms to continue' },
     name: 'terms',
     required: true,
-    composeHelperText: true,
-    messages: { required: 'You need to accept the terms to continue' },
   });
 
   return (
@@ -33,16 +36,12 @@ function TermsSwitch({ control }: { control: Control<FormValues> }) {
 
 // A switch that stores a string instead of a boolean.
 function NewsletterSwitch({ control }: { control: Control<FormValues> }) {
-  const {
-    helperText: _helperText,
-    error: _error,
-    ...adapter
-  } = useMuiSwitchAdapter<boolean, FormValues, 'newsletter'>({
+  const { error, helperText, ...adapter } = useMuiSwitchAdapter<boolean, FormValues, 'newsletter'>({
     control,
     name: 'newsletter',
     transform: {
       input: (value) => value === 'subscribed',
-      output: (event: ChangeEvent<HTMLInputElement>) =>
+      output: (event: React.ChangeEvent<HTMLInputElement>) =>
         event.target.checked ? 'subscribed' : 'unsubscribed',
     },
   });
@@ -54,16 +53,16 @@ function NewsletterSwitch({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { terms: false, newsletter: 'unsubscribed' },
+    defaultValues: { newsletter: 'unsubscribed', terms: false },
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={1}>
         <TermsSwitch control={control} />
         <NewsletterSwitch control={control} />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Continue
           </MuiButtonElement>
         </div>

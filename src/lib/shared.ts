@@ -33,9 +33,9 @@ export const docsContentRoute = '/llms.mdx/docs';
 export const markdownCopyHeaders = { 'X-Robots-Tag': 'noindex, follow' } as const;
 
 export const gitConfig = {
-  user: 'piplupjs',
-  repo: 'piplup-docs',
   branch: 'main',
+  repo: 'piplup-docs',
+  user: 'piplupjs',
 };
 
 /** The npm organisation the documented packages are published under. */
@@ -47,31 +47,31 @@ export const npmOrg = 'https://www.npmjs.com/org/piplup';
  */
 export const concerns = [
   {
-    title: 'React Hook Form adapters',
     description:
       'Bind react-hook-form to MUI, the X date pickers or native inputs without rewriting the same Controller boilerplate on every field.',
     href: '/docs/forms',
     packages: ['@piplup/rhf-core', '@piplup/rhf-adapters'],
+    title: 'React Hook Form adapters',
   },
   {
-    title: 'Access control for React',
     description:
       'Gate UI on the signed-in user’s roles and permissions, with hierarchical wildcard grants and permission names TypeScript checks for you.',
     href: '/docs/access-control',
     packages: ['@piplup/react-acl'],
+    title: 'Access control for React',
   },
   {
-    title: 'Cache busting for React and Vite',
     description:
       'Notice that a new build has shipped and reload clients still running the old bundle, instead of leaving users on a stale release.',
     href: '/docs/cache-busting',
     packages: ['@piplup/cache-buster', '@piplup/vite-plugin-cache-buster'],
+    title: 'Cache busting for React and Vite',
   },
   {
-    title: 'React utility hooks',
     description:
       'The ref helpers, stable callbacks and reactive localStorage hook the other packages are built on, published on their own.',
     href: '/docs/utilities',
     packages: ['@piplup/utils'],
+    title: 'React utility hooks',
   },
 ] as const;

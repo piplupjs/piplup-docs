@@ -1,19 +1,19 @@
 'use client';
 
-import { FormContainer } from '@piplup/rhf-core';
 import { HtmlInputElement } from '@piplup/rhf-adapters/html';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
   return (
     <FormContainer
-      onSubmit={(data) => {
-        alert(JSON.stringify(data, null, 2));
+      defaultValues={{
+        color: '',
       }}
       onError={(errors) => {
         alert(JSON.stringify(errors, null, 2));
       }}
-      defaultValues={{
-        color: '',
+      onSubmit={(data) => {
+        alert(JSON.stringify(data, null, 2));
       }}
     >
       <HtmlInputElement name="color" type="color" />

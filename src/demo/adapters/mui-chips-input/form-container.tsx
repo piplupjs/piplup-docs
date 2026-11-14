@@ -12,9 +12,9 @@ export default function Page() {
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <Stack direction="column" spacing={2}>
-        <MuiChipsInputElement name="tags" label="Tags" />
+        <MuiChipsInputElement label="Tags" name="tags" />
         <div>
-          <MuiButtonElement variant="contained" type="submit">
+          <MuiButtonElement type="submit" variant="contained">
             Submit
           </MuiButtonElement>
         </div>

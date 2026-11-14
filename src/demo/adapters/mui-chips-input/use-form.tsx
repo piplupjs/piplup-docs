@@ -12,9 +12,9 @@ export default function Page() {
   return (
     <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
-        <MuiChipsInputElement control={control} name="tags" label="Tags" />
+        <MuiChipsInputElement control={control} label="Tags" name="tags" />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Submit
           </MuiButtonElement>
         </div>

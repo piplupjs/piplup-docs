@@ -7,7 +7,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import { MuiButtonElement, useMuiSelectAdapter } from '@piplup/rhf-adapters/mui-material';
-import { type Control, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FormValues = { languages: string[] };
 
@@ -24,13 +26,13 @@ function LanguagesField({ control }: { control: Control<FormValues> }) {
     'languages',
     HTMLDivElement
   >({
-    control,
-    name: 'languages',
-    multiple: true,
-    required: true,
     composeHelperText: true,
+    control,
     helperText: `Up to ${MAX_LANGUAGES} languages`,
     messages: { required: 'Pick at least one language' },
+    multiple: true,
+    name: 'languages',
+    required: true,
     rules: {
       validate: (value) =>
         value.length <= MAX_LANGUAGES || `Pick ${MAX_LANGUAGES} languages or fewer`,
@@ -41,8 +43,8 @@ function LanguagesField({ control }: { control: Control<FormValues> }) {
     <FormControl error={error} sx={{ width: 280 }}>
       <InputLabel id="languages-label">Languages you speak</InputLabel>
       <Select
-        labelId="languages-label"
         label="Languages you speak"
+        labelId="languages-label"
         renderValue={(selected) => (selected as string[]).join(', ')}
         {...adapter}
       >
@@ -63,7 +65,7 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <LanguagesField control={control} />
         <div>

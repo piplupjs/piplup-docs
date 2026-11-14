@@ -1,12 +1,12 @@
 'use client';
 
-import dayjs from 'dayjs';
 import Stack from '@mui/material/Stack';
-import { MuiXStaticDateTimePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
-import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { MuiXStaticDateTimePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
 import { FormContainer } from '@piplup/rhf-core';
+import dayjs from 'dayjs';
 
 export default function Page() {
   return (
@@ -18,7 +18,7 @@ export default function Page() {
         <Stack direction="column" spacing={2}>
           <MuiXStaticDateTimePickerElement name="appointment" />
           <div>
-            <MuiButtonElement variant="contained" type="submit">
+            <MuiButtonElement type="submit" variant="contained">
               Submit
             </MuiButtonElement>
           </div>

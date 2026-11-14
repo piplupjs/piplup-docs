@@ -18,23 +18,23 @@ export default function Page() {
           Name
         </HtmlFormLabelElement>
         <HtmlInputElement
+          className="border px-2 block rounded"
           id="name"
           name="name"
           placeholder="Type your name"
           required
-          className="border px-2 block rounded"
         />
         <HtmlFormHelperTextElement
-          name="name"
           style={({ error }) => ({
             ...(error && { color: 'red' }),
           })}
+          name="name"
           renderOnError
         />
       </div>
       <button
-        type="submit"
         className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded mt-3"
+        type="submit"
       >
         Submit
       </button>

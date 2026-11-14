@@ -1,8 +1,11 @@
-import * as React from 'react';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+import * as React from 'react';
+
 import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
 import { DemoPreview } from '@/components/demo-preview';
 
 const readLocalFile = (filePath: string) => {
@@ -59,24 +62,23 @@ export async function Demo({ tabs }: DemoProps) {
     tabs.map(async (tab) => {
       if (isUrl(tab.path)) {
         const code = await fetchRemoteFile(tab.path);
-        return { tab, code, Component: null };
-      } else {
-        const filePath = join(process.cwd(), 'src', tab.path);
-        const code = readLocalFile(filePath);
-        const Component = await loadDemoComponent(tab.path);
-        return { tab, code, Component };
+        return { code, Component: null, tab };
       }
+      const filePath = join(process.cwd(), 'src', tab.path);
+      const code = readLocalFile(filePath);
+      const Component = await loadDemoComponent(tab.path);
+      return { code, Component, tab };
     }),
   );
 
   return (
     <Tabs items={tabs.map((tab) => tab.label)}>
-      {results.map(({ tab, code, Component }) => {
+      {results.map(({ code, Component, tab }) => {
         if (!code) {
           return null;
         }
         return (
-          <Tab value={tab.label} key={tab.label}>
+          <Tab key={tab.label} value={tab.label}>
             {Component ? (
               <DemoPreview>
                 <Component />

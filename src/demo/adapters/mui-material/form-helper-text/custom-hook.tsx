@@ -1,16 +1,19 @@
 'use client';
 
-import { useId } from 'react';
-import Stack from '@mui/material/Stack';
+import * as React from 'react';
+
 import FormHelperText from '@mui/material/FormHelperText';
 import InputBase from '@mui/material/InputBase';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import {
   MuiButtonElement,
   useMuiFormHelperTextAdapter,
   useMuiInputBaseAdapter,
 } from '@piplup/rhf-adapters/mui-material';
-import { type Control, type FieldError, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+
+import type { Control, FieldError } from 'react-hook-form';
 
 type FormValues = { phone: string };
 
@@ -18,13 +21,13 @@ type FormValues = { phone: string };
 // error by name; the input itself does not render any helper text.
 function PhoneError({ control, id }: { control: Control<FormValues>; id: string }) {
   const helper = useMuiFormHelperTextAdapter<FormValues, 'phone', HTMLParagraphElement>({
-    control,
-    name: 'phone',
     composeHelperText: true,
+    control,
     errorParser: (error) => {
       const message = (error as FieldError | undefined)?.message;
       return message ? <strong>{message}</strong> : null;
     },
+    name: 'phone',
   });
 
   if (!helper.error) {
@@ -35,23 +38,19 @@ function PhoneError({ control, id }: { control: Control<FormValues>; id: string 
 }
 
 function PhoneField({ control }: { control: Control<FormValues> }) {
-  const inputId = useId();
+  const inputId = React.useId();
   const errorId = `${inputId}-error`;
 
-  const {
-    ref,
-    helperText: _helperText,
-    ...input
-  } = useMuiInputBaseAdapter({
+  const { helperText, ref, ...input } = useMuiInputBaseAdapter({
     control,
-    name: 'phone',
-    type: 'tel',
-    required: true,
-    pattern: /^\+?[0-9 ]{7,15}$/,
     messages: {
-      required: 'Add a phone number so the courier can reach you',
       pattern: 'Use digits and spaces, with an optional leading +',
+      required: 'Add a phone number so the courier can reach you',
     },
+    name: 'phone',
+    pattern: /^\+?[0-9 ]{7,15}$/,
+    required: true,
+    type: 'tel',
   });
 
   return (
@@ -61,16 +60,16 @@ function PhoneField({ control }: { control: Control<FormValues> }) {
       </Typography>
       <InputBase
         {...input}
+        sx={{
+          border: 1,
+          borderColor: input.error ? 'error.main' : 'divider',
+          borderRadius: 1,
+          px: 1.5,
+          py: 0.5,
+        }}
         id={inputId}
         inputRef={ref}
         slotProps={{ input: { 'aria-describedby': errorId } }}
-        sx={{
-          px: 1.5,
-          py: 0.5,
-          border: 1,
-          borderRadius: 1,
-          borderColor: input.error ? 'error.main' : 'divider',
-        }}
       />
       <PhoneError control={control} id={errorId} />
     </Stack>
@@ -83,11 +82,11 @@ export default function Page() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <Stack direction="column" spacing={2}>
         <PhoneField control={control} />
         <div>
-          <MuiButtonElement control={control} variant="contained" type="submit">
+          <MuiButtonElement control={control} type="submit" variant="contained">
             Continue
           </MuiButtonElement>
         </div>

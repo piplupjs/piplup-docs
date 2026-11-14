@@ -1,7 +1,9 @@
 'use client';
 
-import { type Control, useForm } from 'react-hook-form';
 import { useFormReset } from '@piplup/rhf-core';
+import { useForm } from 'react-hook-form';
+
+import type { Control } from 'react-hook-form';
 
 type FieldValues = {
   firstName: string;
@@ -15,8 +17,6 @@ function ResetButton({ control }: { control?: Control<FieldValues> }) {
 
   return (
     <button
-      type="button"
-      className="border border-black hover:border-black/90 px-4 py-1 rounded"
       onClick={() =>
         reset(
           {
@@ -26,6 +26,8 @@ function ResetButton({ control }: { control?: Control<FieldValues> }) {
           { keepDirty: false },
         )
       }
+      className="border border-black hover:border-black/90 px-4 py-1 rounded"
+      type="button"
     >
       Reset form
     </button>
@@ -33,7 +35,7 @@ function ResetButton({ control }: { control?: Control<FieldValues> }) {
 }
 
 export default function Page() {
-  const { control, register, handleSubmit } = useForm({
+  const { control, handleSubmit, register } = useForm({
     defaultValues: {
       firstName: 'Taylor',
       subscribed: false,
@@ -53,7 +55,7 @@ export default function Page() {
       </label>
 
       <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-        <button type="submit" className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded">
+        <button className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded" type="submit">
           Submit
         </button>
         <ResetButton control={control} />

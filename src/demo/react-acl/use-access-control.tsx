@@ -1,17 +1,20 @@
 'use client';
 
 import * as React from 'react';
+
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { AccessControlProvider, useAccessControl, type AccessPrincipal } from '@piplup/react-acl';
+import { AccessControlProvider, useAccessControl } from '@piplup/react-acl';
+
+import type { AccessPrincipal } from '@piplup/react-acl';
 
 const principals: Record<string, AccessPrincipal> = {
-  guest: { roles: ['guest'], permissions: [] },
-  editor: { roles: ['editor'], permissions: ['post:create', 'post:publish'] },
-  owner: { roles: ['owner'], permissions: ['post:*'] },
+  editor: { permissions: ['post:create', 'post:publish'], roles: ['editor'] },
+  guest: { permissions: [], roles: ['guest'] },
+  owner: { permissions: ['post:*'], roles: ['owner'] },
 };
 
 type User = keyof typeof principals;
@@ -44,7 +47,7 @@ function PostToolbar() {
           {action.label}
         </Button>
       ))}
-      <Button variant="outlined" onClick={handleExport}>
+      <Button onClick={handleExport} variant="outlined">
         Export
       </Button>
     </Stack>
@@ -57,12 +60,12 @@ export default function Page() {
   return (
     <Stack spacing={2}>
       <TextField
-        select
-        size="small"
         label="Current user"
-        value={user}
-        onChange={(e) => setUser(e.target.value as User)}
+        onChange={(event) => setUser(event.target.value as User)}
+        size="small"
         sx={{ maxWidth: 200 }}
+        value={user}
+        select
       >
         {Object.keys(principals).map((name) => (
           <MenuItem key={name} value={name}>

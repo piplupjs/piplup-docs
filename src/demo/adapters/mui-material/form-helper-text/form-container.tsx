@@ -1,8 +1,9 @@
 'use client';
 
-import { useId } from 'react';
-import Stack from '@mui/material/Stack';
+import * as React from 'react';
+
 import FormControl from '@mui/material/FormControl';
+import Stack from '@mui/material/Stack';
 import {
   MuiFormHelperTextElement,
   MuiOutlinedInputElement,
@@ -12,7 +13,7 @@ import {
 import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
-  const inputId = useId();
+  const inputId = React.useId();
   const helperTextId = `${inputId}-helper-text`;
 
   return (
@@ -22,17 +23,17 @@ export default function Page() {
     >
       <Stack direction="column" spacing={2}>
         <FormControl variant="outlined">
-          <MuiFormLabelElement name="email" htmlFor={inputId} sx={{ mb: 0.5 }}>
+          <MuiFormLabelElement htmlFor={inputId} name="email" sx={{ mb: 0.5 }}>
             Email
           </MuiFormLabelElement>
           <MuiOutlinedInputElement
-            name="email"
-            id={inputId}
-            type="email"
             aria-describedby={helperTextId}
+            id={inputId}
+            name="email"
+            type="email"
             required
           />
-          <MuiFormHelperTextElement name="email" id={helperTextId} renderOnError />
+          <MuiFormHelperTextElement id={helperTextId} name="email" renderOnError />
         </FormControl>
         <div>
           <MuiButtonElement type="submit" variant="contained">

@@ -1,5 +1,7 @@
 import Link from 'next/link';
+
 import { ArrowRight } from 'lucide-react';
+
 import { appSearchName, appTagline, docsRoute, gitConfig } from '@/lib/shared';
 
 export function Hero() {
@@ -19,15 +21,15 @@ export function Hero() {
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <Link
-          href={docsRoute}
           className="inline-flex items-center gap-1.5 rounded-lg bg-fd-primary px-5 py-2.5 text-sm font-medium text-fd-primary-foreground transition-opacity hover:opacity-90"
+          href={docsRoute}
         >
           Read the docs
           <ArrowRight className="size-4" />
         </Link>
         <a
-          href={`https://github.com/${gitConfig.user}`}
           className="rounded-lg border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-fd-accent"
+          href={`https://github.com/${gitConfig.user}`}
         >
           GitHub
         </a>

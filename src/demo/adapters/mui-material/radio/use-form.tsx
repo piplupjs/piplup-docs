@@ -16,10 +16,10 @@ export default function Page() {
         <FormControlLabel
           control={
             <MuiRadioElement
-              name="choice"
-              value="a"
               checked={(value) => value === 'a'}
               control={control}
+              name="choice"
+              value="a"
             />
           }
           label="Choice A"
@@ -27,10 +27,10 @@ export default function Page() {
         <FormControlLabel
           control={
             <MuiRadioElement
-              name="choice"
-              value="b"
               checked={(value) => value === 'b'}
               control={control}
+              name="choice"
+              value="b"
             />
           }
           label="Choice B"
