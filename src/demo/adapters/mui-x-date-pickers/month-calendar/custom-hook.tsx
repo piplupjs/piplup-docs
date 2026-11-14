@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import dayjs, { type Dayjs } from "dayjs";
-import FormHelperText from "@mui/material/FormHelperText";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { LocalizationProvider, MonthCalendar } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { useMuiXMonthCalendarAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import { type Control, useForm } from "react-hook-form";
+import dayjs, { type Dayjs } from 'dayjs';
+import FormHelperText from '@mui/material/FormHelperText';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { LocalizationProvider, MonthCalendar } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useMuiXMonthCalendarAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { billingStart: Dayjs | null };
 
 // Compare by month, not by day. MonthCalendar stores the 1st of the month when
 // nothing is selected yet, so `disablePast` would reject the current month.
 function isPastMonth(month: Dayjs) {
-  return month.isBefore(dayjs(), "month");
+  return month.isBefore(dayjs(), 'month');
 }
 
 function BillingMonthField({ control }: { control: Control<FormValues> }) {
@@ -27,19 +27,14 @@ function BillingMonthField({ control }: { control: Control<FormValues> }) {
     shouldDisableDate: _shouldDisableDate,
     shouldDisableYear: _shouldDisableYear,
     ...adapter
-  } = useMuiXMonthCalendarAdapter<
-    Dayjs,
-    FormValues,
-    "billingStart",
-    HTMLDivElement
-  >({
+  } = useMuiXMonthCalendarAdapter<Dayjs, FormValues, 'billingStart', HTMLDivElement>({
     control,
-    name: "billingStart",
+    name: 'billingStart',
     required: true,
     composeHelperText: true,
     shouldDisableMonth: isPastMonth,
     messages: {
-      required: "Choose the first month to bill",
+      required: 'Choose the first month to bill',
       shouldDisableMonth: "Billing can't start in a past month",
     },
   });
@@ -65,7 +60,7 @@ export default function Page() {
       <form
         noValidate
         onSubmit={handleSubmit((values) =>
-          alert(values.billingStart?.startOf("month").format("YYYY-MM-DD")),
+          alert(values.billingStart?.startOf('month').format('YYYY-MM-DD')),
         )}
       >
         <Stack direction="column" spacing={2}>

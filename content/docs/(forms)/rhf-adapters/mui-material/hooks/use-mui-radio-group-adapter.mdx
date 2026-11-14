@@ -10,7 +10,7 @@ Use the element for a simple list of options. Reach for the hook when the group,
 ## Import
 
 ```tsx
-import { useMuiRadioGroupAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiRadioGroupAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ A yes/no question stored as `true` or `false`, starting as `null`. The transform
 <Demo
   tabs={[
     {
-      label: "Yes/no question",
-      path: "demo/adapters/mui-material/radio-group/custom-hook.tsx",
+      label: 'Yes/no question',
+      path: 'demo/adapters/mui-material/radio-group/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/radio-group/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/radio-group/element.tsx',
     },
   ]}
 />
@@ -45,25 +45,19 @@ A yes/no question stored as `true` or `false`, starting as `null`. The transform
 **What's returned.** `name`, `value`, `onChange`, `onBlur`, `ref`, `disabled`, `required`, `error`, `helperText`, `className`, `style` and `classes`. `title` is not returned.
 
 <Callout type="warn">
-  React Hook Form's `required` rule treats `false` as missing. If you store a boolean, `required` rejects the "No" answer. Use `rules.validate` to check for `null` instead, as the demo does.
+  React Hook Form's `required` rule treats `false` as missing. If you store a boolean, `required`
+  rejects the "No" answer. Use `rules.validate` to check for `null` instead, as the demo does.
 </Callout>
 
 <Callout type="warn">
-  `RadioGroup` has no `error` or `helperText` props. Remove them from the returned object before spreading, as the demo and the element do.
+  `RadioGroup` has no `error` or `helperText` props. Remove them from the returned object before
+  spreading, as the demo and the element do.
 </Callout>
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiRadioGroupAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiRadioGroupAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiRadioGroupAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiRadioGroupAdapterReturnType" cwd />

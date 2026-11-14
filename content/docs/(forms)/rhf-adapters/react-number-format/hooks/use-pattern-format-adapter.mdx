@@ -10,7 +10,7 @@ Use the element for one-off fields. Reach for the hook when the same mask and it
 ## Import
 
 ```tsx
-import { usePatternFormatAdapter } from "@piplup/rhf-adapters/react-number-format";
+import { usePatternFormatAdapter } from '@piplup/rhf-adapters/react-number-format';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `UsPhoneField` shows `+1 (###) ###-####` and only accepts a complete number
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/react-number-format/pattern-format/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/react-number-format/pattern-format/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/pattern-format/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/react-number-format/pattern-format/element.tsx',
     },
   ]}
 />
@@ -43,12 +43,12 @@ To keep the formatted text instead, pass `transform.output: (values) => values.f
 - `pattern: /^\d{10}$/` (as in the demo) or `minLength: 10` rejects incomplete numbers.
 - `rules.validate` can check parts of the value, such as the area code.
 
-| Key | Default message |
-| --- | --- |
-| `required` | Please fill out this field. |
-| `pattern` | Please match the requested format. |
-| `minLength` | Please lengthen this text to *n* characters or more |
-| `maxLength` | Please shorten this text to *n* characters or less. |
+| Key         | Default message                                     |
+| ----------- | --------------------------------------------------- |
+| `required`  | Please fill out this field.                         |
+| `pattern`   | Please match the requested format.                  |
+| `minLength` | Please lengthen this text to _n_ characters or more |
+| `maxLength` | Please shorten this text to _n_ characters or less. |
 
 The default length message talks about "text", which reads oddly for a phone or card number, so set `messages` for these.
 

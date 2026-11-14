@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { FormContainer } from "@piplup/rhf-core";
-import { HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { FormContainer } from '@piplup/rhf-core';
+import { HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   return (
@@ -13,14 +13,10 @@ export default function Page() {
         alert(JSON.stringify(errors, null, 2));
       }}
       defaultValues={{
-        website: "",
+        website: '',
       }}
     >
-      <HtmlInputElement
-        name="website"
-        placeholder="Type your website url"
-        type="url"
-      />
+      <HtmlInputElement name="website" placeholder="Type your website url" type="url" />
     </FormContainer>
   );
 }

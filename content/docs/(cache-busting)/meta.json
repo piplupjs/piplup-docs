@@ -4,10 +4,5 @@
   "description": "Detect a new release and reload stale clients",
   "icon": "RefreshCw",
   "root": true,
-  "pages": [
-    "cache-busting",
-    "reload-after-deploy",
-    "cache-buster",
-    "vite-plugin-cache-buster"
-  ]
+  "pages": ["cache-busting", "reload-after-deploy", "cache-buster", "vite-plugin-cache-buster"]
 }

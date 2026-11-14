@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import { MuiFileInputElement } from "@piplup/rhf-adapters/mui-file-input";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { useForm } from "react-hook-form";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import { MuiFileInputElement } from '@piplup/rhf-adapters/mui-file-input';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useForm } from 'react-hook-form';
 
 const MAX_SIZE = 1024 * 1024; // 1 MB
 
@@ -21,7 +21,9 @@ export default function Page() {
       onSubmit={handleSubmit((values) =>
         // File objects serialize to {} with JSON.stringify, so list them by hand.
         alert(
-          values.photos.map((file) => `${file.name} (${Math.round(file.size / 1024)} KB)`).join("\n"),
+          values.photos
+            .map((file) => `${file.name} (${Math.round(file.size / 1024)} KB)`)
+            .join('\n'),
         ),
       )}
     >
@@ -33,17 +35,18 @@ export default function Page() {
           placeholder="Choose up to 3 images"
           multiple
           required
-          messages={{ required: "Attach at least one photo" }}
+          messages={{ required: 'Attach at least one photo' }}
           // `accept` only filters the browser's file picker. The rules below enforce it.
-          slotProps={{ htmlInput: { accept: "image/*" } }}
+          slotProps={{ htmlInput: { accept: 'image/*' } }}
           rules={{
             validate: {
-              count: (files) => files.length <= 3 || "Attach up to 3 photos",
+              count: (files) => files.length <= 3 || 'Attach up to 3 photos',
               type: (files) =>
-                files.every((file) => file.type.startsWith("image/")) ||
-                "Only image files are allowed",
+                files.every((file) => file.type.startsWith('image/')) ||
+                'Only image files are allowed',
               size: (files) =>
-                files.every((file) => file.size <= MAX_SIZE) || "Each photo must be 1 MB or smaller",
+                files.every((file) => file.size <= MAX_SIZE) ||
+                'Each photo must be 1 MB or smaller',
             },
           }}
         />

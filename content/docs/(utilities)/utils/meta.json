@@ -2,9 +2,5 @@
   "$schema": "../../../.source/json-schema/docs.meta.json",
   "title": "@piplup/utils",
   "collapsible": false,
-  "pages": [
-    "[Installation](/docs/utils/installation)",
-    "helpers",
-    "hooks"
-  ]
+  "pages": ["[Installation](/docs/utils/installation)", "helpers", "hooks"]
 }

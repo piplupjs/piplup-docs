@@ -1,15 +1,12 @@
-"use client";
+'use client';
 
-import Box from "@mui/material/Box";
-import FormHelperText from "@mui/material/FormHelperText";
-import Slider from "@mui/material/Slider";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import {
-  MuiButtonElement,
-  useMuiSliderAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+import Box from '@mui/material/Box';
+import FormHelperText from '@mui/material/FormHelperText';
+import Slider from '@mui/material/Slider';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { MuiButtonElement, useMuiSliderAdapter } from '@piplup/rhf-adapters/mui-material';
+import { type Control, useForm } from 'react-hook-form';
 
 type PriceRange = { min: number; max: number };
 
@@ -23,19 +20,18 @@ function PriceRangeField({ control }: { control: Control<FormValues> }) {
   const { error, helperText, ...adapter } = useMuiSliderAdapter<
     number[],
     FormValues,
-    "price",
+    'price',
     HTMLSpanElement
   >({
     control,
-    name: "price",
+    name: 'price',
     min: 0,
     max: 1000,
     composeHelperText: true,
     helperText: `At least $${MIN_GAP} apart`,
     rules: {
       validate: ({ min, max }) =>
-        max - min >= MIN_GAP ||
-        `Leave at least $${MIN_GAP} between the two prices`,
+        max - min >= MIN_GAP || `Leave at least $${MIN_GAP} between the two prices`,
     },
     transform: {
       input: (value) => [value.min, value.max],
@@ -69,12 +65,7 @@ export default function Page() {
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
         <PriceRangeField control={control} />
         <div>

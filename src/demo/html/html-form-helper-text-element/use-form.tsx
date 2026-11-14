@@ -1,15 +1,12 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import {
-  HtmlFormHelperTextElement,
-  HtmlInputElement,
-} from "@piplup/rhf-adapters/html";
+import { useForm } from 'react-hook-form';
+import { HtmlFormHelperTextElement, HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      email: "",
+      email: '',
     },
   });
 
@@ -26,7 +23,7 @@ export default function Page() {
           name="email"
           required
           messages={{
-            required: "Email is required",
+            required: 'Email is required',
           }}
           aria-describedby="email-help"
           placeholder="Enter your email address"
@@ -37,7 +34,7 @@ export default function Page() {
           name="email"
           control={control}
           style={({ error }) => ({
-            ...(error && { color: "red" }),
+            ...(error && { color: 'red' }),
           })}
         >
           &quot;e.g. test@gmail.com&quot;

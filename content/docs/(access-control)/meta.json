@@ -4,10 +4,5 @@
   "description": "Roles, permissions and wildcard grants for React",
   "icon": "ShieldCheck",
   "root": true,
-  "pages": [
-    "access-control",
-    "react-role-based-access-control",
-    "react-acl-vs-casl",
-    "react-acl"
-  ]
+  "pages": ["access-control", "react-role-based-access-control", "react-acl-vs-casl", "react-acl"]
 }

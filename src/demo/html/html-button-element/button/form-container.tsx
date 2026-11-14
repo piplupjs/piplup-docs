@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { FormContainer } from "@piplup/rhf-core";
-import { HtmlButtonElement, HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { FormContainer } from '@piplup/rhf-core';
+import { HtmlButtonElement, HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   return (

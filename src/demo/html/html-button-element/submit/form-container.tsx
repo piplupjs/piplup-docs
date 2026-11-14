@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { FormContainer } from "@piplup/rhf-core";
-import { HtmlButtonElement, HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { FormContainer } from '@piplup/rhf-core';
+import { HtmlButtonElement, HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   return (
@@ -20,8 +20,10 @@ export default function Page() {
         />
       </div>
       <div>
-        <HtmlButtonElement type="submit" disableOnIsSubmitting
-        className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded mt-3"
+        <HtmlButtonElement
+          type="submit"
+          disableOnIsSubmitting
+          className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded mt-3"
         >
           Submit
         </HtmlButtonElement>

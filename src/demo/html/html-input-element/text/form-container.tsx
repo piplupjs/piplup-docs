@@ -13,10 +13,10 @@ export default function Page() {
         alert(JSON.stringify(errors, null, 2));
       }}
       defaultValues={{
-        input: ''
+        input: '',
       }}
     >
-      <HtmlInputElement 
+      <HtmlInputElement
         name="input"
         placeholder="Type text here"
         type="text"

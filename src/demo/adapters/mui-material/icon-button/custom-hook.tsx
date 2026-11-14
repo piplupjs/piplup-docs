@@ -1,14 +1,11 @@
-"use client";
+'use client';
 
-import ClearIcon from "@mui/icons-material/Clear";
-import SearchIcon from "@mui/icons-material/Search";
-import IconButton from "@mui/material/IconButton";
-import Stack from "@mui/material/Stack";
-import {
-  MuiTextFieldElement,
-  useMuiIconButtonAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+import ClearIcon from '@mui/icons-material/Clear';
+import SearchIcon from '@mui/icons-material/Search';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import { MuiTextFieldElement, useMuiIconButtonAdapter } from '@piplup/rhf-adapters/mui-material';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { query: string };
 
@@ -21,7 +18,7 @@ function SearchButton({ control }: { control: Control<FormValues> }) {
     ...adapter
   } = useMuiIconButtonAdapter<FormValues, HTMLButtonElement>({
     control,
-    type: "submit",
+    type: 'submit',
     disableOnError: true,
   });
 
@@ -40,7 +37,7 @@ function ClearButton({ control }: { control: Control<FormValues> }) {
     ...adapter
   } = useMuiIconButtonAdapter<FormValues, HTMLButtonElement>({
     control,
-    type: "reset",
+    type: 'reset',
   });
 
   return (
@@ -52,25 +49,20 @@ function ClearButton({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    mode: "onChange",
-    defaultValues: { query: "" },
+    mode: 'onChange',
+    defaultValues: { query: '' },
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
-      <Stack direction="row" spacing={1} sx={{ alignItems: "flex-start" }}>
+    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
+      <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-start' }}>
         <MuiTextFieldElement
           control={control}
           name="query"
           label="Search products"
           size="small"
           minLength={3}
-          messages={{ minLength: "Type at least 3 characters" }}
+          messages={{ minLength: 'Type at least 3 characters' }}
         />
         <SearchButton control={control} />
         <ClearButton control={control} />

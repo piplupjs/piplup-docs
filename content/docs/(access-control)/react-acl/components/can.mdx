@@ -1,6 +1,6 @@
 ---
 title: Can
-seoTitle: "Can: show React UI by permission or role"
+seoTitle: 'Can: show React UI by permission or role'
 description: Render content only when the principal holds the required permissions or roles, with ALL/ANY matching, a fallback and a loading placeholder.
 ---
 
@@ -16,7 +16,7 @@ filter a list, disable instead of hide, or check access in an event handler — 
 ## Import
 
 ```tsx
-import { Can } from "@piplup/react-acl";
+import { Can } from '@piplup/react-acl';
 ```
 
 ## Usage
@@ -27,8 +27,8 @@ check respond. Tick `invoice:*` on its own to watch one wildcard satisfy `invoic
 <Demo
   tabs={[
     {
-      label: "Matching modes",
-      path: "demo/react-acl/can.tsx",
+      label: 'Matching modes',
+      path: 'demo/react-acl/can.tsx',
     },
   ]}
 />
@@ -37,11 +37,11 @@ check respond. Tick `invoice:*` on its own to watch one wildcard satisfy `invoic
 
 `Can` renders exactly one of its three slots, checked in this order:
 
-| Provider state | Renders | Default |
-| --- | --- | --- |
-| `loading` is `true` | `loading` | nothing |
-| Check fails | `fallback` | nothing |
-| Check passes | `children` | — |
+| Provider state      | Renders    | Default |
+| ------------------- | ---------- | ------- |
+| `loading` is `true` | `loading`  | nothing |
+| Check fails         | `fallback` | nothing |
+| Check passes        | `children` | —       |
 
 No wrapper element is added around any of them.
 
@@ -49,16 +49,16 @@ No wrapper element is added around any of them.
 
 `permission` and `role` are checked separately, and **both** must pass.
 
-| Requirement | `ALL` | `ANY` |
-| --- | --- | --- |
-| Prop omitted or `[]` | Passes | Passes |
-| `"a"` | Principal holds `a` | Principal holds `a` |
-| `["a", "b"]` | Holds `a` and `b` | Holds `a` or `b` |
+| Requirement          | `ALL`               | `ANY`               |
+| -------------------- | ------------------- | ------------------- |
+| Prop omitted or `[]` | Passes              | Passes              |
+| `"a"`                | Principal holds `a` | Principal holds `a` |
+| `["a", "b"]`         | Holds `a` and `b`   | Holds `a` or `b`    |
 
 `permission` defaults to `ALL`. `role` defaults to `ANY`. `mode` overrides both:
 
 ```tsx
-<Can mode="ANY" permission={["post:publish", "post:schedule"]} role={["editor", "owner"]}>
+<Can mode="ANY" permission={['post:publish', 'post:schedule']} role={['editor', 'owner']}>
   {/* editor OR owner, AND post:publish OR post:schedule */}
   <PublishMenu />
 </Can>
@@ -84,12 +84,12 @@ A few consequences:
 typed as `Omit<CanProps, "children">`:
 
 ```tsx
-import { withCan } from "@piplup/react-acl";
+import { withCan } from '@piplup/react-acl';
 
 const BillingPanel = withCan(Panel, {
-  permission: ["billing:read", "billing:write"],
-  mode: "ANY",
-  role: "admin",
+  permission: ['billing:read', 'billing:write'],
+  mode: 'ANY',
+  role: 'admin',
   loading: <Skeleton />,
   fallback: <NoAccess />,
 });
@@ -98,8 +98,8 @@ const BillingPanel = withCan(Panel, {
 A single permission can be passed directly, with an optional fallback as the third argument:
 
 ```tsx
-const AdminPanel = withCan(Panel, "admin:manage");
-const Guarded = withCan(Panel, "admin:manage", <NoAccess />);
+const AdminPanel = withCan(Panel, 'admin:manage');
+const Guarded = withCan(Panel, 'admin:manage', <NoAccess />);
 ```
 
 The returned component forwards its own props through to the wrapped one and is named

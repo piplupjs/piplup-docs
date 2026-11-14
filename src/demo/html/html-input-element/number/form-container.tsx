@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { FormContainer } from "@piplup/rhf-core";
-import { HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { FormContainer } from '@piplup/rhf-core';
+import { HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   return (
@@ -16,11 +16,7 @@ export default function Page() {
         randomNumber: 0,
       }}
     >
-      <HtmlInputElement
-        name="randomNumber"
-        placeholder="Type a random number here"
-        type="number"
-      />
+      <HtmlInputElement name="randomNumber" placeholder="Type a random number here" type="number" />
     </FormContainer>
   );
 }

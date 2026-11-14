@@ -1,7 +1,7 @@
 ---
 title: Installation - @piplup/cache-buster
-seoTitle: "React cache busting after deploys"
-description: "Install @piplup/cache-buster to detect that a new version of your React app is deployed and reload clients still running the old bundle."
+seoTitle: 'React cache busting after deploys'
+description: 'Install @piplup/cache-buster to detect that a new version of your React app is deployed and reload clients still running the old bundle.'
 ---
 
 `@piplup/cache-buster` is a lightweight React utility that ensures users always get the latest deployed version of your app.
@@ -43,7 +43,7 @@ If you're using Vite:
 Update `vite.config.(ts|mts|js|mjs)`:
 
 ```tsx
-import { vitePluginCacheBuster } from "@piplup/vite-plugin-cache-buster";
+import { vitePluginCacheBuster } from '@piplup/vite-plugin-cache-buster';
 
 export default {
   plugins: [vitePluginCacheBuster()],
@@ -65,4 +65,3 @@ Without generating this file at build time, cache busting cannot work.
   prompt with [`useReleaseStatus`](/docs/cache-buster/hooks/use-release-status).
 - [Reload users after a deploy](/docs/reload-after-deploy) covers the rest of the fix: cache
   headers for `index.html` and recovering from lazy chunks a deploy removed.
-

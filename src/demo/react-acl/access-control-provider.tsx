@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Alert from "@mui/material/Alert";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { AccessControlProvider, Can, type AccessPrincipal } from "@piplup/react-acl";
+import * as React from 'react';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { AccessControlProvider, Can, type AccessPrincipal } from '@piplup/react-acl';
 
 // Stands in for a request to your auth API.
 const users: Record<string, AccessPrincipal> = {
-  guest: { roles: ["guest"], permissions: [] },
-  viewer: { roles: ["viewer"], permissions: ["report:read"] },
-  admin: { roles: ["admin"], permissions: ["report:*"] },
+  guest: { roles: ['guest'], permissions: [] },
+  viewer: { roles: ['viewer'], permissions: ['report:read'] },
+  admin: { roles: ['admin'], permissions: ['report:*'] },
 };
 
 function fetchPrincipal(user: string): Promise<AccessPrincipal> {
@@ -22,7 +22,7 @@ function fetchPrincipal(user: string): Promise<AccessPrincipal> {
 type Loaded = { user: string; principal: AccessPrincipal };
 
 export default function Page() {
-  const [user, setUser] = React.useState("guest");
+  const [user, setUser] = React.useState('guest');
   const [loaded, setLoaded] = React.useState<Loaded | null>(null);
 
   React.useEffect(() => {
@@ -46,11 +46,11 @@ export default function Page() {
 
   return (
     <Stack spacing={2}>
-      <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
+      <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
         {Object.keys(users).map((name) => (
           <Button
             key={name}
-            variant={user === name ? "contained" : "outlined"}
+            variant={user === name ? 'contained' : 'outlined'}
             onClick={() => setUser(name)}
           >
             Sign in as {name}

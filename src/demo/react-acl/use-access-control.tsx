@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import Stack from "@mui/material/Stack";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
-import { AccessControlProvider, useAccessControl, type AccessPrincipal } from "@piplup/react-acl";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { AccessControlProvider, useAccessControl, type AccessPrincipal } from '@piplup/react-acl';
 
 const principals: Record<string, AccessPrincipal> = {
-  guest: { roles: ["guest"], permissions: [] },
-  editor: { roles: ["editor"], permissions: ["post:create", "post:publish"] },
-  owner: { roles: ["owner"], permissions: ["post:*"] },
+  guest: { roles: ['guest'], permissions: [] },
+  editor: { roles: ['editor'], permissions: ['post:create', 'post:publish'] },
+  owner: { roles: ['owner'], permissions: ['post:*'] },
 };
 
 type User = keyof typeof principals;
 
 const actions = [
-  { label: "New post", permission: "post:create" },
-  { label: "Publish", permission: "post:publish" },
-  { label: "Delete", permission: "post:delete" },
+  { label: 'New post', permission: 'post:create' },
+  { label: 'Publish', permission: 'post:publish' },
+  { label: 'Delete', permission: 'post:delete' },
 ];
 
 function PostToolbar() {
@@ -30,7 +30,7 @@ function PostToolbar() {
 
   // Check a role in an event handler, not only while rendering.
   const handleExport = () => {
-    alert(hasRole(["editor", "owner"]) ? "Exporting posts" : "Sign in to export");
+    alert(hasRole(['editor', 'owner']) ? 'Exporting posts' : 'Sign in to export');
   };
 
   if (loading) {
@@ -38,7 +38,7 @@ function PostToolbar() {
   }
 
   return (
-    <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
+    <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
       {visible.map((action) => (
         <Button key={action.label} variant="contained">
           {action.label}
@@ -52,7 +52,7 @@ function PostToolbar() {
 }
 
 export default function Page() {
-  const [user, setUser] = React.useState<User>("editor");
+  const [user, setUser] = React.useState<User>('editor');
 
   return (
     <Stack spacing={2}>

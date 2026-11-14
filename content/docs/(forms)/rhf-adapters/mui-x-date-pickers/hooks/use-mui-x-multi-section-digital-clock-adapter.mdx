@@ -10,7 +10,7 @@ The element shows the columns only and drops the error message. Use the hook whe
 ## Import
 
 ```tsx
-import { useMuiXMultiSectionDigitalClockAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { useMuiXMultiSectionDigitalClockAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `DepartureClock` allows departures every 5 minutes, at :00 or :30 seconds. 
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-x-date-pickers/multi-section-digital-clock/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/multi-section-digital-clock/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/multi-section-digital-clock/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/multi-section-digital-clock/element.tsx',
     },
   ]}
 />
@@ -36,11 +36,11 @@ Validation and default messages are the same as [`useMuiXTimePickerAdapter`](/do
 
 **One rule per column.** `MultiSectionDigitalClock` checks each column with the matching view: hour options with `shouldDisableTime(value, "hours")`, minute options with `"minutes"` and second options with `"seconds"`. Validation uses the same three views, so a rule written for one view disables options in that column and reports the matching key:
 
-| Rule in `shouldDisableTime` | Disables options in | Message key |
-| --- | --- | --- |
-| `view === "hours"` | hours column | `shouldDisableTime-hours` |
-| `view === "minutes"` | minutes column | `shouldDisableTime-minutes` |
-| `view === "seconds"` | seconds column | `shouldDisableTime-seconds` |
+| Rule in `shouldDisableTime` | Disables options in | Message key                 |
+| --------------------------- | ------------------- | --------------------------- |
+| `view === "hours"`          | hours column        | `shouldDisableTime-hours`   |
+| `view === "minutes"`        | minutes column      | `shouldDisableTime-minutes` |
+| `view === "seconds"`        | seconds column      | `shouldDisableTime-seconds` |
 
 Validation reports only the first failing check, in the order hours, minutes, seconds, then `minutesStep`. In the example, a value at 08:07:15 reports the seconds message, not the `minutesStep` one.
 
@@ -48,8 +48,16 @@ Validation reports only the first failing check, in the order hours, minutes, se
 
 ## Props
 
-<AutoTypeTable path="content/docs/props.ts" name="UseMuiXMultiSectionDigitalClockAdapterProps" cwd />
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseMuiXMultiSectionDigitalClockAdapterProps"
+  cwd
+/>
 
 ## Return value
 
-<AutoTypeTable path="content/docs/props.ts" name="UseMuiXMultiSectionDigitalClockAdapterReturnType" cwd />
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseMuiXMultiSectionDigitalClockAdapterReturnType"
+  cwd
+/>

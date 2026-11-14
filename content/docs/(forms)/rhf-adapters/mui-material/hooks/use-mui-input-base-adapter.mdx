@@ -12,7 +12,7 @@ The same input logic powers [`useMuiInputAdapterProps`](/docs/rhf-adapters/mui-m
 ## Import
 
 ```tsx
-import { useMuiInputBaseAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiInputBaseAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -22,12 +22,12 @@ This `SeatsField` stores a number, accepts 1 to 8, and renders its own label and
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-material/input-base/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-material/input-base/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/input-base/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/input-base/element.tsx',
     },
   ]}
 />
@@ -36,11 +36,11 @@ This `SeatsField` stores a number, accepts 1 to 8, and renders its own label and
 
 **Value.** The `type` prop decides how values move between the form and the input:
 
-| `type` | Value passed to the input | Value stored on change |
-| --- | --- | --- |
-| `number` | The field value, with `undefined` turned into `""` | `null` when the input is empty, otherwise a number (`+event.target.value`) |
-| `file` | Always `undefined`, so the input stays uncontrolled | `event.target.files` (a `FileList`) |
-| Anything else (`text`, `email`, `tel`, ...) | The field value, with `undefined` turned into `""` | `event.target.value` |
+| `type`                                      | Value passed to the input                           | Value stored on change                                                     |
+| ------------------------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------- |
+| `number`                                    | The field value, with `undefined` turned into `""`  | `null` when the input is empty, otherwise a number (`+event.target.value`) |
+| `file`                                      | Always `undefined`, so the input stays uncontrolled | `event.target.files` (a `FileList`)                                        |
+| Anything else (`text`, `email`, `tel`, ...) | The field value, with `undefined` turned into `""`  | `event.target.value`                                                       |
 
 There is no `valueAsNumber` option. Setting `type: "number"` is what makes the form store numbers.
 
@@ -52,14 +52,14 @@ Your own `onChange` and `onBlur` run after React Hook Form's handlers and receiv
 
 **Validation.** The rule props become React Hook Form rules. Each has a default message, which you can replace through `messages`:
 
-| Prop | Rule | Default message |
-| --- | --- | --- |
-| `required` | Value must not be empty | Please fill out this field. |
-| `minLength` | Text length | Please lengthen this text to `{minLength}` characters or more |
-| `maxLength` | Text length | Please shorten this text to `{maxLength}` characters or less. |
-| `pattern` | Regular expression (a string is converted with `new RegExp`) | Please match the requested format. |
-| `min` | Numeric value | Value must be `{min}` or later. |
-| `max` | Numeric value | Value must be `{max}` or earlier. |
+| Prop        | Rule                                                         | Default message                                               |
+| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------- |
+| `required`  | Value must not be empty                                      | Please fill out this field.                                   |
+| `minLength` | Text length                                                  | Please lengthen this text to `{minLength}` characters or more |
+| `maxLength` | Text length                                                  | Please shorten this text to `{maxLength}` characters or less. |
+| `pattern`   | Regular expression (a string is converted with `new RegExp`) | Please match the requested format.                            |
+| `min`       | Numeric value                                                | Value must be `{min}` or later.                               |
+| `max`       | Numeric value                                                | Value must be `{max}` or earlier.                             |
 
 Two types add a default on their own when you don't pass `pattern`:
 
@@ -88,16 +88,8 @@ This hook does not read MUI's `FormControl`. Because it always returns `disabled
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiInputBaseAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiInputBaseAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiInputBaseAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiInputBaseAdapterReturnType" cwd />

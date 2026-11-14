@@ -10,7 +10,7 @@ The element renders the picker only, so it never shows an error message. Use the
 ## Import
 
 ```tsx
-import { useMuiXStaticTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { useMuiXStaticTimePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `ReportTimeField` requires a time no later than 20:00 and shows the error b
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-x-date-pickers/static-time-picker/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/static-time-picker/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-time-picker/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-time-picker/element.tsx',
     },
   ]}
 />
@@ -41,7 +41,9 @@ Validation, the default messages and value handling are the same as [`useMuiXTim
 Take `error` and `helperText` out of the result before spreading it, and render them yourself, for example with `FormHelperText`. The element drops them for the same reason.
 
 <Callout type="warn">
-  A static picker is never closed and has no input to blur, so nothing calls the returned `onBlur` and the field is never marked as touched. `mode: "onBlur"` and `"onTouched"` first validate on submit. Use `mode: "onChange"` to show errors while the user picks.
+  A static picker is never closed and has no input to blur, so nothing calls the returned `onBlur`
+  and the field is never marked as touched. `mode: "onBlur"` and `"onTouched"` first validate on
+  submit. Use `mode: "onChange"` to show errors while the user picks.
 </Callout>
 
 **When the value changes.** By default `StaticTimePicker` uses `displayStaticWrapperAs="mobile"`: an analog clock with a toolbar. The value reaches the form through `onChange` each time the user changes the clock, not only when they accept it.

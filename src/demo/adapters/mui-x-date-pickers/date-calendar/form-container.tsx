@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import dayjs from "dayjs";
-import { MuiXDateCalendarElement } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { FormContainer } from "@piplup/rhf-core";
+import dayjs from 'dayjs';
+import { MuiXDateCalendarElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
   return (

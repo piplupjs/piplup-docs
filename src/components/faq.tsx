@@ -4,9 +4,15 @@ export type FaqItem = { question: string; answer: string };
 
 /** Turns `code` spans in a plain-text answer into <code>, and leaves the rest as text. */
 function renderInlineCode(text: string): ReactNode[] {
-  return text.split(/(`[^`]+`)/g).map((part, index) =>
-    part.startsWith('`') && part.endsWith('`') ? <code key={index}>{part.slice(1, -1)}</code> : part,
-  );
+  return text
+    .split(/(`[^`]+`)/g)
+    .map((part, index) =>
+      part.startsWith('`') && part.endsWith('`') ? (
+        <code key={index}>{part.slice(1, -1)}</code>
+      ) : (
+        part
+      ),
+    );
 }
 
 function slugify(text: string): string {

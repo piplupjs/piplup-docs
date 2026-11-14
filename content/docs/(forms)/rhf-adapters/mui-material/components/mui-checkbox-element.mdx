@@ -1,16 +1,16 @@
 ---
 title: MuiCheckboxElement
-seoTitle: "MUI Checkbox with React Hook Form"
-description: "Use MUI Checkbox with react-hook-form without writing a Controller. MuiCheckboxElement binds the checked state and validation to a form field."
+seoTitle: 'MUI Checkbox with React Hook Form'
+description: 'Use MUI Checkbox with react-hook-form without writing a Controller. MuiCheckboxElement binds the checked state and validation to a form field.'
 faq:
-  - question: "How do I use a MUI Checkbox with React Hook Form?"
-    answer: "Render `MuiCheckboxElement` with `control`, a field `name` and a `value`, usually as the `control` of a `FormControlLabel`. Checking the box adds its `value` to an array in the form; unchecking removes it."
-  - question: "Why does MuiCheckboxElement store an array instead of true or false?"
-    answer: "Several checkboxes can share one field, so each box adds or removes its own `value` in an array. For a single yes/no checkbox, pass `transform={{ output: (_event, checked) => checked }}` and `checked={(value) => value === true}` and the field stores a boolean."
-  - question: "Why does it throw \"value prop is required\"?"
+  - question: 'How do I use a MUI Checkbox with React Hook Form?'
+    answer: 'Render `MuiCheckboxElement` with `control`, a field `name` and a `value`, usually as the `control` of a `FormControlLabel`. Checking the box adds its `value` to an array in the form; unchecking removes it.'
+  - question: 'Why does MuiCheckboxElement store an array instead of true or false?'
+    answer: 'Several checkboxes can share one field, so each box adds or removes its own `value` in an array. For a single yes/no checkbox, pass `transform={{ output: (_event, checked) => checked }}` and `checked={(value) => value === true}` and the field stores a boolean.'
+  - question: 'Why does it throw "value prop is required"?'
     answer: "Each checkbox needs a `value` so it knows what to add to the field's array. When the checkbox is the `control` of a `FormControlLabel`, the label's `value` prop is passed down and counts."
-  - question: "How do I make an \"accept the terms\" checkbox required?"
-    answer: "Store a boolean as shown on this page and pass `required`. react-hook-form treats `false` as missing, so submitting with the box unchecked shows the `required` message."
+  - question: 'How do I make an "accept the terms" checkbox required?'
+    answer: 'Store a boolean as shown on this page and pass `required`. react-hook-form treats `false` as missing, so submitting with the box unchecked shows the `required` message.'
   - question: "Where does the checkbox's error message go?"
     answer: "MUI's Checkbox has no helper text, so the element doesn't render one. Put a `MuiFormHelperTextElement` with the same `name` below the checkbox, or the group of checkboxes, to show it."
 ---
@@ -23,7 +23,7 @@ checkbox stores a boolean instead. New to the adapters? Start with
 ## Import
 
 ```tsx
-import { MuiCheckboxElement } from "@piplup/rhf-adapters/mui-material";
+import { MuiCheckboxElement } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -31,12 +31,12 @@ import { MuiCheckboxElement } from "@piplup/rhf-adapters/mui-material";
 <Demo
   tabs={[
     {
-      label: "useForm",
-      path: "demo/adapters/mui-material/checkbox/use-form.tsx",
+      label: 'useForm',
+      path: 'demo/adapters/mui-material/checkbox/use-form.tsx',
     },
     {
-      label: "FormContainer",
-      path: "demo/adapters/mui-material/checkbox/form-container.tsx",
+      label: 'FormContainer',
+      path: 'demo/adapters/mui-material/checkbox/form-container.tsx',
     },
   ]}
 />
@@ -46,13 +46,15 @@ import { MuiCheckboxElement } from "@piplup/rhf-adapters/mui-material";
 By default the field holds an array. Give every checkbox the same `name` and its own `value`:
 
 ```tsx
-{["cheese", "olives", "basil"].map((topping) => (
-  <FormControlLabel
-    key={topping}
-    label={topping}
-    control={<MuiCheckboxElement control={control} name="toppings" value={topping} />}
-  />
-))}
+{
+  ['cheese', 'olives', 'basil'].map((topping) => (
+    <FormControlLabel
+      key={topping}
+      label={topping}
+      control={<MuiCheckboxElement control={control} name="toppings" value={topping} />}
+    />
+  ));
+}
 ```
 
 Checking "cheese" stores `["cheese"]`. Unchecking the last checked box stores `undefined` rather
@@ -101,11 +103,7 @@ does. That demo also adds a "select all" checkbox with an indeterminate state.
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="MuiCheckboxElementProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="MuiCheckboxElementProps" cwd />
 
 `MuiCheckboxElement` supports all standard props of the MUI Checkbox component, along with additional adapter-specific props. For a complete list of available Checkbox properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/checkbox/).
 

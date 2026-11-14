@@ -4,7 +4,7 @@ description: Attach DOM event listeners in a React-friendly way.
 ---
 
 ```tsx
-import { useEventListener } from "@piplup/utils";
+import { useEventListener } from '@piplup/utils';
 
 function Component() {
   useEventListener('resize', () => {
@@ -22,41 +22,41 @@ export function useEventListener<EventName extends keyof MediaQueryListEventMap>
   eventName: EventName,
   handler: (event: MediaQueryListEventMap[EventName]) => void,
   element: React.RefObject<MediaQueryList>,
-  options?: AddEventListenerOptions | boolean
+  options?: AddEventListenerOptions | boolean,
 ): void;
 
 export function useEventListener<EventName extends keyof WindowEventMap>(
   eventName: EventName,
   handler: (event: WindowEventMap[EventName]) => void,
   element?: undefined,
-  options?: AddEventListenerOptions | boolean
+  options?: AddEventListenerOptions | boolean,
 ): void;
 
 export function useEventListener<
   EventName extends keyof HTMLElementEventMap,
-  T extends HTMLElement = HTMLDivElement
+  T extends HTMLElement = HTMLDivElement,
 >(
   eventName: EventName,
   handler: (event: HTMLElementEventMap[EventName]) => void,
   element: React.RefObject<T>,
-  options?: AddEventListenerOptions | boolean
+  options?: AddEventListenerOptions | boolean,
 ): void;
 
 export function useEventListener<EventName extends keyof DocumentEventMap>(
   eventName: EventName,
   handler: (event: DocumentEventMap[EventName]) => void,
   element: React.RefObject<Document>,
-  options?: AddEventListenerOptions | boolean
+  options?: AddEventListenerOptions | boolean,
 ): void;
 
 export function useEventListener<
   EventName extends string,
-  EventElement extends HTMLElement = HTMLDivElement
+  EventElement extends HTMLElement = HTMLDivElement,
 >(
   eventName: EventName,
   handler: (event: Event) => void,
   element?: React.RefObject<EventElement>,
-  options?: AddEventListenerOptions | boolean
+  options?: AddEventListenerOptions | boolean,
 ): void;
 
 export function useEventListener<
@@ -64,7 +64,7 @@ export function useEventListener<
   EventNameWindow extends keyof WindowEventMap,
   EventNameHTMLElement extends keyof HTMLElementEventMap,
   EventNameMediaQuery extends keyof MediaQueryListEventMap,
-  EventElement extends HTMLElement | MediaQueryList | void = void
+  EventElement extends HTMLElement | MediaQueryList | void = void,
 >(
   eventName: EventName | EventNameHTMLElement | EventNameMediaQuery | EventNameWindow,
   handler: (
@@ -72,10 +72,10 @@ export function useEventListener<
       | Event
       | HTMLElementEventMap[EventNameHTMLElement]
       | MediaQueryListEventMap[EventNameMediaQuery]
-      | WindowEventMap[EventNameWindow]
+      | WindowEventMap[EventNameWindow],
   ) => void,
   element?: React.RefObject<EventElement>,
-  options?: AddEventListenerOptions | boolean
+  options?: AddEventListenerOptions | boolean,
 ): void;
 ```
 
@@ -91,21 +91,24 @@ When you need to force a specific overload or narrow the handler/event types you
 // Narrow to an HTML element event (click on a button)
 useEventListener<'click', HTMLButtonElement>(
   'click',
-  (e) => { /* e is MouseEvent */ },
-  buttonRef
+  (e) => {
+    /* e is MouseEvent */
+  },
+  buttonRef,
 );
 
 // Window event (no element required)
-useEventListener<'resize'>(
-  'resize',
-  (e) => { /* e is UIEvent */ }
-);
+useEventListener<'resize'>('resize', (e) => {
+  /* e is UIEvent */
+});
 
 // MediaQueryList event
 useEventListener<'change'>(
   'change',
-  (e: MediaQueryListEvent) => { /* ... */ },
-  mediaQueryRef
+  (e: MediaQueryListEvent) => {
+    /* ... */
+  },
+  mediaQueryRef,
 );
 ```
 

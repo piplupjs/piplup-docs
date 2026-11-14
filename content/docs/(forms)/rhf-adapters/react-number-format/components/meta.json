@@ -1,8 +1,4 @@
 {
   "title": "Components",
-  "pages": [
-    "number-format-base-element",
-    "numeric-format-element",
-    "pattern-format-element"
-  ]
+  "pages": ["number-format-base-element", "numeric-format-element", "pattern-format-element"]
 }

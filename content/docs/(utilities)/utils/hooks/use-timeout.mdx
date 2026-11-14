@@ -6,7 +6,7 @@ description: React hook that calls a function once after a delay, with cleanup o
 `useTimeout` calls `callback` once, `delay` milliseconds after the component mounts. The timer is cleared when the component unmounts, so the callback never runs on an unmounted component.
 
 ```tsx
-import { useTimeout } from "@piplup/utils";
+import { useTimeout } from '@piplup/utils';
 
 function Toast({ message, onClose }: { message: string; onClose: () => void }) {
   useTimeout(onClose, 5000);
@@ -39,18 +39,20 @@ function AutoDismiss({ onClose }: { onClose: () => void }) {
 
 ## Parameters
 
-<TypeTable type={{
-  callback: {
-    description: "Function to call when the timer fires. The latest one passed is called.",
-    type: "() => void",
-    required: true,
-  },
-  delay: {
-    description: "Milliseconds to wait, or `null` to cancel the timer.",
-    type: "number | null",
-    required: true,
-  },
-}} />
+<TypeTable
+  type={{
+    callback: {
+      description: 'Function to call when the timer fires. The latest one passed is called.',
+      type: '() => void',
+      required: true,
+    },
+    delay: {
+      description: 'Milliseconds to wait, or `null` to cancel the timer.',
+      type: 'number | null',
+      required: true,
+    },
+  }}
+/>
 
 ## Return value
 

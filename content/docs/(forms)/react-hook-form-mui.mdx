@@ -1,18 +1,18 @@
 ---
 title: Using MUI with React Hook Form
-seoTitle: "How to use MUI with React Hook Form"
-description: "Connect MUI TextField, Select, Autocomplete, Checkbox and DatePicker to react-hook-form without a Controller on every field, with validation and error text."
+seoTitle: 'How to use MUI with React Hook Form'
+description: 'Connect MUI TextField, Select, Autocomplete, Checkbox and DatePicker to react-hook-form without a Controller on every field, with validation and error text.'
 faq:
-  - question: "Do I need a Controller to use MUI with React Hook Form?"
+  - question: 'Do I need a Controller to use MUI with React Hook Form?'
     answer: "MUI inputs are controlled components, so react-hook-form's `register` doesn't fit them well and the usual answer is a `Controller` per field. The `Mui*Element` components wrap `useController` for you, so you pass `control` and `name` and skip the `Controller` and its `render` function."
-  - question: "Why does the browser show its own validation popup instead of my error message?"
+  - question: 'Why does the browser show its own validation popup instead of my error message?'
     answer: "Elements pass `required` through to the input, which turns on the browser's built-in validation. Add `noValidate` to your `<form>`, or use `FormContainer`, which adds it for you, and react-hook-form's messages show instead."
-  - question: "Can I use zod or yup instead of the validation props?"
+  - question: 'Can I use zod or yup instead of the validation props?'
     answer: "Yes. Pass a resolver to `useForm` as usual. Resolver errors land in the same field state the elements read, so the message still shows as the field's helper text. With a resolver, react-hook-form ignores field-level rules, so put all validation in the schema; `required` on an element then only adds the asterisk."
-  - question: "How do I change the default error messages for every field?"
-    answer: "Each field takes a `messages` prop for its own rules. To format every error in one place, wrap the form in `FormErrorProvider` with an `errorParser`, or pass `errorParser` to `FormContainer`. A parser from context takes precedence over one passed to a single field."
-  - question: "Does it work with MUI X date pickers?"
-    answer: "Yes. `@piplup/rhf-adapters/mui-x-date-pickers` has an element for every MUI X picker, plus the date and time fields, calendars and clocks. Picker limits such as `minDate` and `disablePast` also become react-hook-form validation, each with its own message."
+  - question: 'How do I change the default error messages for every field?'
+    answer: 'Each field takes a `messages` prop for its own rules. To format every error in one place, wrap the form in `FormErrorProvider` with an `errorParser`, or pass `errorParser` to `FormContainer`. A parser from context takes precedence over one passed to a single field.'
+  - question: 'Does it work with MUI X date pickers?'
+    answer: 'Yes. `@piplup/rhf-adapters/mui-x-date-pickers` has an element for every MUI X picker, plus the date and time fields, calendars and clocks. Picker limits such as `minDate` and `disablePast` also become react-hook-form validation, each with its own message.'
 ---
 
 MUI's inputs are controlled components, so React Hook Form's `register` doesn't work with
@@ -28,7 +28,7 @@ Here is one MUI `TextField` connected to React Hook Form with a `Controller`:
 <Controller
   name="email"
   control={control}
-  rules={{ required: "Enter your email" }}
+  rules={{ required: 'Enter your email' }}
   render={({ field, fieldState }) => (
     <TextField
       {...field}
@@ -57,7 +57,7 @@ The same field with [`MuiTextFieldElement`](/docs/rhf-adapters/mui-material/comp
   name="email"
   label="Email"
   required
-  messages={{ required: "Enter your email" }}
+  messages={{ required: 'Enter your email' }}
 />
 ```
 
@@ -78,22 +78,22 @@ versions. The date pickers live in a separate subpath with
 ## A complete form
 
 ```tsx
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import {
   MuiButtonElement,
   MuiFormHelperTextElement,
   MuiSelectElement,
   MuiTextFieldElement,
-} from "@piplup/rhf-adapters/mui-material";
-import { useForm } from "react-hook-form";
+} from '@piplup/rhf-adapters/mui-material';
+import { useForm } from 'react-hook-form';
 
 type SignUp = { name: string; email: string; role: string };
 
 export function SignUpForm() {
   const { control, handleSubmit } = useForm<SignUp>({
-    defaultValues: { name: "", email: "", role: "" },
+    defaultValues: { name: '', email: '', role: '' },
   });
 
   return (
@@ -132,12 +132,12 @@ Three details in this form are easy to miss:
 context and adds `noValidate`, so the elements don't need a `control` prop:
 
 ```tsx
-import { MuiButtonElement, MuiTextFieldElement } from "@piplup/rhf-adapters/mui-material";
-import { FormContainer } from "@piplup/rhf-core";
+import { MuiButtonElement, MuiTextFieldElement } from '@piplup/rhf-adapters/mui-material';
+import { FormContainer } from '@piplup/rhf-core';
 
 export function EmailForm() {
   return (
-    <FormContainer defaultValues={{ email: "" }} onSubmit={(values) => console.log(values)}>
+    <FormContainer defaultValues={{ email: '' }} onSubmit={(values) => console.log(values)}>
       <MuiTextFieldElement name="email" type="email" label="Email" required />
       <MuiButtonElement type="submit" variant="contained">
         Save
@@ -151,14 +151,14 @@ export function EmailForm() {
 
 Every element accepts these props and turns them into React Hook Form rules:
 
-| Prop | Rule | Default message |
-| --- | --- | --- |
-| `required` | `required` | Please fill out this field. |
-| `minLength` | `minLength` | Please lengthen this text to *n* characters or more |
-| `maxLength` | `maxLength` | Please shorten this text to *n* characters or less. |
-| `min` | `min` | Value must be *n* or later. |
-| `max` | `max` | Value must be *n* or earlier. |
-| `pattern` | `pattern` | Please match the requested format. |
+| Prop        | Rule        | Default message                                     |
+| ----------- | ----------- | --------------------------------------------------- |
+| `required`  | `required`  | Please fill out this field.                         |
+| `minLength` | `minLength` | Please lengthen this text to _n_ characters or more |
+| `maxLength` | `maxLength` | Please shorten this text to _n_ characters or less. |
+| `min`       | `min`       | Value must be _n_ or later.                         |
+| `max`       | `max`       | Value must be _n_ or earlier.                       |
+| `pattern`   | `pattern`   | Please match the requested format.                  |
 
 Override any message with the `messages` prop, for example
 `messages={{ min: "You must be 18 or older" }}`. The `min` and `max` defaults are worded for
@@ -177,13 +177,13 @@ create.
 Each element normalizes the empty value its MUI component expects. Set `defaultValues` to match,
 so every field starts controlled:
 
-| Element | Empty value | Stored value |
-| --- | --- | --- |
-| [`MuiTextFieldElement`](/docs/rhf-adapters/mui-material/components/mui-text-field-element) | `""` | The string; with `type="number"`, a number or `null` |
-| [`MuiSelectElement`](/docs/rhf-adapters/mui-material/components/mui-select-element) | `""`, or `[]` with `multiple` | The selected `value`, or an array of them |
-| [`MuiAutocompleteElement`](/docs/rhf-adapters/mui-material/components/mui-autocomplete-element) | `null`, or `[]` with `multiple` | The whole option, or an array of options |
-| [`MuiCheckboxElement`](/docs/rhf-adapters/mui-material/components/mui-checkbox-element) | `[]`; unchecking every box stores `undefined` | An array of the checked boxes' `value`s |
-| [`MuiXDatePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-picker-element) | `null` | A date object from your `LocalizationProvider` adapter |
+| Element                                                                                               | Empty value                                   | Stored value                                           |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------ |
+| [`MuiTextFieldElement`](/docs/rhf-adapters/mui-material/components/mui-text-field-element)            | `""`                                          | The string; with `type="number"`, a number or `null`   |
+| [`MuiSelectElement`](/docs/rhf-adapters/mui-material/components/mui-select-element)                   | `""`, or `[]` with `multiple`                 | The selected `value`, or an array of them              |
+| [`MuiAutocompleteElement`](/docs/rhf-adapters/mui-material/components/mui-autocomplete-element)       | `null`, or `[]` with `multiple`               | The whole option, or an array of options               |
+| [`MuiCheckboxElement`](/docs/rhf-adapters/mui-material/components/mui-checkbox-element)               | `[]`; unchecking every box stores `undefined` | An array of the checked boxes' `value`s                |
+| [`MuiXDatePickerElement`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-picker-element) | `null`                                        | A date object from your `LocalizationProvider` adapter |
 
 When the stored shape should differ from what the component shows, use `transform`. For example,
 the [Autocomplete hook demo](/docs/rhf-adapters/mui-material/hooks/use-mui-autocomplete-adapter)

@@ -1,17 +1,14 @@
-"use client";
+'use client';
 
-import MenuItem from "@mui/material/MenuItem";
-import Stack from "@mui/material/Stack";
-import {
-  MuiSelectElement,
-  MuiButtonElement,
-} from "@piplup/rhf-adapters/mui-material";
-import { FormContainer } from "@piplup/rhf-core";
+import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
+import { MuiSelectElement, MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
   return (
     <FormContainer
-      defaultValues={{ role: "user" }}
+      defaultValues={{ role: 'user' }}
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <Stack direction="column" spacing={2}>

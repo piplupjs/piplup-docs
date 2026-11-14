@@ -1,8 +1,4 @@
 {
   "title": "mui-tel-input",
-  "pages": [
-    "[Installation](/docs/rhf-adapters/mui-tel-input/installation)",
-    "components",
-    "hooks"
-  ]
+  "pages": ["[Installation](/docs/rhf-adapters/mui-tel-input/installation)", "components", "hooks"]
 }

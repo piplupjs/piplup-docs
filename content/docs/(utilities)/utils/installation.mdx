@@ -1,6 +1,6 @@
 ---
 title: Installation — @piplup/utils
-seoTitle: "React utility hooks — @piplup/utils"
+seoTitle: 'React utility hooks — @piplup/utils'
 description: Install @piplup/utils, check its React peer dependency, and see which helpers and hooks it exports and how they behave during server rendering.
 ---
 
@@ -12,9 +12,9 @@ description: Install @piplup/utils, check its React peer dependency, and see whi
 
 ## Peer dependencies
 
-| Package | Version |
-| --- | --- |
-| `react` | `^18.2.0 \|\| ^19.0.0` |
+| Package                   | Version                |
+| ------------------------- | ---------------------- |
+| `react`                   | `^18.2.0 \|\| ^19.0.0` |
 | `@types/react` (optional) | `^18.2.0 \|\| ^19.0.0` |
 
 If you use `@piplup/rhf-core`, this package is already installed: rhf-core depends on `@piplup/utils` `3.2.4` directly. `@piplup/rhf-adapters` lists the same version as a peer dependency.
@@ -52,7 +52,7 @@ import {
   prefersReducedMotion,
   // countdown without React
   createCountdown,
-} from "@piplup/utils";
+} from '@piplup/utils';
 ```
 
 ## Server rendering
@@ -72,19 +72,19 @@ The bundle starts with a `"use client"` directive, so in the Next.js App Router 
 `setItem` notifies every `useLocalStorage` hook that reads the same key, in the current tab as well as in other tabs. Two components can share a value without a context:
 
 ```tsx
-"use client";
+'use client';
 
-import { setItem, useLocalStorage } from "@piplup/utils";
+import { setItem, useLocalStorage } from '@piplup/utils';
 
 function ThemeLabel() {
-  const theme = useLocalStorage("theme", "light");
+  const theme = useLocalStorage('theme', 'light');
   return <span>Theme: {theme}</span>;
 }
 
 function ThemeToggle() {
-  const theme = useLocalStorage("theme", "light");
+  const theme = useLocalStorage('theme', 'light');
   return (
-    <button onClick={() => setItem("theme", theme === "dark" ? "light" : "dark")}>
+    <button onClick={() => setItem('theme', theme === 'dark' ? 'light' : 'dark')}>
       Toggle theme
     </button>
   );

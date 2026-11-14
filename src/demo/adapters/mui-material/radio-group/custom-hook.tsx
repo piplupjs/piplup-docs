@@ -1,18 +1,15 @@
-"use client";
+'use client';
 
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormHelperText from "@mui/material/FormHelperText";
-import FormLabel from "@mui/material/FormLabel";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import Stack from "@mui/material/Stack";
-import {
-  MuiButtonElement,
-  useMuiRadioGroupAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import type * as React from "react";
-import { type Control, useForm } from "react-hook-form";
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormLabel from '@mui/material/FormLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Stack from '@mui/material/Stack';
+import { MuiButtonElement, useMuiRadioGroupAdapter } from '@piplup/rhf-adapters/mui-material';
+import type * as React from 'react';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { giftWrap: boolean | null };
 
@@ -22,20 +19,19 @@ function GiftWrapField({ control }: { control: Control<FormValues> }) {
   const { error, helperText, ...adapter } = useMuiRadioGroupAdapter<
     string | null,
     FormValues,
-    "giftWrap",
+    'giftWrap',
     HTMLDivElement
   >({
     control,
-    name: "giftWrap",
+    name: 'giftWrap',
     composeHelperText: true,
     // Not `required`: React Hook Form treats `false` as missing.
     rules: {
-      validate: (value) => value !== null || "Choose yes or no",
+      validate: (value) => value !== null || 'Choose yes or no',
     },
     transform: {
-      input: (value) => (typeof value === "boolean" ? String(value) : null),
-      output: (_event: React.ChangeEvent<HTMLInputElement>, value: string) =>
-        value === "true",
+      input: (value) => (typeof value === 'boolean' ? String(value) : null),
+      output: (_event: React.ChangeEvent<HTMLInputElement>, value: string) => value === 'true',
     },
   });
 
@@ -57,12 +53,7 @@ export default function Page() {
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
         <GiftWrapField control={control} />
         <div>

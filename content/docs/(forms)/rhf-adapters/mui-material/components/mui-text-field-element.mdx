@@ -1,18 +1,18 @@
 ---
 title: MuiTextFieldElement
-seoTitle: "MUI TextField with React Hook Form"
-description: "Use MUI TextField with react-hook-form without writing a Controller. MuiTextFieldElement wires value, validation and error helper text in one component."
+seoTitle: 'MUI TextField with React Hook Form'
+description: 'Use MUI TextField with react-hook-form without writing a Controller. MuiTextFieldElement wires value, validation and error helper text in one component.'
 faq:
-  - question: "How do I use MUI TextField with React Hook Form?"
+  - question: 'How do I use MUI TextField with React Hook Form?'
     answer: "Render `MuiTextFieldElement` with your form's `control` and a field `name`. It takes every MUI TextField prop, connects the value and change handler to react-hook-form, and shows the field's validation error as helper text. Inside a `FormContainer` or `FormProvider` you can leave out `control`."
-  - question: "Why do I get a warning about an uncontrolled input becoming controlled?"
+  - question: 'Why do I get a warning about an uncontrolled input becoming controlled?'
     answer: "That warning comes from a TextField whose value starts as `undefined`. `MuiTextFieldElement` passes an empty string to MUI in that case, but you should still set `defaultValues` for every field so the form's initial state and reset behave predictably."
-  - question: "How do I get a number instead of a string from a number field?"
-    answer: "Set `type=\"number\"`. The element stores the input as a number, and an empty input as `null`, so you don't need `valueAsNumber` or a manual conversion."
-  - question: "How do I show my own message for a required field?"
-    answer: "Pass `required` together with `messages={{ required: \"Enter your email\" }}`. The same `messages` prop overrides the defaults for `minLength`, `maxLength`, `min`, `max` and `pattern`."
-  - question: "Can the field still show a hint when there is no error?"
-    answer: "Yes. Pass `helperText` and it shows while the field is valid. When validation fails, the error message replaces it, and the hint comes back once the error is fixed."
+  - question: 'How do I get a number instead of a string from a number field?'
+    answer: 'Set `type="number"`. The element stores the input as a number, and an empty input as `null`, so you don''t need `valueAsNumber` or a manual conversion.'
+  - question: 'How do I show my own message for a required field?'
+    answer: 'Pass `required` together with `messages={{ required: "Enter your email" }}`. The same `messages` prop overrides the defaults for `minLength`, `maxLength`, `min`, `max` and `pattern`.'
+  - question: 'Can the field still show a hint when there is no error?'
+    answer: 'Yes. Pass `helperText` and it shows while the field is valid. When validation fails, the error message replaces it, and the hint comes back once the error is fixed.'
 ---
 
 `MuiTextFieldElement` is MUI's `TextField` connected to React Hook Form. It replaces the
@@ -24,7 +24,7 @@ message as helper text. New to the adapters? Start with
 ## Import
 
 ```tsx
-import { MuiTextFieldElement } from "@piplup/rhf-adapters/mui-material";
+import { MuiTextFieldElement } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -32,12 +32,12 @@ import { MuiTextFieldElement } from "@piplup/rhf-adapters/mui-material";
 <Demo
   tabs={[
     {
-      label: "useForm",
-      path: "demo/adapters/mui-material/text-field/use-form.tsx",
+      label: 'useForm',
+      path: 'demo/adapters/mui-material/text-field/use-form.tsx',
     },
     {
-      label: "FormContainer",
-      path: "demo/adapters/mui-material/text-field/form-container.tsx",
+      label: 'FormContainer',
+      path: 'demo/adapters/mui-material/text-field/form-container.tsx',
     },
   ]}
 />
@@ -83,7 +83,7 @@ Remember `noValidate` on your `<form>`. `required` is also passed to the `<input
   label="Age"
   required
   min={18}
-  messages={{ min: "You must be 18 or older" }}
+  messages={{ min: 'You must be 18 or older' }}
 />
 ```
 
@@ -117,11 +117,7 @@ Together they let a field store a different shape from what it shows.
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="MuiTextFieldElementProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="MuiTextFieldElementProps" cwd />
 
 `MuiTextFieldElement` supports props of the MUI TextField component, along with additional adapter-specific props. For a complete list of available TextField properties, refer to the MUI [API documentation](https://mui.com/material-ui/api/text-field/).
 

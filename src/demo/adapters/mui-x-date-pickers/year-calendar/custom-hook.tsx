@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import dayjs, { type Dayjs } from "dayjs";
-import FormHelperText from "@mui/material/FormHelperText";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { LocalizationProvider, YearCalendar } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { useMuiXYearCalendarAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import { type Control, useForm } from "react-hook-form";
+import dayjs, { type Dayjs } from 'dayjs';
+import FormHelperText from '@mui/material/FormHelperText';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { LocalizationProvider, YearCalendar } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useMuiXYearCalendarAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { joinedIn: Dayjs | null };
 
@@ -21,24 +21,19 @@ function JoinedYearField({ control }: { control: Control<FormValues> }) {
     shouldDisableDate: _shouldDisableDate,
     shouldDisableMonth: _shouldDisableMonth,
     ...adapter
-  } = useMuiXYearCalendarAdapter<
-    Dayjs,
-    FormValues,
-    "joinedIn",
-    HTMLDivElement
-  >({
+  } = useMuiXYearCalendarAdapter<Dayjs, FormValues, 'joinedIn', HTMLDivElement>({
     control,
-    name: "joinedIn",
+    name: 'joinedIn',
     required: true,
     composeHelperText: true,
-    helperText: "Pick the year you started.",
+    helperText: 'Pick the year you started.',
     // minDate and maxDate also set the range of years the grid lists.
-    minDate: dayjs("1970-01-01"),
+    minDate: dayjs('1970-01-01'),
     maxDate: dayjs(),
     messages: {
-      required: "Select the year you joined",
+      required: 'Select the year you joined',
       maxDate: "That year hasn't happened yet",
-      minDate: "We were founded in 1970",
+      minDate: 'We were founded in 1970',
     },
   });
 

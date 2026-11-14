@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { FormContainer } from "@piplup/rhf-core";
-import { HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { FormContainer } from '@piplup/rhf-core';
+import { HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   return (
@@ -17,21 +17,11 @@ export default function Page() {
       }}
     >
       <div>
-        <HtmlInputElement
-          id="one"
-          name="checkbox"
-          type="checkbox"
-          value="one"
-        />
+        <HtmlInputElement id="one" name="checkbox" type="checkbox" value="one" />
         <label htmlFor="one">One</label>
       </div>
       <div>
-        <HtmlInputElement
-          id="two"
-          name="checkbox"
-          type="checkbox"
-          value="two"
-        />
+        <HtmlInputElement id="two" name="checkbox" type="checkbox" value="two" />
         <label htmlFor="two">Two</label>
       </div>
     </FormContainer>

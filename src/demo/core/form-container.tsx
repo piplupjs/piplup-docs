@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
 import {
   HtmlFormHelperTextElement,
   HtmlFormLabelElement,
   HtmlInputElement,
-} from "@piplup/rhf-adapters/html";
-import { FormContainer } from "@piplup/rhf-core";
+} from '@piplup/rhf-adapters/html';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
   return (
     <FormContainer
-      defaultValues={{ name: "" }}
+      defaultValues={{ name: '' }}
       onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
     >
       <div>
@@ -27,7 +27,7 @@ export default function Page() {
         <HtmlFormHelperTextElement
           name="name"
           style={({ error }) => ({
-            ...(error && { color: "red" }),
+            ...(error && { color: 'red' }),
           })}
           renderOnError
         />

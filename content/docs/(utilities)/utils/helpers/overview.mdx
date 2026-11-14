@@ -1,7 +1,7 @@
 ---
 title: Helpers Overview
-seoTitle: "Helper functions — @piplup/utils"
-description: "Small, typed utility functions from @piplup/utils: compact, execSequentially, forkRef, a type-safe hasOwnProperty and more."
+seoTitle: 'Helper functions — @piplup/utils'
+description: 'Small, typed utility functions from @piplup/utils: compact, execSequentially, forkRef, a type-safe hasOwnProperty and more.'
 ---
 
 ## compact
@@ -9,10 +9,10 @@ description: "Small, typed utility functions from @piplup/utils: compact, execSe
 Removes falsy values (`null`, `undefined`, `false`, `0`, `""` and `NaN`) from an array. A non-array argument returns `[]`.
 
 ```tsx
-import { compact } from "@piplup/utils";
+import { compact } from '@piplup/utils';
 
 compact([1, null, 2, undefined]); // [1, 2]
-compact([0, 1, "", "a", false]); // [1, "a"]
+compact([0, 1, '', 'a', false]); // [1, "a"]
 ```
 
 ## execSequentially
@@ -20,18 +20,18 @@ compact([0, 1, "", "a", false]); // [1, "a"]
 Run multiple functions in sequence producing a new function.
 
 ```tsx
-import { execSequentially } from "@piplup/utils";
+import { execSequentially } from '@piplup/utils';
 
 const combined = execSequentially(fn1, fn2);
 combined();
 ```
 
-## forkRef 
+## forkRef
 
 Utilities for combining multiple refs.
 
 ```tsx
-import { forkRef } from "@piplup/utils";
+import { forkRef } from '@piplup/utils';
 
 const ref = forkRef(refA, refB);
 ```
@@ -41,9 +41,11 @@ const ref = forkRef(refA, refB);
 Type-safe `hasOwnProperty` helper.
 
 ```ts
-import { hasOwnProperty } from "@piplup/utils";
+import { hasOwnProperty } from '@piplup/utils';
 
-if (hasOwnProperty(obj, 'key')) { /* ... */ }
+if (hasOwnProperty(obj, 'key')) {
+  /* ... */
+}
 ```
 
 ## setRef

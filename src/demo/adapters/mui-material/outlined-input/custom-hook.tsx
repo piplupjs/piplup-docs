@@ -1,18 +1,15 @@
-"use client";
+'use client';
 
-import { useId, useState } from "react";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
-import InputAdornment from "@mui/material/InputAdornment";
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import {
-  MuiButtonElement,
-  useMuiOutlinedInputAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+import { useId, useState } from 'react';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { MuiButtonElement, useMuiOutlinedInputAdapter } from '@piplup/rhf-adapters/mui-material';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { password: string };
 
@@ -23,15 +20,15 @@ function PasswordField({ control }: { control: Control<FormValues> }) {
   const [visible, setVisible] = useState(false);
   const { ref, helperText, ...adapter } = useMuiOutlinedInputAdapter({
     control,
-    name: "password",
-    type: visible ? "text" : "password",
+    name: 'password',
+    type: visible ? 'text' : 'password',
     required: true,
     minLength: 8,
     maxLength: 64,
     composeHelperText: true,
-    helperText: "At least 8 characters",
+    helperText: 'At least 8 characters',
     messages: {
-      required: "Choose a password",
+      required: 'Choose a password',
       minLength: (length) => `Use at least ${length} characters`,
     },
   });
@@ -48,7 +45,7 @@ function PasswordField({ control }: { control: Control<FormValues> }) {
         endAdornment={
           <InputAdornment position="end">
             <Button size="small" onClick={() => setVisible((v) => !v)}>
-              {visible ? "Hide" : "Show"}
+              {visible ? 'Hide' : 'Show'}
             </Button>
           </InputAdornment>
         }
@@ -60,16 +57,11 @@ function PasswordField({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { password: "" },
+    defaultValues: { password: '' },
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
         <PasswordField control={control} />
         <div>

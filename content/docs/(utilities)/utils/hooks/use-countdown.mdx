@@ -6,13 +6,13 @@ description: React countdown hook that re-renders only the components that show 
 `useCountdown` creates a countdown and returns a controller for it. It never re-renders the component that calls it. Components that show a value read it with `useCountdownValue`, and re-render only when the value they read changes.
 
 ```tsx
-import { useCountdown, useCountdownValue } from "@piplup/utils";
-import type { Countdown } from "@piplup/utils";
+import { useCountdown, useCountdownValue } from '@piplup/utils';
+import type { Countdown } from '@piplup/utils';
 
 function ResendButton({ onResend }: { onResend: () => void }) {
   const countdown = useCountdown({ from: 30, autoStart: true });
   // Re-renders once, when the countdown finishes.
-  const canResend = useCountdownValue(countdown, (state) => state.status === "finished");
+  const canResend = useCountdownValue(countdown, (state) => state.status === 'finished');
 
   return (
     <button
@@ -63,14 +63,14 @@ React.useEffect(
 
 The controller and its methods keep the same identity for the component's lifetime, so you can pass them as props or event handlers directly, for example `onClick={countdown.pause}`.
 
-| Method | What it does |
-| --- | --- |
-| `start()` | Starts from `from` when idle or finished. Resumes when paused. Does nothing while running. |
-| `pause()` | Pauses a running countdown. Resuming continues the current step where it left off. |
-| `reset()` | Stops and goes back to `from`, idle. |
-| `restart()` | Starts again from `from`, counting from now, in a single update. |
-| `getState()` | Returns `{ count, status }` without subscribing, for event handlers. |
-| `subscribe(listener)` | Calls `listener` with the new state on every change. Returns an unsubscribe function. |
+| Method                | What it does                                                                               |
+| --------------------- | ------------------------------------------------------------------------------------------ |
+| `start()`             | Starts from `from` when idle or finished. Resumes when paused. Does nothing while running. |
+| `pause()`             | Pauses a running countdown. Resuming continues the current step where it left off.         |
+| `reset()`             | Stops and goes back to `from`, idle.                                                       |
+| `restart()`           | Starts again from `from`, counting from now, in a single update.                           |
+| `getState()`          | Returns `{ count, status }` without subscribing, for event handlers.                       |
+| `subscribe(listener)` | Calls `listener` with the new state on every change. Returns an unsubscribe function.      |
 
 `status` is `"idle"`, `"running"`, `"paused"` or `"finished"`.
 
@@ -122,45 +122,49 @@ The countdown renders `from` on the server and on the first client render, so hy
 `createCountdown` returns the same countdown without any React. It doesn't start until you call `start()`, and `setOptions()` replaces its options:
 
 ```ts
-import { createCountdown } from "@piplup/utils";
+import { createCountdown } from '@piplup/utils';
 
-const countdown = createCountdown({ from: 10, onComplete: () => console.log("done") });
+const countdown = createCountdown({ from: 10, onComplete: () => console.log('done') });
 countdown.subscribe(({ count }) => render(count));
 countdown.start();
 ```
 
 ## Parameters
 
-<TypeTable type={{
-  from: {
-    description: "Value to count from.",
-    type: "number",
-    required: true,
-  },
-  to: {
-    description: "Value to count to. Counts down when `from` is greater, up when it is smaller. The countdown always ends exactly on `to`.",
-    type: "number",
-    default: "0",
-  },
-  interval: {
-    description: "Milliseconds per step. Must be greater than 0.",
-    type: "number",
-    default: "1000",
-  },
-  autoStart: {
-    description: "Start after the component mounts. Applies once per component.",
-    type: "boolean",
-    default: "false",
-  },
-  startedAt: {
-    description: "Epoch milliseconds the countdown really started at. The first start after it changes skips the time that has already passed.",
-    type: "number",
-  },
-  onComplete: {
-    description: "Called once when the count reaches `to`.",
-    type: "() => void",
-  },
-}} />
+<TypeTable
+  type={{
+    from: {
+      description: 'Value to count from.',
+      type: 'number',
+      required: true,
+    },
+    to: {
+      description:
+        'Value to count to. Counts down when `from` is greater, up when it is smaller. The countdown always ends exactly on `to`.',
+      type: 'number',
+      default: '0',
+    },
+    interval: {
+      description: 'Milliseconds per step. Must be greater than 0.',
+      type: 'number',
+      default: '1000',
+    },
+    autoStart: {
+      description: 'Start after the component mounts. Applies once per component.',
+      type: 'boolean',
+      default: 'false',
+    },
+    startedAt: {
+      description:
+        'Epoch milliseconds the countdown really started at. The first start after it changes skips the time that has already passed.',
+      type: 'number',
+    },
+    onComplete: {
+      description: 'Called once when the count reaches `to`.',
+      type: '() => void',
+    },
+  }}
+/>
 
 `from`, `to`, `interval` and `startedAt` must be finite numbers, and `interval` must be greater than 0. Anything else throws a `TypeError`.
 

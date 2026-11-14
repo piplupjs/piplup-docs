@@ -1,34 +1,31 @@
-"use client";
+'use client';
 
-import Checkbox from "@mui/material/Checkbox";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
-import FormHelperText from "@mui/material/FormHelperText";
-import FormLabel from "@mui/material/FormLabel";
-import Stack from "@mui/material/Stack";
-import {
-  MuiButtonElement,
-  useMuiCheckboxAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import type * as React from "react";
-import { type Control, useForm } from "react-hook-form";
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormLabel from '@mui/material/FormLabel';
+import Stack from '@mui/material/Stack';
+import { MuiButtonElement, useMuiCheckboxAdapter } from '@piplup/rhf-adapters/mui-material';
+import type * as React from 'react';
+import { type Control, useForm } from 'react-hook-form';
 
-type Channel = "email" | "sms" | "push";
+type Channel = 'email' | 'sms' | 'push';
 
 type FormValues = { channels?: Channel[] };
 
 const CHANNELS: Array<{ value: Channel; label: string }> = [
-  { value: "email", label: "Email" },
-  { value: "sms", label: "SMS" },
-  { value: "push", label: "Push notifications" },
+  { value: 'email', label: 'Email' },
+  { value: 'sms', label: 'SMS' },
+  { value: 'push', label: 'Push notifications' },
 ];
 
 // Every checkbox registers the same field, so they share these rules.
 const sharedProps = {
-  name: "channels",
+  name: 'channels',
   required: true,
-  messages: { required: "Pick at least one channel" },
+  messages: { required: 'Pick at least one channel' },
 } as const;
 
 // One option. Checking it adds `value` to the array, unchecking removes it.
@@ -49,7 +46,7 @@ function ChannelCheckbox({
     helperText: _helperText,
     required: _required,
     ...adapter
-  } = useMuiCheckboxAdapter<unknown, FormValues, "channels", HTMLButtonElement>({
+  } = useMuiCheckboxAdapter<unknown, FormValues, 'channels', HTMLButtonElement>({
     control,
     value,
     ...sharedProps,
@@ -66,43 +63,25 @@ function ChannelsField({ control }: { control: Control<FormValues> }) {
     helperText,
     required: _required,
     ...adapter
-  } = useMuiCheckboxAdapter<
-    unknown,
-    FormValues,
-    "channels",
-    HTMLButtonElement
-  >({
+  } = useMuiCheckboxAdapter<unknown, FormValues, 'channels', HTMLButtonElement>({
     control,
-    value: "all",
+    value: 'all',
     ...sharedProps,
     composeHelperText: true,
-    checked: (value) =>
-      Array.isArray(value) && value.length === CHANNELS.length,
+    checked: (value) => Array.isArray(value) && value.length === CHANNELS.length,
     indeterminate: (value) =>
-      Array.isArray(value) &&
-      value.length > 0 &&
-      value.length < CHANNELS.length,
+      Array.isArray(value) && value.length > 0 && value.length < CHANNELS.length,
     transform: {
       output: (event: React.ChangeEvent<HTMLInputElement>) =>
-        event.target.checked
-          ? CHANNELS.map((channel) => channel.value)
-          : undefined,
+        event.target.checked ? CHANNELS.map((channel) => channel.value) : undefined,
     },
   });
 
   return (
-    <FormControl
-      required
-      error={error}
-      component="fieldset"
-      variant="standard"
-    >
+    <FormControl required error={error} component="fieldset" variant="standard">
       <FormLabel component="legend">Notify me by</FormLabel>
       <FormGroup>
-        <FormControlLabel
-          control={<Checkbox {...adapter} />}
-          label="All channels"
-        />
+        <FormControlLabel control={<Checkbox {...adapter} />} label="All channels" />
         <Stack sx={{ pl: 3 }}>
           {CHANNELS.map((channel) => (
             <ChannelCheckbox
@@ -121,16 +100,11 @@ function ChannelsField({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { channels: ["email"] },
+    defaultValues: { channels: ['email'] },
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
         <ChannelsField control={control} />
         <div>

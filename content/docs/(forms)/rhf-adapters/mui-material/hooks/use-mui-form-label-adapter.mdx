@@ -10,7 +10,7 @@ Use the hook when the label is part of a custom field component, so the label, i
 ## Import
 
 ```tsx
-import { useMuiFormLabelAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiFormLabelAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ import { useMuiFormLabelAdapter } from "@piplup/rhf-adapters/mui-material";
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-material/form-label/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-material/form-label/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/form-label/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/form-label/element.tsx',
     },
   ]}
 />
@@ -44,23 +44,16 @@ It needs `control`, or a surrounding `FormProvider`/[`FormContainer`](/docs/rhf-
 Both are passed to `FormLabel` explicitly, even when `false`. That means they override the `error` and `disabled` of a surrounding `FormControl` for this label.
 
 <Callout type="warn">
-  The label doesn't know when the input itself is disabled through its own `disabled` prop. Pass the same `disabled` to both hooks, or disable the whole form.
+  The label doesn't know when the input itself is disabled through its own `disabled` prop. Pass the
+  same `disabled` to both hooks, or disable the whole form.
 </Callout>
 
 [useMuiInputLabelAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-input-label-adapter) is the same hook for `InputLabel`, but it doesn't read `FormControl`'s `disabled`. The generic reading of field state is described in [useFieldStateAdapter](/docs/rhf-core/hooks/use-field-state-adapter).
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiFormLabelAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiFormLabelAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiFormLabelAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiFormLabelAdapterReturnType" cwd />

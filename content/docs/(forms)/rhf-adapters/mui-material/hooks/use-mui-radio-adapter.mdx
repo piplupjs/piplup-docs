@@ -10,7 +10,7 @@ Each radio is wired to the field on its own, so the options can live anywhere: i
 ## Import
 
 ```tsx
-import { useMuiRadioAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiRadioAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ Each `SeatOption` stores a number, not the string the DOM returns. The options d
 <Demo
   tabs={[
     {
-      label: "Seat picker",
-      path: "demo/adapters/mui-material/radio/custom-hook.tsx",
+      label: 'Seat picker',
+      path: 'demo/adapters/mui-material/radio/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/radio/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/radio/element.tsx',
     },
   ]}
 />
@@ -45,21 +45,15 @@ Each `SeatOption` stores a number, not the string the DOM returns. The options d
 **What's returned.** The usual field props (`name`, `value`, `onChange`, `onBlur`, `ref`, `disabled`, `required`) plus `checked`, `error`, `helperText`, `className` and `style`. `title` and `type` are not returned, so set `title` on the `Radio` directly if you need it.
 
 <Callout type="warn">
-  `Radio` has no `error` or `helperText` props. Remove them before spreading the result. Remove `required` as well when the radio sits in a `FormControlLabel`: otherwise the label shows an asterisk next to every option.
+  `Radio` has no `error` or `helperText` props. Remove them before spreading the result. Remove
+  `required` as well when the radio sits in a `FormControlLabel`: otherwise the label shows an
+  asterisk next to every option.
 </Callout>
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiRadioAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiRadioAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiRadioAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiRadioAdapterReturnType" cwd />

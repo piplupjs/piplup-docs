@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { HtmlTextareaElement } from "@piplup/rhf-adapters/html";
+import { useForm } from 'react-hook-form';
+import { HtmlTextareaElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   const { control, handleSubmit } = useForm();

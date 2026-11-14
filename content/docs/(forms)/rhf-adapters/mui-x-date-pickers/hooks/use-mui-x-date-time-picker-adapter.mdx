@@ -10,7 +10,7 @@ Use the element for most forms. Use the hook when one kind of date-time field re
 ## Import
 
 ```tsx
-import { useMuiXDateTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { useMuiXDateTimePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `MeetingField` accepts times from 09:00 to 17:00 in 15 minute steps, on any
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-x-date-pickers/date-time-picker/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/date-time-picker/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-time-picker/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-time-picker/element.tsx',
     },
   ]}
 />
@@ -38,16 +38,16 @@ Value handling, the text field wiring (`slotProps.textField`, `composeHelperText
 
 **Date checks, then time checks.** The hook runs MUI X's `validateDateTime`. It first runs every date check from the DatePicker hook (`minDate`, `maxDate`, `shouldDisableDate` and so on, with the same keys and default messages). If those pass, it checks the time, in this order:
 
-| Key | Fails when | Default message |
-| --- | --- | --- |
-| `minTime` | The time is before `minTime` | Time is earlier than the minimum allowed time |
-| `maxTime` | The time is after `maxTime` | Time is later than the maximum allowed time |
-| `disableFuture` | The value is after the current moment | Future date is not allowed |
-| `disablePast` | The value is before the current moment | Past date is not allowed |
-| `shouldDisableTime-hours` | `shouldDisableTime(value, "hours")` returns `true` | Hour is disabled |
-| `shouldDisableTime-minutes` | `shouldDisableTime(value, "minutes")` returns `true` | Minute is disabled |
-| `shouldDisableTime-seconds` | `shouldDisableTime(value, "seconds")` returns `true` | Second is disabled |
-| `minutesStep` | The minutes are not a multiple of `minutesStep` | Minute step is not valid |
+| Key                         | Fails when                                           | Default message                               |
+| --------------------------- | ---------------------------------------------------- | --------------------------------------------- |
+| `minTime`                   | The time is before `minTime`                         | Time is earlier than the minimum allowed time |
+| `maxTime`                   | The time is after `maxTime`                          | Time is later than the maximum allowed time   |
+| `disableFuture`             | The value is after the current moment                | Future date is not allowed                    |
+| `disablePast`               | The value is before the current moment               | Past date is not allowed                      |
+| `shouldDisableTime-hours`   | `shouldDisableTime(value, "hours")` returns `true`   | Hour is disabled                              |
+| `shouldDisableTime-minutes` | `shouldDisableTime(value, "minutes")` returns `true` | Minute is disabled                            |
+| `shouldDisableTime-seconds` | `shouldDisableTime(value, "seconds")` returns `true` | Second is disabled                            |
+| `minutesStep`               | The minutes are not a multiple of `minutesStep`      | Minute step is not valid                      |
 
 Only the first failing check is reported. Override any message through `messages`, using the key from the table.
 
@@ -56,7 +56,12 @@ Only the first failing check is reported. Override any message through `messages
 **`minTime` and `maxTime` ignore the date by default.** Only the time of day is compared, so `minTime` set to 09:00 means "09:00 or later on any day". Set `disableIgnoringDatePartForTimeValidation: true` to compare the full date and time instead. To express "not before this exact moment", pass the same value to `minDate` and `minTime` with that flag. The [MobileDateTimePicker hook page](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-mobile-date-time-picker-adapter) has an example.
 
 <Callout type="warn">
-  The hook and the picker decide this flag differently. The hook uses the value you pass. MUI X's `DateTimePicker` ignores that prop and turns full date comparison on whenever `disablePast`, `disableFuture`, `minDateTime` or `maxDateTime` is set. If you combine a time-of-day `minTime` with `disablePast`, the picker lets users choose 07:00 tomorrow and the form then rejects it. Keep them aligned: use time-of-day limits without `disablePast`/`disableFuture`, or set the flag together with `disablePast` for an exact-moment limit.
+  The hook and the picker decide this flag differently. The hook uses the value you pass. MUI X's
+  `DateTimePicker` ignores that prop and turns full date comparison on whenever `disablePast`,
+  `disableFuture`, `minDateTime` or `maxDateTime` is set. If you combine a time-of-day `minTime`
+  with `disablePast`, the picker lets users choose 07:00 tomorrow and the form then rejects it. Keep
+  them aligned: use time-of-day limits without `disablePast`/`disableFuture`, or set the flag
+  together with `disablePast` for an exact-moment limit.
 </Callout>
 
 The hook does not read `minDateTime` or `maxDateTime`. If you pass them straight to the picker, the picker greys out those times but the form still accepts a typed value outside the range. Use `minTime`/`maxTime` with the flag above so the rule is validated too.
@@ -64,7 +69,9 @@ The hook does not read `minDateTime` or `maxDateTime`. If you pass them straight
 **The rules also drive the picker UI.** The validation props are returned with the adapter props, so spreading them onto `DateTimePicker` also disables the matching days, hours and minutes in its views (subject to the flag difference above). The form-level check still matters for typed values and for values set with `reset` or `setValue`.
 
 <Callout type="warn">
-  In TypeScript, `minDate` and `maxDate` are required props of the date-time hooks, unlike the date-only hooks. Pass real limits, as the example does. If they are missing at runtime, the hook falls back to the `LocalizationProvider` defaults (1900-01-01 and 2099-12-31).
+  In TypeScript, `minDate` and `maxDate` are required props of the date-time hooks, unlike the
+  date-only hooks. Pass real limits, as the example does. If they are missing at runtime, the hook
+  falls back to the `LocalizationProvider` defaults (1900-01-01 and 2099-12-31).
 </Callout>
 
 ## Props

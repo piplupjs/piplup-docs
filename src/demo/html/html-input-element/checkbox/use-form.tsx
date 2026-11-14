@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { useForm } from 'react-hook-form';
+import { HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   const { control, handleSubmit } = useForm({
@@ -18,23 +18,11 @@ export default function Page() {
       })}
     >
       <div>
-        <HtmlInputElement
-          control={control}
-          id="one"
-          name="checkbox"
-          type="checkbox"
-          value="one"
-        />
+        <HtmlInputElement control={control} id="one" name="checkbox" type="checkbox" value="one" />
         <label htmlFor="one">One</label>
       </div>
       <div>
-        <HtmlInputElement
-          control={control}
-          id="two"
-          name="checkbox"
-          type="checkbox"
-          value="two"
-        />
+        <HtmlInputElement control={control} id="two" name="checkbox" type="checkbox" value="two" />
         <label htmlFor="two">Two</label>
       </div>
     </form>

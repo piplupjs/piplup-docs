@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import dayjs, { type Dayjs } from "dayjs";
-import FormHelperText from "@mui/material/FormHelperText";
-import Stack from "@mui/material/Stack";
-import { LocalizationProvider, StaticTimePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { useMuiXStaticTimePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import { type Control, useForm } from "react-hook-form";
+import dayjs, { type Dayjs } from 'dayjs';
+import FormHelperText from '@mui/material/FormHelperText';
+import Stack from '@mui/material/Stack';
+import { LocalizationProvider, StaticTimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useMuiXStaticTimePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { reportTime: Dayjs | null };
 
@@ -19,16 +19,16 @@ function ReportTimeField({ control }: { control: Control<FormValues> }) {
   const { error, helperText, ...adapter } = useMuiXStaticTimePickerAdapter<
     Dayjs,
     FormValues,
-    "reportTime",
+    'reportTime',
     HTMLDivElement
   >({
     control,
-    name: "reportTime",
+    name: 'reportTime',
     required: true,
     composeHelperText: true,
     maxTime: lastSend,
     messages: {
-      required: "Pick a time for the daily report",
+      required: 'Pick a time for the daily report',
       maxTime: "Reports can't be sent after 20:00",
     },
   });
@@ -37,7 +37,7 @@ function ReportTimeField({ control }: { control: Control<FormValues> }) {
     <div>
       <StaticTimePicker ampm={false} {...adapter} />
       <FormHelperText error={error}>
-        {helperText || "Reports go out once a day, no later than 20:00"}
+        {helperText || 'Reports go out once a day, no later than 20:00'}
       </FormHelperText>
     </div>
   );
@@ -52,7 +52,7 @@ export default function Page() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form
         noValidate
-        onSubmit={handleSubmit((values) => alert(values.reportTime?.format("HH:mm")))}
+        onSubmit={handleSubmit((values) => alert(values.reportTime?.format('HH:mm')))}
       >
         <Stack direction="column" spacing={2}>
           <ReportTimeField control={control} />

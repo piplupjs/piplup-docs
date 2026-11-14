@@ -10,7 +10,7 @@ The hook behaves exactly like [`useMuiButtonAdapter`](/docs/rhf-adapters/mui-mat
 ## Import
 
 ```tsx
-import { useMuiIconButtonAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiIconButtonAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ A search bar with two icon buttons. The search button uses `disableOnError`, so 
 <Demo
   tabs={[
     {
-      label: "Search toolbar",
-      path: "demo/adapters/mui-material/icon-button/custom-hook.tsx",
+      label: 'Search toolbar',
+      path: 'demo/adapters/mui-material/icon-button/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/icon-button/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/icon-button/element.tsx',
     },
   ]}
 />
@@ -39,11 +39,11 @@ For the full behavior (form state subscription, the disabling table, reset on `t
 **Disabling on one field only.** If the form has other fields, `isValid` covers them too. Pass your own `error` to base the state on one field instead. It replaces the `isValid` check:
 
 ```tsx
-const { errors } = useFormState({ control, name: "query" });
+const { errors } = useFormState({ control, name: 'query' });
 
 const adapter = useMuiIconButtonAdapter<FormValues, HTMLButtonElement>({
   control,
-  type: "submit",
+  type: 'submit',
   disableOnError: true,
   error: !!errors.query,
 });
@@ -54,21 +54,14 @@ const adapter = useMuiIconButtonAdapter<FormValues, HTMLButtonElement>({
 **Accessible name.** The adapter doesn't add a label. An icon has no text, so give each `IconButton` an `aria-label`, as the demo does.
 
 <Callout type="warn">
-  `IconButton` has no `error` or `helperText` props. Remove them from the returned object before spreading it, as the demo and the element do.
+  `IconButton` has no `error` or `helperText` props. Remove them from the returned object before
+  spreading it, as the demo and the element do.
 </Callout>
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiIconButtonAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiIconButtonAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiIconButtonAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiIconButtonAdapterReturnType" cwd />

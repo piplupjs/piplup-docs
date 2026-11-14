@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useId } from "react";
-import Stack from "@mui/material/Stack";
-import FormLabel from "@mui/material/FormLabel";
-import FormHelperText from "@mui/material/FormHelperText";
-import InputBase from "@mui/material/InputBase";
+import { useId } from 'react';
+import Stack from '@mui/material/Stack';
+import FormLabel from '@mui/material/FormLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import InputBase from '@mui/material/InputBase';
 import {
   MuiButtonElement,
   useMuiFormHelperTextAdapter,
   useMuiFormLabelAdapter,
   useMuiInputBaseAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+} from '@piplup/rhf-adapters/mui-material';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { bio: string };
 
@@ -27,33 +27,29 @@ function BioField({ control }: { control: Control<FormValues> }) {
     ...input
   } = useMuiInputBaseAdapter({
     control,
-    name: "bio",
+    name: 'bio',
     required: true,
     maxLength: 160,
     messages: {
-      required: "Tell us a little about yourself",
+      required: 'Tell us a little about yourself',
       maxLength: (max) => `Keep it under ${max} characters`,
     },
   });
 
   const { helperText: _labelHelperText, ...label } = useMuiFormLabelAdapter<
     FormValues,
-    "bio",
+    'bio',
     HTMLLabelElement
   >({
     control,
-    name: "bio",
+    name: 'bio',
   });
 
-  const helper = useMuiFormHelperTextAdapter<
-    FormValues,
-    "bio",
-    HTMLParagraphElement
-  >({
+  const helper = useMuiFormHelperTextAdapter<FormValues, 'bio', HTMLParagraphElement>({
     control,
-    name: "bio",
+    name: 'bio',
     composeHelperText: true,
-    children: "Shown on your public profile",
+    children: 'Shown on your public profile',
   });
 
   return (
@@ -67,12 +63,12 @@ function BioField({ control }: { control: Control<FormValues> }) {
         inputRef={ref}
         multiline
         minRows={3}
-        slotProps={{ input: { "aria-describedby": helperId } }}
+        slotProps={{ input: { 'aria-describedby': helperId } }}
         sx={{
           p: 1,
           border: 1,
           borderRadius: 1,
-          borderColor: input.error ? "error.main" : "divider",
+          borderColor: input.error ? 'error.main' : 'divider',
         }}
       />
       <FormHelperText {...helper} id={helperId} />
@@ -82,16 +78,11 @@ function BioField({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { bio: "" },
+    defaultValues: { bio: '' },
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
         <BioField control={control} />
         <div>

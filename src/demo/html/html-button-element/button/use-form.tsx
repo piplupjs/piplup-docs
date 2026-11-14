@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { HtmlButtonElement, HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { useForm } from 'react-hook-form';
+import { HtmlButtonElement, HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      input: "",
+      input: '',
     },
   });
 
@@ -27,8 +27,10 @@ export default function Page() {
         />
       </div>
       <div>
-        <HtmlButtonElement control={control} type="button"
-        className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded mt-3"
+        <HtmlButtonElement
+          control={control}
+          type="button"
+          className="bg-black hover:bg-black/90 px-4 py-1 text-white rounded mt-3"
         >
           Button
         </HtmlButtonElement>

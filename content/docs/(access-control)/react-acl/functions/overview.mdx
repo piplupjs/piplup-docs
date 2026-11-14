@@ -1,6 +1,6 @@
 ---
 title: Check functions
-seoTitle: "hasPermission and hasRole outside React"
+seoTitle: 'hasPermission and hasRole outside React'
 description: hasPermission, hasRole, hasAllPermissions, hasAnyPermissions and createGetRolePermissionAccess — the same checks without React.
 ---
 
@@ -9,7 +9,7 @@ component, so the same rules apply in a navigation filter, a route loader, a ser
 server or a test as in your markup.
 
 ```tsx
-import { hasPermission } from "@piplup/react-acl";
+import { hasPermission } from '@piplup/react-acl';
 
 const visible = items.filter((item) => hasPermission(user, item.requiredPermissions));
 ```
@@ -25,11 +25,11 @@ components, server actions and route handlers. Only `AccessControlProvider`, `us
 `Can` and `withCan` are marked `"use client"`, and everything still comes from `@piplup/react-acl`.
 
 ```ts title="app/api/reports/route.ts"
-import { hasPermission } from "@piplup/react-acl";
+import { hasPermission } from '@piplup/react-acl';
 
 export async function GET() {
   const principal = await loadAccess();
-  if (!hasPermission(principal, "report:read")) {
+  if (!hasPermission(principal, 'report:read')) {
     return new Response(null, { status: 403 });
   }
   // ...return the reports
@@ -57,10 +57,10 @@ so `report:*` satisfies `report:summary:monthly`. A `null` or `undefined` princi
 empty requirement passes.
 
 ```ts
-hasPermission({ permissions: ["report:*"] }, "report:read"); // true
-hasPermission({ permissions: ["report:read"] }, ["report:read", "report:write"]); // false
-hasPermission({ permissions: ["report:read"] }, ["report:read", "report:write"], "ANY"); // true
-hasPermission(null, "report:read"); // false
+hasPermission({ permissions: ['report:*'] }, 'report:read'); // true
+hasPermission({ permissions: ['report:read'] }, ['report:read', 'report:write']); // false
+hasPermission({ permissions: ['report:read'] }, ['report:read', 'report:write'], 'ANY'); // true
+hasPermission(null, 'report:read'); // false
 hasPermission(null, []); // true — nothing was required
 ```
 
@@ -79,9 +79,9 @@ case, while asking for several permissions at once usually means all of them. Ro
 exactly and never resolve wildcards.
 
 ```ts
-hasRole({ roles: ["editor"] }, ["admin", "editor"]); // true
-hasRole({ roles: ["editor"] }, ["admin", "editor"], "ALL"); // false
-hasRole({ roles: ["*"] }, "admin"); // false — roles are not hierarchical
+hasRole({ roles: ['editor'] }, ['admin', 'editor']); // true
+hasRole({ roles: ['editor'] }, ['admin', 'editor'], 'ALL'); // false
+hasRole({ roles: ['*'] }, 'admin'); // false — roles are not hierarchical
 ```
 
 ## hasAllPermissions and hasAnyPermissions
@@ -114,11 +114,11 @@ Summarises how much of your permission set a role covers, for an admin screen th
 the full assignable set once; call the result with each role's permissions.
 
 ```ts
-const getAccess = createGetRolePermissionAccess(["invoice:read", "invoice:write", "user:read"]);
+const getAccess = createGetRolePermissionAccess(['invoice:read', 'invoice:write', 'user:read']);
 
-getAccess(["*"]); // { kind: "wildcard", label: "Wildcard access", … }
-getAccess(["invoice:read", "invoice:write", "user:read"]); // { kind: "all", label: "All permissions", … }
-getAccess(["invoice:read"]); // { kind: "partial", label: "1 of 3 permissions", … }
+getAccess(['*']); // { kind: "wildcard", label: "Wildcard access", … }
+getAccess(['invoice:read', 'invoice:write', 'user:read']); // { kind: "all", label: "All permissions", … }
+getAccess(['invoice:read']); // { kind: "partial", label: "1 of 3 permissions", … }
 getAccess([]); // { kind: "none", label: "No permissions", … }
 ```
 

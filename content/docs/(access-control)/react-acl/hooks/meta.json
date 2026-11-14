@@ -1,7 +1,5 @@
 {
   "$schema": "../../../../.source/json-schema/docs.meta.json",
   "title": "Hooks",
-  "pages": [
-    "use-access-control"
-  ]
+  "pages": ["use-access-control"]
 }

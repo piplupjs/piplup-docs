@@ -1,6 +1,6 @@
-import type { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next';
 import { domain } from '@/lib/shared';
- 
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
@@ -8,5 +8,5 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
     },
     sitemap: `${domain}/sitemap.xml`,
-  }
+  };
 }

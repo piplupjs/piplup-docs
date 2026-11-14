@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { HtmlInputElement } from "@piplup/rhf-adapters/html";
+import { useForm } from 'react-hook-form';
+import { HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   const { control, handleSubmit } = useForm({
@@ -17,12 +17,7 @@ export default function Page() {
         alert(JSON.stringify(data, null, 2));
       })}
     >
-      <HtmlInputElement
-        name="uploadFiles"
-        type="file"
-        multiple
-        control={control}
-      />
+      <HtmlInputElement name="uploadFiles" type="file" multiple control={control} />
     </form>
   );
 }

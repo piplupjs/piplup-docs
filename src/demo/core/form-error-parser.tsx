@@ -1,11 +1,8 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { FormErrorProvider } from "@piplup/rhf-core";
-import {
-  HtmlFormHelperTextElement,
-  HtmlInputElement,
-} from "@piplup/rhf-adapters/html";
+import { useForm } from 'react-hook-form';
+import { FormErrorProvider } from '@piplup/rhf-core';
+import { HtmlFormHelperTextElement, HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 export default function Page() {
   const { control, handleSubmit } = useForm();
@@ -14,10 +11,10 @@ export default function Page() {
     <FormErrorProvider
       errorParser={(error) => {
         const message = error?.message;
-        if (typeof message === "string") {
+        if (typeof message === 'string') {
           switch (message) {
-            case "message.field.required":
-              return "This field is required";
+            case 'message.field.required':
+              return 'This field is required';
             default:
               return message;
           }
@@ -38,14 +35,14 @@ export default function Page() {
             required
             className="border px-2 rounded"
             messages={{
-              required: "message.field.required",
+              required: 'message.field.required',
             }}
           />
           <HtmlFormHelperTextElement
             control={control}
             name="message"
             style={({ error }) => ({
-              ...(error && { color: "red" }),
+              ...(error && { color: 'red' }),
             })}
             renderOnError
           />

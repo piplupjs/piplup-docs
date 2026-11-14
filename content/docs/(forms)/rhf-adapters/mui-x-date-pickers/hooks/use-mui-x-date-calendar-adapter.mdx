@@ -10,7 +10,7 @@ The element validates but shows no message. Use the hook when the calendar is th
 ## Import
 
 ```tsx
-import { useMuiXDateCalendarAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { useMuiXDateCalendarAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ This `DeliveryCalendar` starts with a saved date from yesterday. The calendar sh
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-x-date-pickers/date-calendar/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/date-calendar/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-calendar/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/date-calendar/element.tsx',
     },
   ]}
 />
@@ -37,11 +37,16 @@ Validation uses the same rules, keys and default messages as [`useMuiXDatePicker
 **Remove the error props before spreading.** The hook returns `error`, `helperText` and `required` with the other props. `DateCalendar` has no props with those names and passes unknown props to its root `<div>`, so they would end up in the DOM. Take them off first, as the example does:
 
 ```tsx
-const { error, helperText, required: _required, ...adapter } = useMuiXDateCalendarAdapter({
+const {
+  error,
+  helperText,
+  required: _required,
+  ...adapter
+} = useMuiXDateCalendarAdapter({
   control,
-  name: "delivery",
+  name: 'delivery',
   composeHelperText: true,
-  helperText: "We deliver Monday to Saturday.",
+  helperText: 'We deliver Monday to Saturday.',
 });
 
 return (

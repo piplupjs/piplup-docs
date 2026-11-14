@@ -1,12 +1,9 @@
-"use client";
+'use client';
 
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import {
-  MuiTextFieldElement,
-  useMuiButtonAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import { MuiTextFieldElement, useMuiButtonAdapter } from '@piplup/rhf-adapters/mui-material';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { displayName: string; bio: string };
 
@@ -20,13 +17,13 @@ function SaveButton({ control }: { control: Control<FormValues> }) {
     ...adapter
   } = useMuiButtonAdapter<FormValues, HTMLButtonElement>({
     control,
-    type: "submit",
+    type: 'submit',
     disableOnIsSubmitting: true,
   });
 
   return (
     <Button variant="contained" {...adapter}>
-      {adapter.disabled ? "Saving…" : "Save"}
+      {adapter.disabled ? 'Saving…' : 'Save'}
     </Button>
   );
 }
@@ -40,10 +37,10 @@ function DiscardButton({ control }: { control: Control<FormValues> }) {
     ...adapter
   } = useMuiButtonAdapter<FormValues, HTMLButtonElement>({
     control,
-    type: "reset",
+    type: 'reset',
     disableOnIsSubmitting: true,
     onClick(event) {
-      if (!window.confirm("Discard your changes?")) {
+      if (!window.confirm('Discard your changes?')) {
         event.preventDefault();
       }
     },
@@ -58,7 +55,7 @@ function DiscardButton({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { displayName: "Ada", bio: "" },
+    defaultValues: { displayName: 'Ada', bio: '' },
   });
 
   return (
@@ -71,19 +68,8 @@ export default function Page() {
       })}
     >
       <Stack direction="column" spacing={2}>
-        <MuiTextFieldElement
-          control={control}
-          name="displayName"
-          label="Display name"
-          required
-        />
-        <MuiTextFieldElement
-          control={control}
-          name="bio"
-          label="Bio"
-          multiline
-          minRows={2}
-        />
+        <MuiTextFieldElement control={control} name="displayName" label="Display name" required />
+        <MuiTextFieldElement control={control} name="bio" label="Bio" multiline minRows={2} />
         <Stack direction="row" spacing={1}>
           <SaveButton control={control} />
           <DiscardButton control={control} />

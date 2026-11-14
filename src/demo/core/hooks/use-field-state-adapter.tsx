@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { type Control, useForm } from "react-hook-form";
-import { useFieldStateAdapter } from "@piplup/rhf-core";
+import { type Control, useForm } from 'react-hook-form';
+import { useFieldStateAdapter } from '@piplup/rhf-core';
 
 type FieldValues = {
   email: string;
@@ -9,8 +9,8 @@ type FieldValues = {
 
 function EmailHelperText({ control }: { control?: Control<FieldValues> }) {
   const helper = useFieldStateAdapter({
-    name: "email",
-    helperText: "We will only use this for account updates.",
+    name: 'email',
+    helperText: 'We will only use this for account updates.',
     disableOnIsSubmitting: true,
     control,
   });
@@ -25,25 +25,20 @@ function EmailHelperText({ control }: { control?: Control<FieldValues> }) {
 export default function Page() {
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
-      email: "",
+      email: '',
     },
   });
 
   return (
-    <form
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-      noValidate
-    >
+    <form onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))} noValidate>
       <div>
         <label htmlFor="email">Email</label>
         <input
           id="email"
           type="email"
           placeholder="name@example.com"
-          {...register("email", {
-            required: "Email is required.",
+          {...register('email', {
+            required: 'Email is required.',
           })}
           className="border rounded block px-2"
         />

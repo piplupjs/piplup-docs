@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import type { Dayjs } from "dayjs";
-import FormHelperText from "@mui/material/FormHelperText";
-import Stack from "@mui/material/Stack";
-import { LocalizationProvider, MultiSectionDigitalClock } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { useMuiXMultiSectionDigitalClockAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
-import { type Control, useForm } from "react-hook-form";
+import type { Dayjs } from 'dayjs';
+import FormHelperText from '@mui/material/FormHelperText';
+import Stack from '@mui/material/Stack';
+import { LocalizationProvider, MultiSectionDigitalClock } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { useMuiXMultiSectionDigitalClockAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { departure: Dayjs | null };
 
@@ -19,17 +19,17 @@ function DepartureClock({ control }: { control: Control<FormValues> }) {
     helperText,
     required: _required,
     ...adapter
-  } = useMuiXMultiSectionDigitalClockAdapter<Dayjs, FormValues, "departure", HTMLDivElement>({
+  } = useMuiXMultiSectionDigitalClockAdapter<Dayjs, FormValues, 'departure', HTMLDivElement>({
     control,
-    name: "departure",
+    name: 'departure',
     required: true,
     composeHelperText: true,
     minutesStep: 5,
-    shouldDisableTime: (value, view) => view === "seconds" && value.second() % 30 !== 0,
+    shouldDisableTime: (value, view) => view === 'seconds' && value.second() % 30 !== 0,
     messages: {
-      required: "Pick a departure time",
-      minutesStep: "Departures leave every 5 minutes",
-      "shouldDisableTime-seconds": "Only :00 or :30 seconds",
+      required: 'Pick a departure time',
+      minutesStep: 'Departures leave every 5 minutes',
+      'shouldDisableTime-seconds': 'Only :00 or :30 seconds',
     },
   });
 
@@ -37,7 +37,7 @@ function DepartureClock({ control }: { control: Control<FormValues> }) {
     <div>
       <MultiSectionDigitalClock
         ampm={false}
-        views={["hours", "minutes", "seconds"]}
+        views={['hours', 'minutes', 'seconds']}
         timeSteps={{ minutes: 5, seconds: 30 }}
         {...adapter}
       />
@@ -55,7 +55,7 @@ export default function Page() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <form
         noValidate
-        onSubmit={handleSubmit((values) => alert(values.departure?.format("HH:mm:ss")))}
+        onSubmit={handleSubmit((values) => alert(values.departure?.format('HH:mm:ss')))}
       >
         <Stack direction="column" spacing={2}>
           <DepartureClock control={control} />

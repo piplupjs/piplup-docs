@@ -12,8 +12,9 @@ export function Hero() {
       <h1 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl">{appTagline}</h1>
 
       <p className="mt-5 text-lg text-fd-muted-foreground text-balance">
-        {appSearchName} is a set of small packages that each solve one problem well — React Hook Form adapters for MUI,
-        role-based access control, cache busting — so you install what you need and nothing else.
+        {appSearchName} is a set of small packages that each solve one problem well — React Hook
+        Form adapters for MUI, role-based access control, cache busting — so you install what you
+        need and nothing else.
       </p>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">

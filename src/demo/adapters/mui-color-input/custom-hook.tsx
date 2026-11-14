@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import { useMuiColorInputAdapter } from "@piplup/rhf-adapters/mui-color-input";
-import { MuiButtonElement } from "@piplup/rhf-adapters/mui-material";
-import { MuiColorInput, matchIsValidColor } from "mui-color-input";
-import { type Control, useForm, useWatch } from "react-hook-form";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import { useMuiColorInputAdapter } from '@piplup/rhf-adapters/mui-color-input';
+import { MuiButtonElement } from '@piplup/rhf-adapters/mui-material';
+import { MuiColorInput, matchIsValidColor } from 'mui-color-input';
+import { type Control, useForm, useWatch } from 'react-hook-form';
 
 type FormValues = { buttonColor: string };
 
@@ -22,17 +22,17 @@ function brightness(hex: string) {
 // A color field for button backgrounds: hex only, no alpha,
 // and it rejects colors too light for white button text.
 function ButtonColorField({ control }: { control: Control<FormValues> }) {
-  const adapter = useMuiColorInputAdapter<string, FormValues, "buttonColor", HTMLDivElement>({
+  const adapter = useMuiColorInputAdapter<string, FormValues, 'buttonColor', HTMLDivElement>({
     control,
-    name: "buttonColor",
+    name: 'buttonColor',
     required: true,
     composeHelperText: true,
-    helperText: "Used behind white button text",
-    messages: { required: "Pick a button color" },
+    helperText: 'Used behind white button text',
+    messages: { required: 'Pick a button color' },
     rules: {
       validate: {
-        valid: (value) => matchIsValidColor(value) || "Enter a valid hex color",
-        contrast: (value) => brightness(value) < 128 || "Too light for white text",
+        valid: (value) => matchIsValidColor(value) || 'Enter a valid hex color',
+        contrast: (value) => brightness(value) < 128 || 'Too light for white text',
       },
     },
   });
@@ -41,11 +41,11 @@ function ButtonColorField({ control }: { control: Control<FormValues> }) {
 }
 
 function Preview({ control }: { control: Control<FormValues> }) {
-  const color = useWatch({ control, name: "buttonColor" });
+  const color = useWatch({ control, name: 'buttonColor' });
   const background = matchIsValidColor(color) ? color : undefined;
 
   return (
-    <Button variant="contained" sx={{ bgcolor: background, alignSelf: "flex-start" }}>
+    <Button variant="contained" sx={{ bgcolor: background, alignSelf: 'flex-start' }}>
       Preview
     </Button>
   );
@@ -53,14 +53,11 @@ function Preview({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { buttonColor: "#1976d2" },
+    defaultValues: { buttonColor: '#1976d2' },
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}
-    >
+    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
         <ButtonColorField control={control} />
         <Preview control={control} />

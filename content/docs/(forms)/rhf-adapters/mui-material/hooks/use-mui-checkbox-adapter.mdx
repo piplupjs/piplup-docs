@@ -10,7 +10,7 @@ Use the element for plain checkbox lists. Reach for the hook when one component 
 ## Import
 
 ```tsx
-import { useMuiCheckboxAdapter } from "@piplup/rhf-adapters/mui-material";
+import { useMuiCheckboxAdapter } from '@piplup/rhf-adapters/mui-material';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ The "All channels" box is checked when every channel is selected, indeterminate 
 <Demo
   tabs={[
     {
-      label: "Checkbox group",
-      path: "demo/adapters/mui-material/checkbox/custom-hook.tsx",
+      label: 'Checkbox group',
+      path: 'demo/adapters/mui-material/checkbox/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/checkbox/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-material/checkbox/element.tsx',
     },
   ]}
 />
@@ -43,9 +43,9 @@ The "All channels" box is checked when every channel is selected, indeterminate 
 **Single on/off checkbox.** To store `true`/`false` instead of an array, give the box a `value`, decide `checked` yourself and store the `checked` flag:
 
 ```tsx
-const adapter = useMuiCheckboxAdapter<unknown, FormValues, "terms", HTMLButtonElement>({
+const adapter = useMuiCheckboxAdapter<unknown, FormValues, 'terms', HTMLButtonElement>({
   control,
-  name: "terms",
+  name: 'terms',
   value: true,
   required: true,
   checked: (value) => value === true,
@@ -64,25 +64,21 @@ React Hook Form treats `false` as missing, so `required` here means "must be che
 **Errors.** A checkbox can't show a message. The hook returns `error` and `helperText`; render them in a `FormControl` and `FormHelperText` around the group. With `composeHelperText: true`, `helperText` is the field's error message, falling back to your `helperText` when there's no error.
 
 <Callout type="warn">
-  `Checkbox` has no `error` or `helperText` props. Remove them before spreading the result. Remove `required` as well when the checkbox sits in a `FormControlLabel`: otherwise the label shows an asterisk next to every option.
+  `Checkbox` has no `error` or `helperText` props. Remove them before spreading the result. Remove
+  `required` as well when the checkbox sits in a `FormControlLabel`: otherwise the label shows an
+  asterisk next to every option.
 </Callout>
 
 <Callout type="warn">
-  Keep option values the same type as the stored values. Checked state compares values as strings, but unchecking removes values with strict equality. If the field holds `"2"` and the box has `value={2}`, it shows as checked but clicking it can't remove `"2"`.
+  Keep option values the same type as the stored values. Checked state compares values as strings,
+  but unchecking removes values with strict equality. If the field holds `"2"` and the box has
+  `value={2}`, it shows as checked but clicking it can't remove `"2"`.
 </Callout>
 
 ## Props
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiCheckboxAdapterProps"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiCheckboxAdapterProps" cwd />
 
 ## Return value
 
-<AutoTypeTable
-  path="content/docs/props.ts"
-  name="UseMuiCheckboxAdapterReturnType"
-  cwd
-/>
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiCheckboxAdapterReturnType" cwd />

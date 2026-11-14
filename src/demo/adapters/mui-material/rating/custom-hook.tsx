@@ -1,25 +1,22 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Box from "@mui/material/Box";
-import FormHelperText from "@mui/material/FormHelperText";
-import Rating from "@mui/material/Rating";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import {
-  MuiButtonElement,
-  useMuiRatingAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import FormHelperText from '@mui/material/FormHelperText';
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { MuiButtonElement, useMuiRatingAdapter } from '@piplup/rhf-adapters/mui-material';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { score: number | null };
 
 const LABELS: Record<number, string> = {
-  1: "Poor",
-  2: "Fair",
-  3: "Good",
-  4: "Very good",
-  5: "Excellent",
+  1: 'Poor',
+  2: 'Fair',
+  3: 'Good',
+  4: 'Very good',
+  5: 'Excellent',
 };
 
 // A required rating with a word next to the stars. Click the selected star
@@ -30,14 +27,14 @@ function ScoreField({ control }: { control: Control<FormValues> }) {
   const { error, helperText, ...adapter } = useMuiRatingAdapter<
     number | null,
     FormValues,
-    "score",
+    'score',
     HTMLSpanElement
   >({
     control,
-    name: "score",
+    name: 'score',
     required: true,
     composeHelperText: true,
-    messages: { required: "Please rate your stay" },
+    messages: { required: 'Please rate your stay' },
   });
 
   const shown = hover !== -1 ? hover : adapter.value;
@@ -45,16 +42,11 @@ function ScoreField({ control }: { control: Control<FormValues> }) {
   return (
     <Stack spacing={0.5}>
       <Typography component="legend">How was your stay?</Typography>
-      <Stack direction="row" spacing={2} sx={{ alignItems: "center" }}>
-        <Rating
-          {...adapter}
-          onChangeActive={(_event, value) => setHover(value)}
-        />
+      <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+        <Rating {...adapter} onChangeActive={(_event, value) => setHover(value)} />
         <Box sx={{ minWidth: 80 }}>{shown ? LABELS[shown] : null}</Box>
       </Stack>
-      {helperText ? (
-        <FormHelperText error={error}>{helperText}</FormHelperText>
-      ) : null}
+      {helperText ? <FormHelperText error={error}>{helperText}</FormHelperText> : null}
     </Stack>
   );
 }
@@ -65,12 +57,7 @@ export default function Page() {
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
         <ScoreField control={control} />
         <div>

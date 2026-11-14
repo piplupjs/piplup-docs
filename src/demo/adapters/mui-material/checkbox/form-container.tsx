@@ -1,12 +1,9 @@
-"use client";
+'use client';
 
-import Stack from "@mui/material/Stack";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import {
-  MuiButtonElement,
-  MuiCheckboxElement,
-} from "@piplup/rhf-adapters/mui-material";
-import { FormContainer } from "@piplup/rhf-core";
+import Stack from '@mui/material/Stack';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { MuiButtonElement, MuiCheckboxElement } from '@piplup/rhf-adapters/mui-material';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
   return (

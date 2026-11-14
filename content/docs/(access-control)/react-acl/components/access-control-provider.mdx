@@ -1,6 +1,6 @@
 ---
 title: AccessControlProvider
-seoTitle: "AccessControlProvider: roles and permissions in React"
+seoTitle: 'AccessControlProvider: roles and permissions in React'
 description: Provide the current principal — roles and permissions — and its loading state to Can, useAccessControl and everything below it.
 ---
 
@@ -15,7 +15,7 @@ session token, a server prop — and pass the result in.
 ## Import
 
 ```tsx
-import { AccessControlProvider } from "@piplup/react-acl";
+import { AccessControlProvider } from '@piplup/react-acl';
 ```
 
 ## Usage
@@ -27,8 +27,8 @@ each one can reach. The admin holds `report:*`, so the delete button appears wit
 <Demo
   tabs={[
     {
-      label: "Remote principal",
-      path: "demo/react-acl/access-control-provider.tsx",
+      label: 'Remote principal',
+      path: 'demo/react-acl/access-control-provider.tsx',
     },
   ]}
 />
@@ -48,7 +48,7 @@ function AclRoot({ children }: { children: React.ReactNode }) {
   const [principal, setPrincipal] = React.useState<AccessPrincipal>(undefined);
 
   React.useEffect(() => {
-    fetch("/api/me/acl")
+    fetch('/api/me/acl')
       .then((res) => res.json())
       .then(setPrincipal);
   }, []);
@@ -76,7 +76,7 @@ a login, logout or role change.
 
 <Callout type="warn">
   The context value is rebuilt whenever the `principal` object is a new reference. An inline literal
-  such as `principal={{ roles: ["admin"] }}` creates a new object on every render, which re-renders
+  such as `principal={{ roles: ['admin'] }}` creates a new object on every render, which re-renders
   every consumer each time the provider renders. Keep the principal in state, or wrap it in
   `useMemo`.
 </Callout>

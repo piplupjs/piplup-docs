@@ -1,7 +1,7 @@
 ---
 title: MuiFileInputElement
-seoTitle: "MUI File Input with React Hook Form"
-description: "Use mui-file-input with react-hook-form: MuiFileInputElement stores a File or File[], with file size and type validation."
+seoTitle: 'MUI File Input with React Hook Form'
+description: 'Use mui-file-input with react-hook-form: MuiFileInputElement stores a File or File[], with file size and type validation.'
 ---
 
 `MuiFileInputElement` renders `MuiFileInput` from `mui-file-input` and stores the selected file in React Hook Form: a `File` (or `null`) by default, or a `File[]` when `multiple` is set. To build your own file field, use [`useMuiFileInputAdapter`](/docs/rhf-adapters/mui-file-input/hooks/use-mui-file-input-adapter).
@@ -9,15 +9,15 @@ description: "Use mui-file-input with react-hook-form: MuiFileInputElement store
 ## Import
 
 ```tsx
-import { MuiFileInputElement } from "@piplup/rhf-adapters/mui-file-input";
+import { MuiFileInputElement } from '@piplup/rhf-adapters/mui-file-input';
 ```
 
 ## Usage
 
 <Demo
   tabs={[
-    { label: "useForm", path: "demo/adapters/mui-file-input/use-form.tsx" },
-    { label: "FormContainer", path: "demo/adapters/mui-file-input/form-container.tsx" },
+    { label: 'useForm', path: 'demo/adapters/mui-file-input/use-form.tsx' },
+    { label: 'FormContainer', path: 'demo/adapters/mui-file-input/form-container.tsx' },
   ]}
 />
 
@@ -27,7 +27,7 @@ import { MuiFileInputElement } from "@piplup/rhf-adapters/mui-file-input";
 
 The element has no size or type options of its own. Write those checks as `rules.validate` functions; they receive the `File` or `File[]` from the form. This demo accepts up to three images of 1 MB or less, and the Reset button clears the selection.
 
-<Demo tabs={[{ label: "Validation", path: "demo/adapters/mui-file-input/validation.tsx" }]} />
+<Demo tabs={[{ label: 'Validation', path: 'demo/adapters/mui-file-input/validation.tsx' }]} />
 
 `slotProps.htmlInput.accept` only filters what the browser's file picker shows. Users can still choose "All files", so keep a type check in your rules.
 
@@ -36,7 +36,8 @@ The element has no size or type options of its own. Write those checks as `rules
 **Single vs. multiple.** Without `multiple`, the form value is a `File`, or `null` when nothing is selected or the clear button is pressed. With `multiple`, it is always an array: `[]` when empty. A value that isn't an array (for example `undefined` from missing `defaultValues`) is shown as `[]` in multiple mode and as `null` otherwise.
 
 <Callout type="warn">
-  Set `multiple` on the element, not through `slotProps.htmlInput.multiple`. With the latter, the browser lets users pick several files but only the first one is stored.
+  Set `multiple` on the element, not through `slotProps.htmlInput.multiple`. With the latter, the
+  browser lets users pick several files but only the first one is stored.
 </Callout>
 
 **Rules.** `required` fails for `null` and for an empty array, with the default message "Please fill out this field." Text rules (`minLength`, `maxLength`, `min`, `max`, `pattern`) are not supported. To limit the number of files, check `files.length` in `rules.validate`.

@@ -1,13 +1,10 @@
-"use client";
+'use client';
 
-import SendIcon from "@mui/icons-material/Send";
-import Fab from "@mui/material/Fab";
-import Stack from "@mui/material/Stack";
-import {
-  MuiTextFieldElement,
-  useMuiFabAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+import SendIcon from '@mui/icons-material/Send';
+import Fab from '@mui/material/Fab';
+import Stack from '@mui/material/Stack';
+import { MuiTextFieldElement, useMuiFabAdapter } from '@piplup/rhf-adapters/mui-material';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { message: string };
 
@@ -22,7 +19,7 @@ function SendFab({ control }: { control: Control<FormValues> }) {
     ...adapter
   } = useMuiFabAdapter<FormValues, HTMLButtonElement>({
     control,
-    type: "submit",
+    type: 'submit',
     disableOnIsSubmitting: true,
     style: ({ error }) => ({ opacity: error ? 0.6 : 1 }),
   });
@@ -37,7 +34,7 @@ function SendFab({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { message: "" },
+    defaultValues: { message: '' },
   });
 
   return (
@@ -49,7 +46,7 @@ export default function Page() {
         alert(JSON.stringify(values, null, 2));
       })}
     >
-      <Stack direction="column" spacing={2} sx={{ alignItems: "flex-start" }}>
+      <Stack direction="column" spacing={2} sx={{ alignItems: 'flex-start' }}>
         <MuiTextFieldElement
           control={control}
           name="message"

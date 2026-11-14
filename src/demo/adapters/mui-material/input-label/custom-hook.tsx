@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { type ChangeEvent, useId } from "react";
-import Stack from "@mui/material/Stack";
-import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
-import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
+import { type ChangeEvent, useId } from 'react';
+import Stack from '@mui/material/Stack';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
 import {
   MuiButtonElement,
   useMuiInputAdapterProps,
   useMuiInputLabelAdapter,
-} from "@piplup/rhf-adapters/mui-material";
-import { type Control, useForm } from "react-hook-form";
+} from '@piplup/rhf-adapters/mui-material';
+import { type Control, useForm } from 'react-hook-form';
 
 type FormValues = { promoCode: string };
 
@@ -22,23 +22,22 @@ function PromoCodeField({ control }: { control: Control<FormValues> }) {
 
   const { helperText: _labelHelperText, ...label } = useMuiInputLabelAdapter<
     FormValues,
-    "promoCode",
+    'promoCode',
     HTMLLabelElement
   >({
     control,
-    name: "promoCode",
+    name: 'promoCode',
   });
 
   const { ref, helperText, ...input } = useMuiInputAdapterProps({
     control,
-    name: "promoCode",
+    name: 'promoCode',
     pattern: /^[A-Z]{4}-\d{4}$/,
     composeHelperText: true,
-    helperText: "Optional, e.g. SAVE-2024",
-    messages: { pattern: "Codes look like SAVE-2024" },
+    helperText: 'Optional, e.g. SAVE-2024',
+    messages: { pattern: 'Codes look like SAVE-2024' },
     transform: {
-      output: (event: ChangeEvent<HTMLInputElement>) =>
-        event.target.value.toUpperCase(),
+      output: (event: ChangeEvent<HTMLInputElement>) => event.target.value.toUpperCase(),
     },
   });
 
@@ -55,16 +54,11 @@ function PromoCodeField({ control }: { control: Control<FormValues> }) {
 
 export default function Page() {
   const { control, handleSubmit } = useForm<FormValues>({
-    defaultValues: { promoCode: "" },
+    defaultValues: { promoCode: '' },
   });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) =>
-        alert(JSON.stringify(values, null, 2)),
-      )}
-    >
+    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={2}>
         <PromoCodeField control={control} />
         <div>

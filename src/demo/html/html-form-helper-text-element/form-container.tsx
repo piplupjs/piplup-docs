@@ -1,10 +1,7 @@
-"use client";
+'use client';
 
-import {
-  HtmlFormHelperTextElement,
-  HtmlInputElement,
-} from "@piplup/rhf-adapters/html";
-import { FormContainer } from "@piplup/rhf-core";
+import { HtmlFormHelperTextElement, HtmlInputElement } from '@piplup/rhf-adapters/html';
+import { FormContainer } from '@piplup/rhf-core';
 
 export default function Page() {
   return (
@@ -16,7 +13,7 @@ export default function Page() {
         alert(JSON.stringify(error, null, 2));
       }}
       defaultValues={{
-        email: "",
+        email: '',
       }}
     >
       <div>
@@ -24,7 +21,7 @@ export default function Page() {
           name="email"
           required
           messages={{
-            required: "Email is required",
+            required: 'Email is required',
           }}
           aria-describedby="email-help"
           placeholder="Enter your email address"
@@ -34,7 +31,7 @@ export default function Page() {
           id="email-help"
           name="email"
           style={({ error }) => ({
-            ...(error && { color: "red" }),
+            ...(error && { color: 'red' }),
           })}
         >
           &quot;e.g. test@gmail.com&quot;

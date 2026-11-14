@@ -10,7 +10,7 @@ Use the element for most forms. Use the hook when you build desktop date fields 
 ## Import
 
 ```tsx
-import { useMuiXDesktopDatePickerAdapter } from "@piplup/rhf-adapters/mui-x-date-pickers";
+import { useMuiXDesktopDatePickerAdapter } from '@piplup/rhf-adapters/mui-x-date-pickers';
 ```
 
 ## Usage
@@ -20,12 +20,12 @@ The check-out field reads the check-in value with `useWatch` and passes it as `m
 <Demo
   tabs={[
     {
-      label: "Custom field",
-      path: "demo/adapters/mui-x-date-pickers/desktop-date-picker/custom-hook.tsx",
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/desktop-date-picker/custom-hook.tsx',
     },
     {
-      label: "Element source",
-      path: "https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/desktop-date-picker/element.tsx",
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/desktop-date-picker/element.tsx',
     },
   ]}
 />
@@ -39,7 +39,9 @@ The difference is the component. `DatePicker` chooses the desktop or mobile layo
 **Limits from another field.** The validation rule is rebuilt on every render from the current `minDate` and `maxDate`. When check-in changes, the check-out field re-renders with new limits, and the next validation of check-out uses them. If check-in is still empty, `minDate` and `maxDate` are `undefined` and the hook falls back to the `LocalizationProvider` defaults (1900-01-01 and 2099-12-31).
 
 <Callout type="warn">
-  Changing check-in does not re-validate check-out on its own. A check-out error stays visible until check-out changes or the form is submitted. Call `trigger("checkOut")` in an effect after check-in changes if you need it immediately.
+  Changing check-in does not re-validate check-out on its own. A check-out error stays visible until
+  check-out changes or the form is submitted. Call `trigger("checkOut")` in an effect after check-in
+  changes if you need it immediately.
 </Callout>
 
 **Errors and blur.** The text field receives `error`, `helperText` and `onBlur` through `slotProps.textField`, and closing the popover also counts as a blur.

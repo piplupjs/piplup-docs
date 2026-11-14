@@ -1,18 +1,15 @@
-"use client";
+'use client';
 
-import Stack from "@mui/material/Stack";
-import { MuiButtonElement, MuiFormHelperTextElement } from "@piplup/rhf-adapters/mui-material";
-import { MuiOtpInputElement } from "@piplup/rhf-adapters/mui-one-time-password-input";
-import { useForm } from "react-hook-form";
+import Stack from '@mui/material/Stack';
+import { MuiButtonElement, MuiFormHelperTextElement } from '@piplup/rhf-adapters/mui-material';
+import { MuiOtpInputElement } from '@piplup/rhf-adapters/mui-one-time-password-input';
+import { useForm } from 'react-hook-form';
 
 export default function Page() {
-  const { control, handleSubmit } = useForm({ defaultValues: { code: "" } });
+  const { control, handleSubmit } = useForm({ defaultValues: { code: '' } });
 
   return (
-    <form
-      noValidate
-      onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}
-    >
+    <form noValidate onSubmit={handleSubmit((values) => alert(JSON.stringify(values, null, 2)))}>
       <Stack direction="column" spacing={1}>
         <MuiOtpInputElement
           control={control}
@@ -24,8 +21,8 @@ export default function Page() {
           // A partly filled code is not empty, so `required` alone lets it through.
           minLength={6}
           messages={{
-            required: "Enter the code we sent you",
-            minLength: "Enter all 6 digits",
+            required: 'Enter the code we sent you',
+            minLength: 'Enter all 6 digits',
           }}
         />
         {/* The OTP input has no helper text, so render the error message here. */}
