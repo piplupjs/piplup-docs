@@ -16,12 +16,12 @@ export default defineConfig(
   configs.recommended,
   {
     extends: [docsConfigs.docs],
-    // The Next.js rules crash on JSON files, so keep them to code and MDX.
-    files: ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,md,mdx}'],
     settings: { next: { rootDir: '.' } },
   },
   {
     rules: {
+      // `role` on <Can> is a prop, not an ARIA role.
+      'jsx-a11y/aria-role': ['error', { ignoreNonDOM: true }],
       // Next.js uses the automatic JSX runtime.
       'react/react-in-jsx-scope': 'off',
     },
@@ -29,11 +29,7 @@ export default defineConfig(
   {
     // The demos show what a form submitted with alert().
     files: ['src/demo/**'],
-    rules: {
-      // `role` on <Can> is a prop, not an ARIA role.
-      'jsx-a11y/aria-role': ['error', { ignoreNonDOM: true }],
-      'no-alert': 'off',
-    },
+    rules: { 'no-alert': 'off' },
   },
   {
     // The pages inline JSON-LD built from our own content.
