@@ -2,6 +2,28 @@ import { createMDX } from 'fumadocs-mdx/next';
 
 const withMDX = createMDX();
 
+const pickersRoute = '/docs/rhf-adapters/mui-x-date-pickers';
+
+/**
+ * The desktop, mobile and static versions of each MUI X picker used to have an element page and a
+ * hook page each. They now live in a "Desktop, mobile and static versions" section of the main
+ * picker's pages, so their old URLs point there.
+ */
+const pickerVariantRedirects = ['date', 'time', 'date-time'].flatMap((kind) =>
+  ['desktop', 'mobile', 'static'].flatMap((variant) => [
+    {
+      destination: `${pickersRoute}/components/mui-x-${kind}-picker-element`,
+      permanent: true,
+      source: `${pickersRoute}/components/mui-x-${variant}-${kind}-picker-element`,
+    },
+    {
+      destination: `${pickersRoute}/hooks/use-mui-x-${kind}-picker-adapter`,
+      permanent: true,
+      source: `${pickersRoute}/hooks/use-mui-x-${variant}-${kind}-picker-adapter`,
+    },
+  ]),
+);
+
 /** @type {import('next').NextConfig} */
 const config = {
   // `/docs/<page>.mdx` is rewritten to the page's markdown in `src/proxy.ts`.
@@ -50,6 +72,7 @@ const config = {
         permanent: true,
         source: '/react-number-format',
       },
+      ...pickerVariantRedirects,
     ];
   },
 };

@@ -13,6 +13,8 @@ faq:
     answer: "Watch the start date and pass it as the end picker's `minDate`, with a `messages.minDate` of your own. The picker then greys out earlier days, and an earlier date typed by hand fails validation with your message."
   - question: 'What happens when the user types an invalid date?'
     answer: 'The field fails validation with "Date is not a valid date", which you can change with `messages.invalidDate`. An empty picker isn''t invalid; use `required` to make the date mandatory.'
+  - question: 'What is the difference between DatePicker, DesktopDatePicker, MobileDatePicker and StaticDatePicker?'
+    answer: '`DatePicker` opens a popover when the pointer is precise, such as a mouse, and a dialog on touch screens. `DesktopDatePicker` always opens a popover, `MobileDatePicker` always opens a dialog, and `StaticDatePicker` is always visible with no text field. Each has an element, such as `MuiXMobileDatePickerElement`, with the same props and validation.'
 ---
 
 `MuiXDatePickerElement` is the MUI X `DatePicker` connected to React Hook Form. It stores the
@@ -125,6 +127,37 @@ Each limit has a default message that `messages` can replace:
 
 An empty picker passes these checks, so add `required` when a date is mandatory. Your own
 `rules.validate` functions still run alongside them.
+
+## Desktop, mobile and static versions
+
+`MuiXDatePickerElement` renders MUI X's `DatePicker`, which picks its layout from the device: a popover when the pointer is precise, such as a mouse, and a dialog on touch screens. To fix the layout, use one of these elements instead. They come from the same import path and take the same props, validation and messages as `MuiXDatePickerElement`.
+
+| Element                        | Renders             | Opens as                                       |
+| ------------------------------ | ------------------- | ---------------------------------------------- |
+| `MuiXDesktopDatePickerElement` | `DesktopDatePicker` | A popover next to the field, on every device   |
+| `MuiXMobileDatePickerElement`  | `MobileDatePicker`  | A dialog with action buttons, on every device  |
+| `MuiXStaticDatePickerElement`  | `StaticDatePicker`  | Always visible on the page, with no text field |
+
+<Demo
+  tabs={[
+    {
+      label: 'DesktopDatePicker',
+      path: 'demo/adapters/mui-x-date-pickers/desktop-date-picker/use-form.tsx',
+    },
+    {
+      label: 'MobileDatePicker',
+      path: 'demo/adapters/mui-x-date-pickers/mobile-date-picker/use-form.tsx',
+    },
+    {
+      label: 'StaticDatePicker',
+      path: 'demo/adapters/mui-x-date-pickers/static-date-picker/use-form.tsx',
+    },
+  ]}
+/>
+
+`MuiXStaticDatePickerElement` validates the field but shows no error message, because a static picker has no text field to put it in. It takes no `slotProps`, `inputRef` or `onClose`, and focus can't move to it when validation fails. To show the message, build the field with [`useMuiXStaticDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter#staticdatepicker) and render the error yourself.
+
+Each version has its own hook for custom fields, documented on the [`useMuiXDatePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-picker-adapter#desktop-mobile-and-static-versions) page.
 
 ## Props
 

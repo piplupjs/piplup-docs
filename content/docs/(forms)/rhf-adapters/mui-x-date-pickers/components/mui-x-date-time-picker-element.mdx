@@ -25,6 +25,37 @@ import { MuiXDateTimePickerElement } from '@piplup/rhf-adapters/mui-x-date-picke
   ]}
 />
 
+## Desktop, mobile and static versions
+
+`MuiXDateTimePickerElement` renders MUI X's `DateTimePicker`, which picks its layout from the device: a popover when the pointer is precise, such as a mouse, and a dialog on touch screens. To fix the layout, use one of these elements instead. They come from the same import path and take the same props, validation and messages as `MuiXDateTimePickerElement`.
+
+| Element                            | Renders                 | Opens as                                       |
+| ---------------------------------- | ----------------------- | ---------------------------------------------- |
+| `MuiXDesktopDateTimePickerElement` | `DesktopDateTimePicker` | A popover next to the field, on every device   |
+| `MuiXMobileDateTimePickerElement`  | `MobileDateTimePicker`  | A dialog with action buttons, on every device  |
+| `MuiXStaticDateTimePickerElement`  | `StaticDateTimePicker`  | Always visible on the page, with no text field |
+
+<Demo
+  tabs={[
+    {
+      label: 'DesktopDateTimePicker',
+      path: 'demo/adapters/mui-x-date-pickers/desktop-date-time-picker/use-form.tsx',
+    },
+    {
+      label: 'MobileDateTimePicker',
+      path: 'demo/adapters/mui-x-date-pickers/mobile-date-time-picker/use-form.tsx',
+    },
+    {
+      label: 'StaticDateTimePicker',
+      path: 'demo/adapters/mui-x-date-pickers/static-date-time-picker/use-form.tsx',
+    },
+  ]}
+/>
+
+`MuiXStaticDateTimePickerElement` validates the field but shows no error message, because a static picker has no text field to put it in. It takes no `slotProps`, `inputRef` or `onClose`, and focus can't move to it when validation fails. To show the message, build the field with [`useMuiXStaticDateTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-time-picker-adapter#staticdatetimepicker) and render the error yourself.
+
+Each version has its own hook for custom fields, documented on the [`useMuiXDateTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-date-time-picker-adapter#desktop-mobile-and-static-versions) page.
+
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="MuiXDateTimePickerElementProps" cwd />
