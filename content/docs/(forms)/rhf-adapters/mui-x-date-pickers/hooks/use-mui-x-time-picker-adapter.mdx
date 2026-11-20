@@ -74,13 +74,113 @@ The other time hooks use the same validation and messages. They differ in where 
 
 | Hook                                                                                                                                  | Text field    | Errors shown by              | Touched on                 |
 | ------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---------------------------- | -------------------------- |
-| [`useMuiXDesktopTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-desktop-time-picker-adapter)                | yes           | `slotProps.textField`        | input blur or picker close |
-| [`useMuiXMobileTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-mobile-time-picker-adapter)                  | yes           | `slotProps.textField`        | input blur or dialog close |
-| [`useMuiXStaticTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-static-time-picker-adapter)                  | no            | you render them              | never                      |
+| [`useMuiXDesktopTimePickerAdapter`](#desktoptimepicker)                                                                               | yes           | `slotProps.textField`        | input blur or picker close |
+| [`useMuiXMobileTimePickerAdapter`](#mobiletimepicker)                                                                                 | yes           | `slotProps.textField`        | input blur or dialog close |
+| [`useMuiXStaticTimePickerAdapter`](#statictimepicker)                                                                                 | no            | you render them              | never                      |
 | [`useMuiXTimeFieldAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-field-adapter)                                 | yes, no popup | `error` / `helperText` props | input blur                 |
 | [`useMuiXTimeClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-clock-adapter)                                 | no            | you render them              | blur inside the clock      |
 | [`useMuiXDigitalClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-digital-clock-adapter)                           | no            | you render them              | blur inside the clock      |
 | [`useMuiXMultiSectionDigitalClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-multi-section-digital-clock-adapter) | no            | you render them              | blur inside the clock      |
+
+## Desktop, mobile and static versions
+
+`TimePicker` picks its layout from the device: a popover when the pointer is precise, such as a mouse, and a dialog on touch screens. MUI X also has three versions with a fixed layout, and each has a hook, compared in the [Variants](#variants) table above.
+
+The desktop and mobile hooks call `useMuiXTimePickerAdapter` with the same props and return its result unchanged, so everything above applies to them. The static hook validates the same way, but returns the error for you to render.
+
+### DesktopTimePicker
+
+`useMuiXDesktopTimePickerAdapter` returns props for `DesktopTimePicker`. Use it when you build your own desktop time field, for example one that always blocks certain hours. Pick it over `useMuiXTimePickerAdapter` when you want the desktop popover on every device, including touch screens.
+
+This `MeetingTimeField` rejects any time in the 12:00 hour. The popover greys that hour out, but you can still type `12:30 PM` into the field and submit to see the error.
+
+<Demo
+  tabs={[
+    {
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/desktop-time-picker/custom-hook.tsx',
+    },
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/desktop-time-picker/element.tsx',
+    },
+  ]}
+/>
+
+What differs is the component you spread it onto:
+
+- `TimePicker` switches between the desktop and mobile layouts with the `@media (pointer: fine)` media query. `DesktopTimePicker` always uses the desktop layout.
+- The desktop popover shows a `DigitalClock` (one column) or a `MultiSectionDigitalClock` (one column per section), depending on the views and `timeSteps`. Both disable the options that `minTime`, `maxTime`, `minutesStep` and `shouldDisableTime` reject, because the hook returns those props.
+- The text field is the main way to enter a time. A typed time never goes through the disabled options in the popover, so validation is what rejects it.
+
+**`shouldDisableTime` and its message.** Validation calls `shouldDisableTime(value, view)` with `"hours"`, then `"minutes"`, then `"seconds"`, and reports the first view that returns `true`. Return `true` only for the view you mean, and override the matching key. The example checks `view === "hours"`, so its error comes from `shouldDisableTime-hours`; the default for that key is "Hour is disabled".
+
+### MobileTimePicker
+
+`useMuiXMobileTimePickerAdapter` returns props for `MobileTimePicker`. Use it when you build your own touch-first time field, for example a same-day booking field that always rejects times that have passed. Pick it over `useMuiXTimePickerAdapter` when you want the dialog on every device, including desktops with a mouse.
+
+This `PickupTimeField` only accepts times later today. Open the dialog and pick a time that has already passed, then submit.
+
+<Demo
+  tabs={[
+    {
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/mobile-time-picker/custom-hook.tsx',
+    },
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/mobile-time-picker/element.tsx',
+    },
+  ]}
+/>
+
+What differs is the component you spread it onto:
+
+- `TimePicker` picks the mobile layout only when the `@media (pointer: fine)` media query does not match. `MobileTimePicker` always uses it.
+- The hours, minutes and seconds views render as an analog `TimeClock` inside a dialog, not the digital lists of the desktop popover. The clock disables the hours and minutes that `minTime`, `maxTime`, `minutesStep` and `shouldDisableTime` reject.
+- Errors still render under the text field, through `slotProps.textField`, not inside the dialog.
+- The returned `onClose` runs when the dialog closes, which calls React Hook Form's `onBlur` and marks the field as touched. With `mode: "onBlur"` or `"onTouched"`, validation runs right after the user closes the dialog.
+
+**`disablePast` and `disableFuture` compare the full date and time.** Unlike `minTime` and `maxTime`, they do not ignore the date part. A value picked in the dialog keeps the date of the current value, or today's date when the field is empty, so in the example "past" means earlier today. If the form value carries another date, the check uses that date.
+
+### StaticTimePicker
+
+`useMuiXStaticTimePickerAdapter` returns props for `StaticTimePicker`. `MuiXStaticTimePickerElement` renders the picker only, so it never shows an error message. Use the hook when you want the always-visible picker and also want to show validation errors next to it.
+
+This `ReportTimeField` requires a time no later than 20:00 and shows the error below the picker. Submit without picking a time, or pick 21:00, to see it.
+
+<Demo
+  tabs={[
+    {
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/static-time-picker/custom-hook.tsx',
+    },
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-time-picker/element.tsx',
+    },
+  ]}
+/>
+
+- There is no `slotProps`, `inputRef` or `onClose` in the result, and the hook does not accept them.
+- The result has plain `error` and `helperText` values. With `composeHelperText: true`, `helperText` is the current error message, or `undefined` when the field is valid. There is no `helperText` prop, so put any hint in your own markup, as the example does with `helperText || "..."`.
+- The hook's second argument is merged with React Hook Form's ref and returned as `ref`.
+
+Take `error` and `helperText` out of the result before spreading it, and render them yourself, for example with `FormHelperText`. The element drops them for the same reason.
+
+<Callout type="warn">
+  A static picker is never closed and has no input to blur, so nothing calls the returned `onBlur`
+  and the field is never marked as touched. `mode: "onBlur"` and `"onTouched"` first validate on
+  submit. Use `mode: "onChange"` to show errors while the user picks.
+</Callout>
+
+**When the value changes.** By default `StaticTimePicker` uses `displayStaticWrapperAs="mobile"`: an analog clock with a toolbar. The value reaches the form through `onChange` each time the user changes the clock, not only when they accept it.
+
+**Props and return value.** The static hook takes no `slotProps`, `inputRef` or `onClose`:
+
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiXStaticTimePickerAdapterProps" cwd />
+
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiXStaticTimePickerAdapterReturnType" cwd />
 
 ## Props
 

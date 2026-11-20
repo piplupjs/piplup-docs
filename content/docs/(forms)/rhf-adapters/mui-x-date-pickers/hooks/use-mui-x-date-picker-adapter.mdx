@@ -58,6 +58,105 @@ Each failure has a default message, which you can replace through `messages`:
 
 Set `composeHelperText: true` to show the error message as the helper text, as the element does. Without it, only the `error` state is applied.
 
+## Desktop, mobile and static versions
+
+`DatePicker` picks its layout from the device: a popover when the pointer is precise, such as a mouse, and a dialog on touch screens. MUI X also has three versions with a fixed layout, and each has a hook, imported from `@piplup/rhf-adapters/mui-x-date-pickers`:
+
+| Hook                              | Spread onto                                       | Errors shown by       |
+| --------------------------------- | ------------------------------------------------- | --------------------- |
+| `useMuiXDesktopDatePickerAdapter` | `DesktopDatePicker`, a popover on every device    | `slotProps.textField` |
+| `useMuiXMobileDatePickerAdapter`  | `MobileDatePicker`, a dialog on every device      | `slotProps.textField` |
+| `useMuiXStaticDatePickerAdapter`  | `StaticDatePicker`, always visible, no text field | you render them       |
+
+The desktop and mobile hooks call `useMuiXDatePickerAdapter` with the same props and return its result unchanged, so everything above applies to them. The static hook validates the same way, but returns the error for you to render.
+
+### DesktopDatePicker
+
+`useMuiXDesktopDatePickerAdapter` returns props for `DesktopDatePicker`. Use the hook when you build desktop date fields that work together, such as a check-in and check-out pair where one field's limits come from the other.
+
+The check-out field reads the check-in value with `useWatch` and passes it as `minDate` and `maxDate`, so a stay must be 1 to 14 nights. Pick a check-in date, then type a check-out date before it and submit.
+
+<Demo
+  tabs={[
+    {
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/desktop-date-picker/custom-hook.tsx',
+    },
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/desktop-date-picker/element.tsx',
+    },
+  ]}
+/>
+
+**Limits from another field.** The validation rule is rebuilt on every render from the current `minDate` and `maxDate`. When check-in changes, the check-out field re-renders with new limits, and the next validation of check-out uses them. If check-in is still empty, `minDate` and `maxDate` are `undefined` and the hook falls back to the `LocalizationProvider` defaults (1900-01-01 and 2099-12-31).
+
+<Callout type="warn">
+  Changing check-in does not re-validate check-out on its own. A check-out error stays visible until
+  check-out changes or the form is submitted. Call `trigger("checkOut")` in an effect after check-in
+  changes if you need it immediately.
+</Callout>
+
+**Errors and blur.** The text field receives `error`, `helperText` and `onBlur` through `slotProps.textField`, and closing the popover also counts as a blur.
+
+### MobileDatePicker
+
+`useMuiXMobileDatePickerAdapter` returns props for `MobileDatePicker`. Use the hook when you build a touch-first date field with your own rules, for example a booking field for a service that only runs in certain months.
+
+This `FerryDateField` opens on the month view and only accepts April to October, up to the end of next year. Open the dialog to see the closed months greyed out, or submit empty to see the `required` message.
+
+<Demo
+  tabs={[
+    {
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/mobile-date-picker/custom-hook.tsx',
+    },
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/mobile-date-picker/element.tsx',
+    },
+  ]}
+/>
+
+**Month and year rules.** `shouldDisableMonth` and `shouldDisableYear` receive the full selected date during validation, and fail with their own keys (`shouldDisableMonth`, `shouldDisableYear`). The same functions grey out months and years in the dialog's month and year views. Checks run in a fixed order, `shouldDisableDate`, `shouldDisableMonth`, `shouldDisableYear`, then `disablePast`/`disableFuture`, `minDate` and `maxDate`, and only the first failure is reported. A past date in January shows the `shouldDisableMonth` message in the example, not the `disablePast` one.
+
+**Errors and blur.** The text field gets `error`, `helperText` and `onBlur` through `slotProps.textField`. The hook also wraps `onClose`, so closing the dialog with either action button marks the field as touched. In `onTouched` mode, opening and cancelling the dialog on an empty required field shows the `required` message.
+
+### StaticDatePicker
+
+`useMuiXStaticDatePickerAdapter` returns props for `StaticDatePicker`. `MuiXStaticDatePickerElement` validates but never shows a message. Use the hook when the picker is the main input on the page, such as a booking screen, and users need to see why their date was rejected.
+
+This `TourDateField` blocks sold-out days and dates more than 60 days ahead. Submit without picking a day to see the message rendered under the picker.
+
+<Demo
+  tabs={[
+    {
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/static-date-picker/custom-hook.tsx',
+    },
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-date-picker/element.tsx',
+    },
+  ]}
+/>
+
+**Error display is up to you.** The hook does not build `slotProps.textField`. It returns `error`, `helperText` and `required` as plain values, and `StaticDatePicker` has no props for them. Take them off the result before spreading, then render them, as the example does with `FormHelperText`. Set `composeHelperText: true` so that `helperText` holds the error message.
+
+**No hint text.** The hook does not accept a `helperText` prop (it is cleared even if passed), so `helperText` in the result is either the error message or `undefined`. Write any hint text directly in your component.
+
+**No touched state.** Any `onBlur` you pass is ignored. The returned `onBlur` is React Hook Form's, but `StaticDatePicker` never calls it, so the field is never marked as touched. In `onBlur` or `onTouched` mode it is only validated after the first submit.
+
+**Ref.** React Hook Form's ref and your `ref` are merged and attached to the picker's root element. There is no input to focus, so `setFocus` and `shouldFocusError` have no effect on this field.
+
+The validation props are also spread onto the picker, so sold-out days and dates past `maxDate` are greyed out in the calendar. The form-level check still catches values set through `defaultValues`, `reset` or `setValue`.
+
+**Props and return value.** The static hook takes no `slotProps`, `inputRef` or `onClose`:
+
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiXStaticDatePickerAdapterProps" cwd />
+
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiXStaticDatePickerAdapterReturnType" cwd />
+
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="UseMuiXDatePickerAdapterProps" cwd />

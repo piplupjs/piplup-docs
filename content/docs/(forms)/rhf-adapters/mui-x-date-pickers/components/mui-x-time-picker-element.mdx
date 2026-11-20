@@ -25,6 +25,37 @@ import { MuiXTimePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
   ]}
 />
 
+## Desktop, mobile and static versions
+
+`MuiXTimePickerElement` renders MUI X's `TimePicker`, which picks its layout from the device: a popover when the pointer is precise, such as a mouse, and a dialog on touch screens. To fix the layout, use one of these elements instead. They come from the same import path and take the same props, validation and messages as `MuiXTimePickerElement`.
+
+| Element                        | Renders             | Opens as                                       |
+| ------------------------------ | ------------------- | ---------------------------------------------- |
+| `MuiXDesktopTimePickerElement` | `DesktopTimePicker` | A popover next to the field, on every device   |
+| `MuiXMobileTimePickerElement`  | `MobileTimePicker`  | A dialog with action buttons, on every device  |
+| `MuiXStaticTimePickerElement`  | `StaticTimePicker`  | Always visible on the page, with no text field |
+
+<Demo
+  tabs={[
+    {
+      label: 'DesktopTimePicker',
+      path: 'demo/adapters/mui-x-date-pickers/desktop-time-picker/use-form.tsx',
+    },
+    {
+      label: 'MobileTimePicker',
+      path: 'demo/adapters/mui-x-date-pickers/mobile-time-picker/use-form.tsx',
+    },
+    {
+      label: 'StaticTimePicker',
+      path: 'demo/adapters/mui-x-date-pickers/static-time-picker/use-form.tsx',
+    },
+  ]}
+/>
+
+`MuiXStaticTimePickerElement` validates the field but shows no error message, because a static picker has no text field to put it in. It takes no `slotProps`, `inputRef` or `onClose`, and focus can't move to it when validation fails. To show the message, build the field with [`useMuiXStaticTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-picker-adapter#statictimepicker) and render the error yourself.
+
+Each version has its own hook for custom fields, documented on the [`useMuiXTimePickerAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-picker-adapter#desktop-mobile-and-static-versions) page.
+
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="MuiXTimePickerElementProps" cwd />

@@ -53,7 +53,7 @@ Only the first failing check is reported. Override any message through `messages
 
 **`disablePast` and `disableFuture` work to the minute.** The date check compares by day, and the time check compares against the current time. So with `disablePast`, 08:00 today fails if it is already 10:00.
 
-**`minTime` and `maxTime` ignore the date by default.** Only the time of day is compared, so `minTime` set to 09:00 means "09:00 or later on any day". Set `disableIgnoringDatePartForTimeValidation: true` to compare the full date and time instead. To express "not before this exact moment", pass the same value to `minDate` and `minTime` with that flag. The [MobileDateTimePicker hook page](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-mobile-date-time-picker-adapter) has an example.
+**`minTime` and `maxTime` ignore the date by default.** Only the time of day is compared, so `minTime` set to 09:00 means "09:00 or later on any day". Set `disableIgnoringDatePartForTimeValidation: true` to compare the full date and time instead. To express "not before this exact moment", pass the same value to `minDate` and `minTime` with that flag. The [MobileDateTimePicker example](#mobiledatetimepicker) below shows it.
 
 <Callout type="warn">
   The hook and the picker decide this flag differently. The hook uses the value you pass. MUI X's
@@ -73,6 +73,109 @@ The hook does not read `minDateTime` or `maxDateTime`. If you pass them straight
   date-only hooks. Pass real limits, as the example does. If they are missing at runtime, the hook
   falls back to the `LocalizationProvider` defaults (1900-01-01 and 2099-12-31).
 </Callout>
+
+## Desktop, mobile and static versions
+
+`DateTimePicker` picks its layout from the device: a popover when the pointer is precise, such as a mouse, and a dialog on touch screens. MUI X also has three versions with a fixed layout, and each has a hook, imported from `@piplup/rhf-adapters/mui-x-date-pickers`:
+
+| Hook                                  | Spread onto                                           | Errors shown by       |
+| ------------------------------------- | ----------------------------------------------------- | --------------------- |
+| `useMuiXDesktopDateTimePickerAdapter` | `DesktopDateTimePicker`, a popover on every device    | `slotProps.textField` |
+| `useMuiXMobileDateTimePickerAdapter`  | `MobileDateTimePicker`, a dialog on every device      | `slotProps.textField` |
+| `useMuiXStaticDateTimePickerAdapter`  | `StaticDateTimePicker`, always visible, no text field | you render them       |
+
+The desktop and mobile hooks call `useMuiXDateTimePickerAdapter` with the same props and return its result unchanged, so everything above applies to them. The static hook validates the same way, but returns the error for you to render.
+
+### DesktopDateTimePicker
+
+`useMuiXDesktopDateTimePickerAdapter` returns props for `DesktopDateTimePicker`. Use the hook when you want a desktop date-time field with your own rules built in, for example one that always opens as a popover and blocks hours your team is not available.
+
+This `CallbackField` only accepts hours between 08:00 and 20:00, skips the 13:00 lunch hour, and rejects past times. Open the picker to see the blocked hours, or type 13:15 and submit.
+
+<Demo
+  tabs={[
+    {
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/desktop-date-time-picker/custom-hook.tsx',
+    },
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/desktop-date-time-picker/element.tsx',
+    },
+  ]}
+/>
+
+**`shouldDisableTime` runs once per time view.** The hook calls `shouldDisableTime(value, "hours")`, then `"minutes"`, then `"seconds"`, and reports the first one that returns `true` under its own key: `shouldDisableTime-hours`, `shouldDisableTime-minutes` or `shouldDisableTime-seconds`. Check the `view` argument and only return `true` for the view your rule is about, as the example does. A rule that ignores `view` always fails on hours first, so only the hours message ever shows.
+
+The same function greys out options in the popover's time columns, so users mostly hit the message when they type a time.
+
+**Errors and blur.** `error`, `helperText` and `onBlur` go to the text field through `slotProps.textField`. You can pass `slotProps.textField` as a function of the picker's owner state, as the example does. The hook calls it and merges the result with its own props: an error message wins over your `helperText`, and both `onBlur` handlers run. Leaving the text field and closing the popover both mark the field as touched.
+
+### MobileDateTimePicker
+
+`useMuiXMobileDateTimePickerAdapter` returns props for `MobileDateTimePicker`. Use the hook when you build a touch-first date-time field with rules that depend on the current moment, such as a pickup time that must be at least two hours away.
+
+This `PickupField` rejects anything earlier than two hours from now and only accepts half-hour slots. Open the dialog to see the earlier times greyed out, or submit without a value to see the `required` message.
+
+<Demo
+  tabs={[
+    {
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/mobile-date-time-picker/custom-hook.tsx',
+    },
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/mobile-date-time-picker/element.tsx',
+    },
+  ]}
+/>
+
+**An earliest date and time.** The hook does not read `minDateTime`. To validate "not before this moment", the example passes the same value to `minDate` and `minTime` and sets `disableIgnoringDatePartForTimeValidation: true`:
+
+- `minDate` rejects earlier days with the `minDate` message.
+- `minTime` with the flag compares the full date and time, so an earlier time on the same day fails with the `minTime` message. Without the flag, `minTime` would act as a daily opening time: a limit of 14:30 would also reject 09:00 tomorrow.
+- `disablePast` is set as well. MUI X's picker ignores the flag you pass and only compares full dates when `disablePast`, `disableFuture`, `minDateTime` or `maxDateTime` is set. With `disablePast`, the dialog greys out the same times the form rejects.
+
+Create the limit once, for example with `useState(() => dayjs().add(2, "hour"))`. A new `dayjs()` on every render moves the limit forward while the user fills the form, so a value that passed a moment ago can fail on submit.
+
+**Errors and blur.** The text field gets `error`, `helperText` and `onBlur` through `slotProps.textField`. The hook also wraps `onClose`, so closing the dialog marks the field as touched, whether the user confirms or cancels. With `mode: "onTouched"`, opening and cancelling the dialog on an empty required field shows the `required` message straight away.
+
+### StaticDateTimePicker
+
+`useMuiXStaticDateTimePickerAdapter` returns props for `StaticDateTimePicker`. `MuiXStaticDateTimePickerElement` shows no validation message at all. Use the hook when the user needs to see why a value was rejected: you get the error state and message back and decide where to render them.
+
+This `PublishAtField` schedules a post on the hour or half hour, up to two weeks ahead. Pick tomorrow, leave the time as it is, and submit to see the message rendered under the picker.
+
+<Demo
+  tabs={[
+    {
+      label: 'Custom field',
+      path: 'demo/adapters/mui-x-date-pickers/static-date-time-picker/custom-hook.tsx',
+    },
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-x-date-pickers/static-date-time-picker/element.tsx',
+    },
+  ]}
+/>
+
+**No `slotProps.textField`.** Unlike the DateTimePicker hook, this one does not take `slotProps` and does not build a text field slot. It returns `error`, `helperText` and `required` as plain values. `StaticDateTimePicker` has no props for them, so take them off the result before spreading and render them yourself, as the example does with `FormHelperText`. With `composeHelperText: true`, `helperText` holds the error message.
+
+**No touched state.** The hook ignores any `onBlur` you pass and has no `onClose` to wrap. The returned `onBlur` is React Hook Form's, but `StaticDateTimePicker` never calls it. The field is never marked as touched, so `mode: "onBlur"` and `mode: "onTouched"` do not validate it before the first submit. Use the default `onSubmit` mode or `onChange`.
+
+**Every pick changes the value.** The form value updates on each selection in the picker, not when the user presses an action button. Picking a day with no value yet keeps the current time of day, so in the example it usually fails the `:00`/`:30` rule until a minute is chosen. The example hides the action bar with `slotProps={{ actionBar: { actions: [] } }}` for that reason.
+
+**Ref.** React Hook Form's ref and your `ref` are merged and attached to the picker's root element. There is no input to focus, so `setFocus` and `shouldFocusError` do nothing for this field.
+
+**Props and return value.** The static hook takes no `slotProps`, `inputRef` or `onClose`:
+
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiXStaticDateTimePickerAdapterProps" cwd />
+
+<AutoTypeTable
+  path="content/docs/props.ts"
+  name="UseMuiXStaticDateTimePickerAdapterReturnType"
+  cwd
+/>
 
 ## Props
 
