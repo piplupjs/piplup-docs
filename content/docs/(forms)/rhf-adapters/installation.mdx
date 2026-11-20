@@ -1,0 +1,226 @@
+---
+title: Installation — @piplup/rhf-adapters
+seoTitle: 'Install React Hook Form adapters for MUI, MUI X and HTML'
+description: 'Install @piplup/rhf-adapters and the peer dependencies for MUI Material, MUI X date pickers, native HTML inputs, react-number-format and MUI community inputs.'
+faq:
+  - question: 'Which packages do I need to install for @piplup/rhf-adapters?'
+    answer: '`@piplup/rhf-adapters`, `@piplup/rhf-core` and `react-hook-form`, plus the library behind each subpath you import: `@mui/material` for `/mui-material`, `@mui/x-date-pickers` and a date library for `/mui-x-date-pickers`, and so on. Every library peer dependency is optional, so you only install the ones you use.'
+  - question: 'Why do I import from a subpath instead of @piplup/rhf-adapters?'
+    answer: 'Each subpath depends on a different UI library. Importing from `@piplup/rhf-adapters/mui-material` pulls in MUI and nothing else, so an app that only uses native inputs never needs MUI installed. The root entry point has no components or hooks of its own.'
+  - question: 'Which versions of React, MUI and React Hook Form are supported?'
+    answer: 'React 19, `react-hook-form` 7.65 or later, `@mui/material` 6 to 9 and `@mui/x-date-pickers` 8 to 9. The community inputs have their own ranges, listed in the version table on this page.'
+  - question: 'Does @piplup/rhf-adapters work without MUI?'
+    answer: 'Yes. The `/html` subpath wraps native `input`, `textarea`, `label` and `button` elements, and `/react-number-format` wraps `NumericFormat` and `PatternFormat`. Neither needs MUI.'
+---
+
+`@piplup/rhf-adapters` connects UI components to [React Hook Form](https://react-hook-form.com)
+without a `Controller` for every field. It's split into subpaths, one per UI library, and you
+install only the libraries for the subpaths you import.
+
+## Install the package
+
+Install the adapters with `@piplup/rhf-core`, which they're built on, and React Hook Form:
+
+```package-install
+@piplup/rhf-adapters @piplup/rhf-core react-hook-form
+```
+
+Then add the peer dependencies for each subpath you use, from the sections below.
+
+| Subpath                                                        | Adapts                                                                    | Also install                                               |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| [`/html`](#html)                                               | Native input, textarea, label, button and helper text                     | Nothing                                                    |
+| [`/mui-material`](#mui-material)                               | TextField, Select, Autocomplete, Checkbox, Radio, Switch, Slider and more | `@mui/material`, `@emotion/react`, `@emotion/styled`       |
+| [`/mui-x-date-pickers`](#mui-x-date-pickers)                   | Date, time and date-time pickers, fields, calendars and clocks            | The MUI packages, `@mui/x-date-pickers` and a date library |
+| [`/react-number-format`](#react-number-format)                 | NumericFormat, PatternFormat, NumberFormatBase                            | `react-number-format`                                      |
+| [`/mui-chips-input`](#mui-chips-input)                         | MuiChipsInput                                                             | The MUI packages and `mui-chips-input`                     |
+| [`/mui-color-input`](#mui-color-input)                         | MuiColorInput                                                             | The MUI packages and `mui-color-input`                     |
+| [`/mui-file-input`](#mui-file-input)                           | MuiFileInput                                                              | The MUI packages and `mui-file-input`                      |
+| [`/mui-one-time-password-input`](#mui-one-time-password-input) | MuiOtpInput                                                               | The MUI packages and `mui-one-time-password-input`         |
+| [`/mui-tel-input`](#mui-tel-input)                             | MuiTelInput                                                               | The MUI packages and `mui-tel-input`                       |
+
+Import from the subpath, not from `@piplup/rhf-adapters` itself. The root entry point has no
+components or hooks, and each subpath only loads its own UI library.
+
+## html
+
+Native `input`, `textarea`, `label` and `button` elements need nothing beyond the packages above:
+
+```tsx
+import { HtmlInputElement, HtmlTextareaElement } from '@piplup/rhf-adapters/html';
+```
+
+Start with [HtmlInputElement](/docs/rhf-adapters/html/components/html-input-element), which covers
+every input type from text to file.
+
+## mui-material
+
+```package-install
+@mui/material @emotion/react @emotion/styled
+```
+
+```tsx
+import { MuiTextFieldElement, MuiSelectElement } from '@piplup/rhf-adapters/mui-material';
+```
+
+Start with [MuiTextFieldElement](/docs/rhf-adapters/mui-material/components/mui-text-field-element),
+or read [Using MUI with React Hook Form](/docs/react-hook-form-mui) for a full form.
+
+## mui-x-date-pickers
+
+Install MUI, the date pickers and the date library you want the pickers to use:
+
+```package-install
+@mui/material @emotion/react @emotion/styled @mui/x-date-pickers
+```
+
+<Tabs items={["dayjs", "date-fns", "luxon", "moment"]}>
+  <Tab value="dayjs">
+
+```package-install
+dayjs
+```
+
+  </Tab>
+  <Tab value="date-fns">
+
+```package-install
+date-fns
+```
+
+  </Tab>
+  <Tab value="luxon">
+
+```package-install
+luxon
+```
+
+  </Tab>
+  <Tab value="moment">
+
+```package-install
+moment
+```
+
+  </Tab>
+</Tabs>
+
+Wrap the form, or your app, in MUI X's `LocalizationProvider` with the matching adapter, such as
+`AdapterDayjs`:
+
+```tsx
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MuiXDatePickerElement } from '@piplup/rhf-adapters/mui-x-date-pickers';
+```
+
+Start with [MuiXDatePickerElement](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-date-picker-element),
+or read [Date pickers with React Hook Form](/docs/react-hook-form-date-picker) for loading,
+submitting and validating dates.
+
+## react-number-format
+
+This subpath wraps `react-number-format` directly and doesn't need MUI:
+
+```package-install
+react-number-format
+```
+
+```tsx
+import {
+  NumericFormatElement,
+  PatternFormatElement,
+} from '@piplup/rhf-adapters/react-number-format';
+```
+
+To render the formatted input as an MUI `TextField`, install the MUI packages too and pass
+`customInput={TextField}`. Start with
+[NumericFormatElement](/docs/rhf-adapters/react-number-format/components/numeric-format-element).
+
+## mui-chips-input
+
+```package-install
+@mui/material @emotion/react @emotion/styled mui-chips-input
+```
+
+```tsx
+import { MuiChipsInputElement } from '@piplup/rhf-adapters/mui-chips-input';
+```
+
+See [MuiChipsInputElement](/docs/rhf-adapters/mui-chips-input/components/mui-chips-input-element).
+
+## mui-color-input
+
+```package-install
+@mui/material @emotion/react @emotion/styled mui-color-input
+```
+
+```tsx
+import { MuiColorInputElement } from '@piplup/rhf-adapters/mui-color-input';
+```
+
+See [MuiColorInputElement](/docs/rhf-adapters/mui-color-input/components/mui-color-input-element).
+
+## mui-file-input
+
+```package-install
+@mui/material @emotion/react @emotion/styled mui-file-input
+```
+
+```tsx
+import { MuiFileInputElement } from '@piplup/rhf-adapters/mui-file-input';
+```
+
+See [MuiFileInputElement](/docs/rhf-adapters/mui-file-input/components/mui-file-input-element).
+
+## mui-one-time-password-input
+
+```package-install
+@mui/material @emotion/react @emotion/styled mui-one-time-password-input
+```
+
+```tsx
+import { MuiOtpInputElement } from '@piplup/rhf-adapters/mui-one-time-password-input';
+```
+
+See [MuiOtpInputElement](/docs/rhf-adapters/mui-one-time-password-input/components/mui-otp-input-element).
+
+## mui-tel-input
+
+```package-install
+@mui/material @emotion/react @emotion/styled mui-tel-input
+```
+
+```tsx
+import { MuiTelInputElement } from '@piplup/rhf-adapters/mui-tel-input';
+```
+
+See [MuiTelInputElement](/docs/rhf-adapters/mui-tel-input/components/mui-tel-input-element).
+
+## Supported versions
+
+`@piplup/rhf-adapters` 5 accepts these versions of its peer dependencies. Every UI library is
+optional, so only the ones behind the subpaths you import need to be installed.
+
+| Package                       | Versions      |
+| ----------------------------- | ------------- |
+| `react`                       | 19            |
+| `react-hook-form`             | 7.65 or later |
+| `@mui/material`               | 6 to 9        |
+| `@mui/x-date-pickers`         | 8 to 9        |
+| `react-number-format`         | 5.4.2 to 5    |
+| `mui-chips-input`             | 4.0.1 to 9    |
+| `mui-color-input`             | 5.0.1 to 9    |
+| `mui-file-input`              | 6 to 9        |
+| `mui-one-time-password-input` | 5 to 7        |
+| `mui-tel-input`               | 7 to 11       |
+
+## FAQ
+
+<Faq />
+
+## See also
+
+- [@piplup/rhf-core installation](/docs/rhf-core/installation)
+- [Using MUI with React Hook Form](/docs/react-hook-form-mui)
+- [rhf-adapters vs react-hook-form-mui](/docs/rhf-adapters-vs-react-hook-form-mui)
