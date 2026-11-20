@@ -35,19 +35,44 @@ import { HtmlFormLabelElement } from '@piplup/rhf-adapters/html';
 
 > The `ref` is forwarded to the underlying `<label>` element.
 
+## useHtmlFormLabelAdapter
+
+`useHtmlFormLabelAdapter` exposes label props and field-state-aware styling inputs for custom label components that should respond to validation and disabled state.
+
+### Import
+
+```tsx
+import { useHtmlFormLabelAdapter } from '@piplup/rhf-adapters/html';
+```
+
+<Demo
+  tabs={[
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/html/form-label/element.tsx',
+    },
+  ]}
+/>
+
+### Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseHtmlFormLabelAdapterProps" cwd />
+
+### Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseHtmlFormLabelAdapterReturnType" cwd />
+
+### Notes
+
+- Use this hook when you need custom label markup but still want field-state-aware styling.
+- The hook is built on top of `useFieldStateAdapter`.
+- Pair the rendered label with the target control via `htmlFor` or `aria-labelledby`.
+
 ## Notes
 
 - Use `htmlFor` to associate the label with an input `id`.
 - The adapter exposes `error`, `disabled`, and helper-text-aware styling composition through field state.
-- For custom label components, build on [`useHtmlFormLabelAdapter`](../hooks/use-html-form-label-adapter).
 
 ## See also
 
-<Cards>
-  <Card title="useHtmlFormLabelAdapter" href="../hooks/use-html-form-label-adapter">
-    Reuse label adapter behavior in a custom component.
-  </Card>
-  <Card title="useFieldStateAdapter" href="/docs/rhf-core/hooks/use-field-state-adapter">
-    Core hook that powers label field-state wiring.
-  </Card>
-</Cards>
+- [useFieldStateAdapter](/docs/rhf-core/hooks/use-field-state-adapter)

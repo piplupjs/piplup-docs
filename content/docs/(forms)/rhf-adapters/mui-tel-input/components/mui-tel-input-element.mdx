@@ -4,7 +4,7 @@ seoTitle: 'MUI Phone Number Input with React Hook Form'
 description: 'Use mui-tel-input with react-hook-form: MuiTelInputElement stores an international phone number and validates it with matchIsValidTel.'
 ---
 
-`MuiTelInputElement` renders `MuiTelInput` from `mui-tel-input`, with its country selector, and stores the phone number in React Hook Form as a string. It accepts all `MuiTelInput` props, such as `defaultCountry`, `onlyCountries` and `forceCallingCode`. To build your own phone field, use [`useMuiTelInputAdapter`](/docs/rhf-adapters/mui-tel-input/hooks/use-mui-tel-input-adapter).
+`MuiTelInputElement` renders `MuiTelInput` from `mui-tel-input`, with its country selector, and stores the phone number in React Hook Form as a string. It accepts all `MuiTelInput` props, such as `defaultCountry`, `onlyCountries` and `forceCallingCode`. To build your own phone field, use [`useMuiTelInputAdapter`](#usemuitelinputadapter).
 
 ## Import
 
@@ -46,3 +46,35 @@ With `onlyCountries`, `matchIsValidTel` checks the country it detects from the n
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="MuiTelInputElementProps" cwd />
+
+## useMuiTelInputAdapter
+
+`useMuiTelInputAdapter` connects a field to React Hook Form and returns the props `MuiTelInputElement` spreads onto its component. Use it to build your own field on the same wiring, for example with different markup around the input.
+
+### Import
+
+```tsx
+import { useMuiTelInputAdapter } from '@piplup/rhf-adapters/mui-tel-input';
+```
+
+<Demo
+  tabs={[
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-tel-input/element.tsx',
+    },
+  ]}
+/>
+
+### Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiTelInputAdapterProps" cwd />
+
+### Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiTelInputAdapterReturnType" cwd />
+
+### Notes
+
+- Use this hook when your telephone UI is custom but should still integrate with RHF.
+- It builds on `useControllerAdapter`.

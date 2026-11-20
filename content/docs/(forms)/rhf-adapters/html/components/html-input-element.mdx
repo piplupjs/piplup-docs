@@ -277,19 +277,44 @@ import { HtmlInputElement } from '@piplup/rhf-adapters/html';
 
 > The `ref` is forwarded to the underlying `<input>` element.
 
+## useHtmlInputAdapter
+
+`useHtmlInputAdapter` returns value, event handlers, and field-state-aware props for custom input components that should behave like React Hook Form-controlled fields.
+
+### Import
+
+```tsx
+import { useHtmlInputAdapter } from '@piplup/rhf-adapters/html';
+```
+
+<Demo
+  tabs={[
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/html/input/element.tsx',
+    },
+  ]}
+/>
+
+### Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseHtmlInputAdapterProps" cwd />
+
+### Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseHtmlInputAdapterReturnType" cwd />
+
+### Notes
+
+- Use this hook for bespoke input components that still need React Hook Form registration and value synchronization.
+- The hook is built on top of `useControllerAdapter`.
+- `transform`, `checked`, and `indeterminate` are useful when DOM values do not match your stored form value exactly.
+
 ## Notes
 
 - Use `transform` when the field value shape differs from the DOM value.
 - Checkbox, radio, file, and other specialized input types can still reuse the same adapter surface.
-- For custom input UIs, build on [`useHtmlInputAdapter`](../hooks/use-html-input-adapter).
 
 ## See also
 
-<Cards>
-  <Card title="useHtmlInputAdapter" href="../hooks/use-html-input-adapter">
-    Reuse the input adapter logic in your own component.
-  </Card>
-  <Card title="useControllerAdapter" href="/docs/rhf-core/hooks/use-controller-adapter">
-    Core hook that powers controlled field integration.
-  </Card>
-</Cards>
+- [useControllerAdapter](/docs/rhf-core/hooks/use-controller-adapter)

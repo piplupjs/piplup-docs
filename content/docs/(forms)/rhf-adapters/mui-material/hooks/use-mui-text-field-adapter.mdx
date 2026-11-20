@@ -32,7 +32,7 @@ This `UsernameField` lowercases what you type and checks length and allowed char
 
 ## How it works
 
-Value handling, `type: "number"`, transforms, and the `required`, `min`, `max`, `minLength`, `maxLength` and `pattern` rules with their default messages work exactly as described on [useMuiInputBaseAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-input-base-adapter#how-it-works). This hook differs in how it handles refs and helper text.
+Value handling, `type: "number"`, transforms, and the `required`, `min`, `max`, `minLength`, `maxLength` and `pattern` rules with their default messages work exactly as described on [useMuiInputBaseAdapter](/docs/rhf-adapters/mui-material/components/mui-input-base-element#usemuiinputbaseadapter). This hook differs in how it handles refs and helper text.
 
 **Refs.** React Hook Form's field ref is returned as `inputRef`, merged with any `inputRef` you pass to the hook. It lands on the inner `<input>`, so React Hook Form can focus the field when validation fails. The ref you pass as the hook's second argument is returned unchanged as `ref` and ends up on the `TextField` root `<div>`.
 

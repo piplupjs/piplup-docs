@@ -67,19 +67,43 @@ import { HtmlButtonElement } from '@piplup/rhf-adapters/html';
 
 > The `ref` is forwarded to the underlying `<button>` element.
 
+## useHtmlButtonAdapter
+
+`useHtmlButtonAdapter` returns normalized button props for building custom button components that respond to React Hook Form state such as submit state, errors, and disabled behavior.
+
+### Import
+
+```tsx
+import { useHtmlButtonAdapter } from '@piplup/rhf-adapters/html';
+```
+
+<Demo
+  tabs={[
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/html/button/element.tsx',
+    },
+  ]}
+/>
+
+### Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseHtmlButtonAdapterProps" cwd />
+
+### Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseHtmlButtonAdapterReturnType" cwd />
+
+### Notes
+
+- The hook is built on top of `useFormStateAdapter`.
+- `type="submit"` and `type="reset"` preserve native form semantics while still allowing adapter-managed disabling.
+
 ## Notes
 
 - Use `type="submit"` or `type="reset"` to delegate to the surrounding form.
 - Use `disableOnError` or `disableOnIsSubmitting` when the button should react to form state automatically.
-- For custom button UIs, build on [`useHtmlButtonAdapter`](../hooks/use-html-button-adapter).
 
 ## See also
 
-<Cards>
-  <Card title="useHtmlButtonAdapter" href="../hooks/use-html-button-adapter">
-    Build a custom button component with the same adapter behavior.
-  </Card>
-  <Card title="useFormStateAdapter" href="/docs/rhf-core/hooks/use-form-state-adapter">
-    Core hook that powers the button adapter's form-state wiring.
-  </Card>
-</Cards>
+- [useFormStateAdapter](/docs/rhf-core/hooks/use-form-state-adapter)

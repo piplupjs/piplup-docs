@@ -1,8 +1,0 @@
-{
-  "title": "Hooks",
-  "pages": [
-    "use-number-format-base-adapter",
-    "use-numeric-format-adapter",
-    "use-pattern-format-adapter"
-  ]
-}
