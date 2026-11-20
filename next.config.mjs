@@ -170,18 +170,18 @@ const config = {
         permanent: true,
         source: '/docs/react-acl/hooks/use-acl',
       },
-      // URLs from the previous site that Google still crawls and reports as 404s.
-      // rhf-adapters no longer has a single installation page, one per subpath instead, so
-      // send it to the hub that lists them all.
+      // A URL from the previous site that Google still crawls and reports as a 404.
       {
-        destination: '/docs/forms',
-        permanent: true,
-        source: '/docs/rhf-adapters/installation',
-      },
-      {
-        destination: '/docs/rhf-adapters/react-number-format/installation',
+        destination: '/docs/rhf-adapters/installation',
         permanent: true,
         source: '/react-number-format',
+      },
+      // Each rhf-adapters subpath used to have its own short installation page. They are now
+      // sections of one page, and the npm READMEs still link to the old URLs.
+      {
+        destination: '/docs/rhf-adapters/installation',
+        permanent: true,
+        source: '/docs/rhf-adapters/:subpath/installation',
       },
       ...pickerVariantRedirects,
       ...mergedHookPages,

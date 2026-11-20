@@ -1,7 +1,7 @@
 {
   "title": "mui-x-date-pickers",
   "pages": [
-    "[Installation](/docs/rhf-adapters/mui-x-date-pickers/installation)",
+    "[Installation](/docs/rhf-adapters/installation#mui-x-date-pickers)",
     "components",
     "hooks"
   ]

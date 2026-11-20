@@ -3,6 +3,7 @@
   "title": "@piplup/rhf-adapters",
   "collapsible": false,
   "pages": [
+    "installation",
     "html",
     "mui-material",
     "mui-x-date-pickers",
