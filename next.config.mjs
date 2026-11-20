@@ -24,6 +24,117 @@ const pickerVariantRedirects = ['date', 'time', 'date-time'].flatMap((kind) =>
   ]),
 );
 
+/**
+ * Each adapter's hook used to have a page of its own next to its element's page. Where one of the
+ * two was thin, they are now one page at the element's URL, with the hook in a section of its own.
+ * Pairs of `[hook page, element page]` under `/docs/rhf-adapters`.
+ */
+const mergedHookPages = [
+  ['html/hooks/use-html-button-adapter', 'html/components/html-button-element'],
+  ['html/hooks/use-html-form-helper-text-adapter', 'html/components/html-form-helper-text-element'],
+  ['html/hooks/use-html-form-label-adapter', 'html/components/html-form-label-element'],
+  ['html/hooks/use-html-input-adapter', 'html/components/html-input-element'],
+  ['html/hooks/use-html-textarea-adapter', 'html/components/html-textarea-element'],
+  [
+    'mui-file-input/hooks/use-mui-file-input-adapter',
+    'mui-file-input/components/mui-file-input-element',
+  ],
+  ['mui-material/hooks/use-mui-button-adapter', 'mui-material/components/mui-button-element'],
+  ['mui-material/hooks/use-mui-fab-adapter', 'mui-material/components/mui-fab-element'],
+  [
+    'mui-material/hooks/use-mui-filled-input-adapter',
+    'mui-material/components/mui-filled-input-element',
+  ],
+  [
+    'mui-material/hooks/use-mui-form-helper-text-adapter',
+    'mui-material/components/mui-form-helper-text-element',
+  ],
+  [
+    'mui-material/hooks/use-mui-form-label-adapter',
+    'mui-material/components/mui-form-label-element',
+  ],
+  [
+    'mui-material/hooks/use-mui-icon-button-adapter',
+    'mui-material/components/mui-icon-button-element',
+  ],
+  [
+    'mui-material/hooks/use-mui-input-base-adapter',
+    'mui-material/components/mui-input-base-element',
+  ],
+  [
+    'mui-material/hooks/use-mui-input-label-adapter',
+    'mui-material/components/mui-input-label-element',
+  ],
+  [
+    'mui-material/hooks/use-mui-outlined-input-adapter',
+    'mui-material/components/mui-outlined-input-element',
+  ],
+  ['mui-material/hooks/use-mui-radio-adapter', 'mui-material/components/mui-radio-element'],
+  [
+    'mui-material/hooks/use-mui-radio-group-adapter',
+    'mui-material/components/mui-radio-group-element',
+  ],
+  ['mui-material/hooks/use-mui-rating-adapter', 'mui-material/components/mui-rating-element'],
+  ['mui-material/hooks/use-mui-slider-adapter', 'mui-material/components/mui-slider-element'],
+  ['mui-material/hooks/use-mui-switch-adapter', 'mui-material/components/mui-switch-element'],
+  [
+    'mui-one-time-password-input/hooks/use-mui-otp-input-adapter',
+    'mui-one-time-password-input/components/mui-otp-input-element',
+  ],
+  [
+    'mui-tel-input/hooks/use-mui-tel-input-adapter',
+    'mui-tel-input/components/mui-tel-input-element',
+  ],
+  [
+    'mui-x-date-pickers/hooks/use-mui-x-date-calendar-adapter',
+    'mui-x-date-pickers/components/mui-x-date-calendar-element',
+  ],
+  [
+    'mui-x-date-pickers/hooks/use-mui-x-date-field-adapter',
+    'mui-x-date-pickers/components/mui-x-date-field-element',
+  ],
+  [
+    'mui-x-date-pickers/hooks/use-mui-x-digital-clock-adapter',
+    'mui-x-date-pickers/components/mui-x-digital-clock-element',
+  ],
+  [
+    'mui-x-date-pickers/hooks/use-mui-x-month-calendar-adapter',
+    'mui-x-date-pickers/components/mui-x-month-calendar-element',
+  ],
+  [
+    'mui-x-date-pickers/hooks/use-mui-x-multi-section-digital-clock-adapter',
+    'mui-x-date-pickers/components/mui-x-multi-section-digital-clock-element',
+  ],
+  [
+    'mui-x-date-pickers/hooks/use-mui-x-time-clock-adapter',
+    'mui-x-date-pickers/components/mui-x-time-clock-element',
+  ],
+  [
+    'mui-x-date-pickers/hooks/use-mui-x-time-field-adapter',
+    'mui-x-date-pickers/components/mui-x-time-field-element',
+  ],
+  [
+    'mui-x-date-pickers/hooks/use-mui-x-year-calendar-adapter',
+    'mui-x-date-pickers/components/mui-x-year-calendar-element',
+  ],
+  [
+    'react-number-format/hooks/use-number-format-base-adapter',
+    'react-number-format/components/number-format-base-element',
+  ],
+  [
+    'react-number-format/hooks/use-numeric-format-adapter',
+    'react-number-format/components/numeric-format-element',
+  ],
+  [
+    'react-number-format/hooks/use-pattern-format-adapter',
+    'react-number-format/components/pattern-format-element',
+  ],
+].map(([hook, element]) => ({
+  destination: `/docs/rhf-adapters/${element}`,
+  permanent: true,
+  source: `/docs/rhf-adapters/${hook}`,
+}));
+
 /** @type {import('next').NextConfig} */
 const config = {
   // `/docs/<page>.mdx` is rewritten to the page's markdown in `src/proxy.ts`.
@@ -73,6 +184,7 @@ const config = {
         source: '/react-number-format',
       },
       ...pickerVariantRedirects,
+      ...mergedHookPages,
     ];
   },
 };

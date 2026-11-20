@@ -4,7 +4,7 @@ seoTitle: 'MUI File Input with React Hook Form'
 description: 'Use mui-file-input with react-hook-form: MuiFileInputElement stores a File or File[], with file size and type validation.'
 ---
 
-`MuiFileInputElement` renders `MuiFileInput` from `mui-file-input` and stores the selected file in React Hook Form: a `File` (or `null`) by default, or a `File[]` when `multiple` is set. To build your own file field, use [`useMuiFileInputAdapter`](/docs/rhf-adapters/mui-file-input/hooks/use-mui-file-input-adapter).
+`MuiFileInputElement` renders `MuiFileInput` from `mui-file-input` and stores the selected file in React Hook Form: a `File` (or `null`) by default, or a `File[]` when `multiple` is set. To build your own file field, use [`useMuiFileInputAdapter`](#usemuifileinputadapter).
 
 ## Import
 
@@ -51,3 +51,35 @@ The element has no size or type options of its own. Write those checks as `rules
 ## Props
 
 <AutoTypeTable path="content/docs/props.ts" name="MuiFileInputElementProps" cwd />
+
+## useMuiFileInputAdapter
+
+`useMuiFileInputAdapter` connects a field to React Hook Form and returns the props `MuiFileInputElement` spreads onto its component. Use it to build your own field on the same wiring, for example with different markup around the input.
+
+### Import
+
+```tsx
+import { useMuiFileInputAdapter } from '@piplup/rhf-adapters/mui-file-input';
+```
+
+<Demo
+  tabs={[
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/mui-file-input/element.tsx',
+    },
+  ]}
+/>
+
+### Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseMuiFileInputAdapterProps" cwd />
+
+### Return value
+
+- Return value: adapter props including `value`, `multiple`, `onChange`, `onBlur`, `inputRef`, `error`, and `helperText`.
+
+### Notes
+
+- Use this hook when your file picker UI is custom but should still be RHF-aware.
+- It builds on `useControllerAdapter`.

@@ -32,7 +32,7 @@ The `EmailInput` below doesn't set `required` or `disabled`. It takes both from 
 
 ## How it works
 
-Value handling, `type: "number"`, transforms, and the validation rules with their default messages are the same as in [useMuiInputBaseAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-input-base-adapter#how-it-works). The demo relies on one of them: `type: "email"` adds an email pattern and the message "Please enter an email address."
+Value handling, `type: "number"`, transforms, and the validation rules with their default messages are the same as in [useMuiInputBaseAdapter](/docs/rhf-adapters/mui-material/components/mui-input-base-element#usemuiinputbaseadapter). The demo relies on one of them: `type: "email"` adds an email pattern and the message "Please enter an email address."
 
 **FormControl fallback.** When the hook runs inside a MUI `FormControl`, it reads that control's state:
 
@@ -43,11 +43,11 @@ A value you pass to the hook always wins, including `false`.
 
 The hook reads the control through React context, so it must run in a component rendered inside the `FormControl`, as `EmailInput` is in the demo. If the same component renders both the `FormControl` and the input, the hook can't see it.
 
-**Errors.** `FormControl` doesn't know about the field's validation error. Its `InputLabel` and `FormHelperText` stay in their normal colors unless you pass `error` to them, as the demo does, or use [`useMuiInputLabelAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-input-label-adapter) and [`useMuiFormHelperTextAdapter`](/docs/rhf-adapters/mui-material/hooks/use-mui-form-helper-text-adapter), which read the error by field name.
+**Errors.** `FormControl` doesn't know about the field's validation error. Its `InputLabel` and `FormHelperText` stay in their normal colors unless you pass `error` to them, as the demo does, or use [`useMuiInputLabelAdapter`](/docs/rhf-adapters/mui-material/components/mui-input-label-element#usemuiinputlabeladapter) and [`useMuiFormHelperTextAdapter`](/docs/rhf-adapters/mui-material/components/mui-form-helper-text-element#usemuiformhelpertextadapter), which read the error by field name.
 
 **Ref.** `Input` puts `ref` on its root `<div>`. Pass the returned `ref` to `inputRef` so React Hook Form can focus the input when validation fails. Also remove `helperText` from the result before spreading, because `Input` has no such prop.
 
-[useMuiFilledInputAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-filled-input-adapter) and [useMuiOutlinedInputAdapter](/docs/rhf-adapters/mui-material/hooks/use-mui-outlined-input-adapter) behave the same way for the other two variants.
+[useMuiFilledInputAdapter](/docs/rhf-adapters/mui-material/components/mui-filled-input-element#usemuifilledinputadapter) and [useMuiOutlinedInputAdapter](/docs/rhf-adapters/mui-material/components/mui-outlined-input-element#usemuioutlinedinputadapter) behave the same way for the other two variants.
 
 ## Props
 

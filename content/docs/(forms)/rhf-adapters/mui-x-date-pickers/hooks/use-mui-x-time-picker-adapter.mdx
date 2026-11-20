@@ -72,15 +72,15 @@ The hook must run inside a `LocalizationProvider`, because it reads the date ada
 
 The other time hooks use the same validation and messages. They differ in where errors can render and how a field becomes touched:
 
-| Hook                                                                                                                                  | Text field    | Errors shown by              | Touched on                 |
-| ------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---------------------------- | -------------------------- |
-| [`useMuiXDesktopTimePickerAdapter`](#desktoptimepicker)                                                                               | yes           | `slotProps.textField`        | input blur or picker close |
-| [`useMuiXMobileTimePickerAdapter`](#mobiletimepicker)                                                                                 | yes           | `slotProps.textField`        | input blur or dialog close |
-| [`useMuiXStaticTimePickerAdapter`](#statictimepicker)                                                                                 | no            | you render them              | never                      |
-| [`useMuiXTimeFieldAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-field-adapter)                                 | yes, no popup | `error` / `helperText` props | input blur                 |
-| [`useMuiXTimeClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-time-clock-adapter)                                 | no            | you render them              | blur inside the clock      |
-| [`useMuiXDigitalClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-digital-clock-adapter)                           | no            | you render them              | blur inside the clock      |
-| [`useMuiXMultiSectionDigitalClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/hooks/use-mui-x-multi-section-digital-clock-adapter) | no            | you render them              | blur inside the clock      |
+| Hook                                                                                                                                                                          | Text field    | Errors shown by              | Touched on                 |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ---------------------------- | -------------------------- |
+| [`useMuiXDesktopTimePickerAdapter`](#desktoptimepicker)                                                                                                                       | yes           | `slotProps.textField`        | input blur or picker close |
+| [`useMuiXMobileTimePickerAdapter`](#mobiletimepicker)                                                                                                                         | yes           | `slotProps.textField`        | input blur or dialog close |
+| [`useMuiXStaticTimePickerAdapter`](#statictimepicker)                                                                                                                         | no            | you render them              | never                      |
+| [`useMuiXTimeFieldAdapter`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-time-field-element#usemuixtimefieldadapter)                                                | yes, no popup | `error` / `helperText` props | input blur                 |
+| [`useMuiXTimeClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-time-clock-element#usemuixtimeclockadapter)                                                | no            | you render them              | blur inside the clock      |
+| [`useMuiXDigitalClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-digital-clock-element#usemuixdigitalclockadapter)                                       | no            | you render them              | blur inside the clock      |
+| [`useMuiXMultiSectionDigitalClockAdapter`](/docs/rhf-adapters/mui-x-date-pickers/components/mui-x-multi-section-digital-clock-element#usemuixmultisectiondigitalclockadapter) | no            | you render them              | blur inside the clock      |
 
 ## Desktop, mobile and static versions
 

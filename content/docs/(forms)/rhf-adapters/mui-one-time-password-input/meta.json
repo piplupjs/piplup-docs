@@ -2,7 +2,6 @@
   "title": "mui-one-time-password-input",
   "pages": [
     "[Installation](/docs/rhf-adapters/mui-one-time-password-input/installation)",
-    "components",
-    "hooks"
+    "components"
   ]
 }

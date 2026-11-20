@@ -35,19 +35,43 @@ import { HtmlFormHelperTextElement } from '@piplup/rhf-adapters/html';
 
 > The `ref` is forwarded to the underlying `<p>` element.
 
+## useHtmlFormHelperTextAdapter
+
+`useHtmlFormHelperTextAdapter` derives helper text content and state from a field so custom helper text components can react to validation without manual field-state wiring.
+
+### Import
+
+```tsx
+import { useHtmlFormHelperTextAdapter } from '@piplup/rhf-adapters/html';
+```
+
+<Demo
+  tabs={[
+    {
+      label: 'Element source',
+      path: 'https://raw.githubusercontent.com/piplupjs/piplup-react-hook-form/refs/heads/main/packages/rhf-adapters/src/html/form-helper-text/element.tsx',
+    },
+  ]}
+/>
+
+### Props
+
+<AutoTypeTable path="content/docs/props.ts" name="UseHtmlFormHelperTextAdapterProps" cwd />
+
+### Return value
+
+<AutoTypeTable path="content/docs/props.ts" name="UseHtmlFormHelperTextAdapterReturnType" cwd />
+
+### Notes
+
+- The hook is built on top of `useFieldStateAdapter`.
+- Pair the rendered helper text with the field's `aria-describedby` for accessibility.
+
 ## Notes
 
 - Use `renderOnError` when helper text should only appear for validation failures.
 - Pair the helper text `id` with an input's `aria-describedby` for better accessibility.
-- For bespoke helper text UIs, build on [`useHtmlFormHelperTextAdapter`](../hooks/use-html-form-helper-text-adapter).
 
 ## See also
 
-<Cards>
-  <Card title="useHtmlFormHelperTextAdapter" href="../hooks/use-html-form-helper-text-adapter">
-    Reuse the helper-text adapter logic in a custom component.
-  </Card>
-  <Card title="useFieldStateAdapter" href="/docs/rhf-core/hooks/use-field-state-adapter">
-    Core hook that powers helper text and field-state derivation.
-  </Card>
-</Cards>
+- [useFieldStateAdapter](/docs/rhf-core/hooks/use-field-state-adapter)

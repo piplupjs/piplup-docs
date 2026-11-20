@@ -1,16 +1,8 @@
 {
   "title": "Hooks",
   "pages": [
-    "use-mui-x-date-calendar-adapter",
-    "use-mui-x-date-field-adapter",
     "use-mui-x-date-picker-adapter",
     "use-mui-x-date-time-picker-adapter",
-    "use-mui-x-digital-clock-adapter",
-    "use-mui-x-month-calendar-adapter",
-    "use-mui-x-multi-section-digital-clock-adapter",
-    "use-mui-x-time-clock-adapter",
-    "use-mui-x-time-field-adapter",
-    "use-mui-x-time-picker-adapter",
-    "use-mui-x-year-calendar-adapter"
+    "use-mui-x-time-picker-adapter"
   ]
 }
